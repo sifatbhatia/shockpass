@@ -43,7 +43,8 @@ export function TicketDropModule({
   totalCapacity,
   totalSold,
 }: TicketDropModuleProps) {
-  const [selectedTier, setSelectedTier] = useState<string | null>(null)
+  const defaultTierId = tiers.find((t) => t.status === 'ON_SALE')?.id ?? null
+  const [selectedTier, setSelectedTier] = useState<string | null>(defaultTierId)
   const [quantity, setQuantity] = useState(1)
   const [waitlistEmail, setWaitlistEmail] = useState('')
 
@@ -155,26 +156,17 @@ export function TicketDropModule({
         {dropContent}
       </Panel>
 
-      <div className="fixed inset-x-0 bottom-0 z-[var(--z-modal)] md:hidden">
-        <div className="mx-auto max-w-lg">
-          <div className="flex justify-center pb-1">
-            <div className="h-1 w-10 rounded-full bg-white/25" aria-hidden />
-          </div>
-          <Panel className="max-h-[68vh] overflow-y-auto rounded-b-none border-b-0 p-5 pb-4 shadow-sheet">
-            {dropContent}
-          </Panel>
-          {selectedTier && (
-            <div className="border-t border-border bg-bg/95 p-4 backdrop-blur-md">
-              <Button
-                href={`/events/${eventSlug}/checkout?tier=${selectedTier}&qty=${quantity}`}
-                className="w-full"
-              >
-                {COPY.getTickets} · {quantity}
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
+      <Panel glow={isOnSale ? 'acid' : 'none'} className="p-5 shadow-panel md:hidden">
+        {dropContent}
+        {selectedTier && (
+          <Button
+            href={`/events/${eventSlug}/checkout?tier=${selectedTier}&qty=${quantity}`}
+            className="mt-5 w-full"
+          >
+            {COPY.getTickets} · {quantity}
+          </Button>
+        )}
+      </Panel>
     </>
   )
 }

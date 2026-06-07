@@ -6,11 +6,17 @@ import { generateSlug } from '@/utils/slug'
 import { EventStatus, EventVisibility, TicketTierStatus } from '@/generated/prisma/enums'
 import { getDemoEventBySlug, listDemoEvents } from '@/lib/demo-events'
 
+const externalPosterUrlSchema = z.string().url()
+const posterUrlSchema = z.string().refine(
+  (value) => value.startsWith('/assets/') || externalPosterUrlSchema.safeParse(value).success,
+  'Use a valid image URL or Willcall asset path'
+)
+
 const createEventSchema = z.object({
   title: z.string().min(3).max(200),
   subtitle: z.string().max(300).optional(),
   description: z.string().min(10),
-  posterUrl: z.string().url(),
+  posterUrl: posterUrlSchema,
   heroVideoUrl: z.string().url().optional(),
   venueName: z.string().min(2),
   venueAddress: z.string().min(5),

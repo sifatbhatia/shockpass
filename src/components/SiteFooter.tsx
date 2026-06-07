@@ -91,7 +91,7 @@ export function SiteFooter() {
         </div>
 
         <p
-          className="pointer-events-none absolute -bottom-[0.11em] left-1/2 z-0 w-max -translate-x-1/2 select-none font-display text-[clamp(9rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg"
+          className="pointer-events-none absolute -bottom-[0.09em] left-1/2 z-0 hidden w-max -translate-x-1/2 select-none font-display text-[clamp(14rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg md:block"
           aria-hidden
         >
           {BRAND.name}
@@ -99,7 +99,14 @@ export function SiteFooter() {
 
         <div className="relative z-10 -mx-5 grid min-h-12 items-center gap-3 bg-bg px-5 py-3 font-mono text-sm font-semibold uppercase leading-tight tracking-normal text-text sm:-mx-8 sm:px-8 md:-mx-12 md:grid-cols-3 md:px-12">
           <p>© 2026 · All rights reserved.</p>
-          <p className="md:text-center">Site by {BRAND.name}</p>
+          <a
+            href="https://sifat.tech"
+            target="_blank"
+            rel="noreferrer"
+            className="w-fit transition-colors hover:text-nav-accent focus-ring md:mx-auto"
+          >
+            Site by Sift Design
+          </a>
           <Link href="#" className="w-fit transition-colors hover:text-nav-accent focus-ring md:ml-auto">
             Back to top
           </Link>

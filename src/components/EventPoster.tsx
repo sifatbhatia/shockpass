@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
 import { BRAND } from '@/lib/brand'
@@ -14,10 +15,12 @@ type EventPosterProps = {
 
 export function EventPoster({ src, title, className, priority = false }: EventPosterProps) {
   const posterSrc = normalizePosterUrl(src)
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const showPoster = Boolean(posterSrc && failedSrc !== posterSrc)
 
   return (
     <div className={clsx('relative h-full w-full overflow-hidden bg-panel-2', className)}>
-      {posterSrc ? (
+      {showPoster && posterSrc ? (
         <Image
           src={posterSrc}
           alt={`${title} event poster`}
@@ -27,6 +30,7 @@ export function EventPoster({ src, title, className, priority = false }: EventPo
           unoptimized
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={() => setFailedSrc(posterSrc)}
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(215,255,63,0.16),transparent_30%),linear-gradient(135deg,#16161a,#050505_60%,#1f1230)]">

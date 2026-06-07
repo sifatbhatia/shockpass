@@ -19,7 +19,6 @@ import { EventPoster } from '@/components/EventPoster'
 import { HomeLiveRow, HomeLiveRowSkeleton } from '@/components/home/HomeLiveRow'
 import { COPY, HOME_BUYER_FEATURES } from '@/lib/copy'
 import { useSession } from 'next-auth/react'
-import { cn } from '@/lib/cn'
 
 const FALLBACK_HERO =
   '/assets/willcall-hero-drop-v2.png'
@@ -483,37 +482,41 @@ export function HomePageView() {
             </div>
           </div>
 
-          <div data-home-animate className="relative mt-2 overflow-hidden border-y border-white/10 py-10 md:py-14">
-            <div className="absolute inset-y-0 right-0 hidden w-1/2 opacity-20 md:block">
-              <Image
-                src="/assets/scan-success-moment.png"
-                alt=""
-                fill
-                sizes="50vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/80 to-bg/40" />
-            </div>
-
-            <div className="relative grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(360px,0.72fr)] lg:gap-20">
+          <div data-home-animate className="relative mt-2 overflow-hidden border-y border-white/10 py-12 md:py-16">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.84fr)_minmax(420px,1fr)] lg:gap-20">
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
                   {COPY.forOrganizers}
                 </p>
-                <h2 className="mt-6 max-w-xl font-display text-5xl leading-[0.95] tracking-tight text-text sm:text-6xl">
-                  Open sales.
-                  <span className="block text-electric">Read the room.</span>
+                <h2 className="mt-6 max-w-2xl font-display text-5xl leading-[0.95] tracking-tight text-text sm:text-6xl md:text-7xl">
+                  Launch the drop.
+                  <span className="block text-electric">Know when it moves.</span>
                 </h2>
               </div>
 
-              <div>
-                <p className="max-w-md text-sm leading-relaxed text-muted font-sans">
-                  Launch tiered drops, track revenue and capacity, run promos, and scan at the door without stitching four tools together.
+              <div className="grid gap-6">
+                <p className="max-w-xl text-sm leading-relaxed text-muted font-sans md:text-base">
+                  Willcall gives organizers one command view for tiers, promos, live sell-through, guest lookup, and door scan. No spreadsheet handoff when the room starts filling.
                 </p>
+
+                <div className="grid border-y border-white/10 sm:grid-cols-3">
+                  {[
+                    ['01', 'Drop tiers', 'Timed releases and capacity checks.'],
+                    ['02', 'Demand read', 'Fill rate, revenue, and buyer pace.'],
+                    ['03', 'Door loop', 'Scan, lookup, and validate in one flow.'],
+                  ].map(([number, title, body]) => (
+                    <div key={title} className="border-b border-white/10 py-5 sm:border-b-0 sm:border-r sm:px-5 sm:last:border-r-0">
+                      <p className="font-mono text-xs text-acid">{number}</p>
+                      <h3 className="mt-3 font-sans text-xl font-semibold tracking-tight text-text">{title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-muted font-sans">{body}</p>
+                    </div>
+                  ))}
+                </div>
+
                 <Button
                   href={session && isOrganizer ? '/dashboard' : '/organizers'}
                   variant="outline"
-                  className={cn('mt-6 w-full shrink-0 sm:w-max')}
+                  className="w-full shrink-0 sm:w-max"
                 >
                   {session && isOrganizer ? COPY.commandCenter : COPY.organizers}
                 </Button>

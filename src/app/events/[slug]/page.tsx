@@ -56,8 +56,8 @@ export default function EventPage() {
           : 'before_sale'
 
   return (
-    <AppShell showLivePulse={isOnSale} mainClassName="pb-[420px] md:pb-0">
-      <section className="relative min-h-[70vh] overflow-hidden grain-overlay stage-vignette">
+    <AppShell showLivePulse={isOnSale}>
+      <section className="relative min-h-[62dvh] overflow-hidden grain-overlay stage-vignette md:min-h-[70vh]">
         <div className="absolute inset-0">
           <EventPoster
             src={event.posterUrl}
@@ -69,10 +69,10 @@ export default function EventPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/75 to-bg/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-bg/90 via-bg/20 to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[70vh] max-w-[1650px] flex-col justify-end px-6 pb-10 pt-16 md:pb-14">
+        <div className="relative mx-auto flex min-h-[62dvh] max-w-[1650px] flex-col justify-end px-4 pb-8 pt-20 sm:px-6 md:min-h-[70vh] md:pb-14">
           <div className="animate-fade-up max-w-4xl">
             <DropStatePill state={dropState} className="mb-5 w-fit" />
-            <h1 className="font-display text-balance text-5xl leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
+            <h1 className="font-display text-balance text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl">
               {event.title}
             </h1>
             {event.subtitle && (
@@ -93,8 +93,8 @@ export default function EventPage() {
         </div>
       </section>
 
-      <section className="ambient-glow mx-auto max-w-[1650px] px-6 py-12 md:py-20">
-        <div className="grid gap-12 md:grid-cols-5 md:gap-16">
+      <section className="ambient-glow mx-auto max-w-[1650px] px-4 py-8 sm:px-6 md:py-20">
+        <div className="grid gap-8 md:grid-cols-5 md:gap-16">
           <div className="space-y-12 md:col-span-3">
             <article className="animate-fade-up">
               <SectionLabel className="mb-3">{COPY.aboutDrop}</SectionLabel>
@@ -117,7 +117,7 @@ export default function EventPage() {
             </article>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 md:row-start-1">
             <TicketDropModule
               eventId={event.id}
               eventSlug={event.slug}

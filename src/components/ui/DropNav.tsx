@@ -279,12 +279,12 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           <div className="ml-auto hidden items-center lg:flex">
             <div
               className={cn(
-                'inline-flex items-center gap-0.5 rounded-full border border-white/12 px-1.5 py-1.5 transition-[background,border-color,box-shadow] duration-500 ease-out',
+                'inline-flex items-center gap-0.5 rounded-full border border-white/12 px-1.5 py-1.5 transition-[background,border-color,box-shadow,backdrop-filter] duration-700 ease-out',
                 megaOpen
                   ? 'bg-panel/90'
                   : darkNav
-                    ? 'border-bg/15 bg-bg/[0.035] shadow-none backdrop-blur-[2px]'
-                    : 'bg-white/[0.035] shadow-none backdrop-blur-[2px]'
+                    ? 'border-bg/20 bg-nav-accent/10 shadow-none backdrop-blur-xl'
+                    : 'bg-bg/16 shadow-none backdrop-blur-xl'
               )}
             >
               <button
@@ -331,8 +331,8 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMobileOpen((open) => !open)}
               className={cn(
-                'inline-flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md focus-ring',
-                darkNav ? 'border-bg/15 bg-bg/[0.06] text-bg' : 'border-white/10 bg-white/[0.04] text-text'
+                'inline-flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-xl transition-[background,border-color,color] duration-700 ease-out focus-ring',
+                darkNav ? 'border-bg/20 bg-nav-accent/10 text-bg' : 'border-white/10 bg-bg/18 text-text'
               )}
             >
               {mobileOpen ? (

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { AppShell } from '@/components/AppShell'
 import { Button } from '@/components/ui/Button'
@@ -20,6 +19,7 @@ import {
   type USLocationValue,
 } from '@/components/forms/USStateCitySelect'
 import { POSTER_PRESETS } from '@/lib/poster-assets'
+import { EventPoster } from '@/components/EventPoster'
 
 const posterPresets: string[] = [...POSTER_PRESETS]
 
@@ -39,6 +39,20 @@ function formatCreateDropError(err: unknown): string {
     /* not JSON */
   }
   return err.message || 'Could not create drop'
+}
+
+function datePart(value: string) {
+  return value ? value.slice(0, 10) : ''
+}
+
+function timePart(value: string) {
+  return value ? value.slice(11, 16) : ''
+}
+
+function mergeDateTime(value: string, part: 'date' | 'time', next: string) {
+  const date = part === 'date' ? next : datePart(value)
+  const time = part === 'time' ? next : timePart(value)
+  return date && time ? `${date}T${time}` : ''
 }
 
 export default function CreateEventPage() {
@@ -181,7 +195,7 @@ export default function CreateEventPage() {
           <div className="sticky top-24">
             <Panel className="overflow-hidden">
               <div className="relative aspect-[4/5]">
-                <Image src={form.posterUrl} alt="" fill unoptimized className="object-cover" />
+                <EventPoster src={form.posterUrl} title={form.title || 'Your drop title'} className="absolute inset-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
                 <div className="absolute bottom-0 p-6">
                   <p className="font-display text-3xl tracking-tight leading-tight">
@@ -224,7 +238,7 @@ export default function CreateEventPage() {
                         form.posterUrl === poster ? 'border-acid shadow-glow-acid' : 'border-border'
                       )}
                     >
-                      <Image src={poster} alt="" fill unoptimized className="object-cover" />
+                      <EventPoster src={poster} title="Poster preset" className="absolute inset-0" />
                     </button>
                   ))}
                 </div>
@@ -265,6 +279,8 @@ export default function CreateEventPage() {
                   </FieldHint>
                 </div>
                 <USAddressAutocomplete
+                  label="Venue search *"
+                  placeholder="Search by venue name or street address..."
                   value={form.venueAddress}
                   onChange={(venueAddress) => setForm({ ...form, venueAddress })}
                   onSelect={(patch) => {
@@ -280,6 +296,7 @@ export default function CreateEventPage() {
                     setLocation(patch.location)
                   }}
                 />
+                <FieldHint>Pick a venue suggestion to fill address, city, timezone, and coordinates.</FieldHint>
                 <div>
                   <Label>Venue name *</Label>
                   <Input required value={form.venueName} onChange={e => setForm({ ...form, venueName: e.target.value })} placeholder="The Echo" />
@@ -296,9 +313,27 @@ export default function CreateEventPage() {
                     }))
                   }}
                 />
-                <div className="grid grid-cols-2 gap-4">
-                  <div><Label>Starts *</Label><Input required type="datetime-local" value={form.startsAt} onChange={e => setForm({ ...form, startsAt: e.target.value })} /></div>
-                  <div><Label>Ends *</Label><Input required type="datetime-local" value={form.endsAt} onChange={e => setForm({ ...form, endsAt: e.target.value })} /></div>
+                <div className="grid gap-4 rounded-pass border border-border bg-panel/40 p-4 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">Schedule</p>
+                  </div>
+                  <div>
+                    <Label>Start date *</Label>
+                    <Input required type="date" value={datePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'date', e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>Start time *</Label>
+                    <Input required type="time" value={timePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'time', e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>End date *</Label>
+                    <Input required type="date" value={datePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'date', e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>End time *</Label>
+                    <Input required type="time" value={timePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'time', e.target.value) })} />
+                  </div>
+                  <p className="text-xs text-muted sm:col-span-2">Timezone: {form.timezone}</p>
                 </div>
                 <div><Label>Capacity *</Label><Input required type="number" value={form.capacity} onChange={e => setForm({ ...form, capacity: parseInt(e.target.value) || 0 })} mono /></div>
               </div>
