@@ -58,11 +58,16 @@ export function TicketDropModule({
   const shareDrop = async () => {
     const url = `${window.location.origin}/events/${eventSlug}`
     const title = COPY.shareDropTitle(eventTitle)
-    if (navigator.share) {
-      await navigator.share({ title, url })
-    } else {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url })
+        return
+      }
+
       await navigator.clipboard.writeText(url)
       toast.success('Link copied')
+    } catch {
+      toast.error('Copy blocked by this browser. Use the address bar link.')
     }
   }
 

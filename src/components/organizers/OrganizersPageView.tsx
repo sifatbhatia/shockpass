@@ -94,16 +94,24 @@ export function OrganizersPageView() {
       <div ref={rootRef} className="bg-bg">
         <section className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(92vh,820px)] overflow-hidden grain-overlay stage-vignette">
           <Image
-            src="/assets/scan-success-moment.png"
+            src="/assets/willcall-organizers-grid.png"
             alt=""
             fill
             loading="eager"
             fetchPriority="high"
             sizes="100vw"
-            className="object-cover opacity-56 saturate-110"
+            className="object-cover opacity-84 saturate-110"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,0.86)_34%,rgba(5,5,5,0.48)_68%,#050505_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.62)_0%,rgba(5,5,5,0.2)_30%,#050505_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,0.84)_42%,rgba(5,5,5,0.36)_76%,#050505_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.7)_0%,rgba(5,5,5,0.22)_36%,#050505_100%)]" />
+          <div className="absolute left-10 top-[16vh] hidden font-mono text-xs uppercase tracking-[0.22em] text-muted md:block">
+            <p>{'///Plan / Manage / Execute / Elevate'}</p>
+          </div>
+          <div className="absolute bottom-14 left-[9vw] hidden font-mono text-xs uppercase leading-relaxed tracking-[0.18em] text-muted md:block">
+            <p>Built for those</p>
+            <p>who build culture.</p>
+            <span className="mt-7 block h-px w-10 bg-nav-accent" />
+          </div>
 
           <div className="relative mx-auto flex min-h-[min(92vh,820px)] max-w-[1650px] flex-col justify-end px-4 pb-10 pt-[calc(var(--nav-bar-height,4.5rem)+2rem)] sm:px-6 sm:pb-16">
             <div className="max-w-5xl">
@@ -115,7 +123,7 @@ export function OrganizersPageView() {
                 <span className="block text-acid">Run the room.</span>
               </h1>
               <p data-org-hero className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
-                Willcall gives promoters and venues a premium ticketing flow: sharp event pages, fast checkout, wallet passes, live capacity, and scanner-ready entry.
+                Built for promoters, venues, and cultural rooms that need ticketing to feel as deliberate as the night itself.
               </p>
               <div data-org-hero className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button href={launchHref}>{COPY.launchADrop}</Button>

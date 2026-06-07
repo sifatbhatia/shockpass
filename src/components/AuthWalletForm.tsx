@@ -12,6 +12,7 @@ import { Input, Label } from '@/components/ui/Input'
 import { Panel } from '@/components/ui/Panel'
 import { BRAND } from '@/lib/brand'
 import { COPY } from '@/lib/copy'
+import { walletConnectProjectId } from '@/lib/wallet-env'
 
 const WalletAuthOption = dynamic(
   () => import('@/components/WalletAuthOption').then((mod) => mod.WalletAuthOption),
@@ -35,7 +36,7 @@ function AuthFields() {
   const [accountType, setAccountType] = useState<'attendee' | 'organizer'>('attendee')
   const [loginAsOrganizer, setLoginAsOrganizer] = useState(false)
   const [loading, setLoading] = useState(false)
-  const walletAuthEnabled = Boolean(process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID)
+  const walletAuthEnabled = Boolean(walletConnectProjectId)
 
   useEffect(() => {
     if (session) router.push(callbackUrl)

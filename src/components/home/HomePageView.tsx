@@ -21,7 +21,7 @@ import { COPY, HOME_BUYER_FEATURES } from '@/lib/copy'
 import { useSession } from 'next-auth/react'
 
 const FALLBACK_HERO =
-  '/assets/willcall-hero-drop-v2.png'
+  '/assets/willcall-grid-hero.png'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -145,7 +145,7 @@ export function HomePageView() {
       <div ref={rootRef}>
       {/* Attendee-first hero — full bleed under transparent nav */}
       <section
-        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(88vh,760px)] overflow-hidden grain-overlay stage-vignette"
+        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(92vh,820px)] overflow-hidden grain-overlay"
       >
         <Image
           src={heroImage}
@@ -155,12 +155,22 @@ export function HomePageView() {
           fetchPriority="high"
           unoptimized
           sizes="100vw"
-          className="object-cover opacity-88 saturate-110"
+          className="object-cover opacity-82 saturate-110"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.72)_0%,rgba(5,5,5,0.45)_18%,rgba(5,5,5,0.88)_55%,#050505_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-bg/90 via-bg/50 to-transparent" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.74)_0%,rgba(5,5,5,0.36)_30%,rgba(5,5,5,0.82)_72%,#050505_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-bg/92 via-bg/38 to-bg/20" />
+        <div className="absolute bottom-8 left-[8vw] hidden font-mono text-xs uppercase tracking-[0.24em] text-muted md:block">
+          <p>Global rooms</p>
+          <p>Art, culture</p>
+          <p>& sound</p>
+          <span className="mt-8 block h-px w-10 bg-nav-accent" />
+        </div>
+        <div className="absolute bottom-12 right-[12vw] hidden font-mono text-xs leading-relaxed tracking-[0.16em] text-muted lg:block">
+          <p>40.7128° N</p>
+          <p>74.0060° W</p>
+        </div>
 
-        <div className="relative mx-auto flex min-h-[min(88vh,760px)] max-w-[1650px] flex-col justify-end px-4 pb-10 pt-[calc(var(--nav-bar-height,4.5rem)+1.5rem)] sm:px-6 sm:pb-14 md:pb-16">
+        <div className="relative mx-auto flex min-h-[min(92vh,820px)] max-w-[1650px] flex-col justify-end px-4 pb-12 pt-[calc(var(--nav-bar-height,4.5rem)+1.5rem)] sm:px-6 sm:pb-16 md:pb-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-end lg:gap-12">
             <div className="max-w-2xl">
               <p data-hero-animate className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-bg/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted backdrop-blur font-sans">
@@ -282,7 +292,7 @@ export function HomePageView() {
       />
 
       {/* Live board — buyer discovery */}
-      <section data-home-animate className="mx-auto max-w-[1650px] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
+      <section data-home-animate className="mx-auto max-w-[1650px] px-4 py-14 sm:px-6 sm:py-16 md:py-20">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-3">
@@ -370,7 +380,7 @@ export function HomePageView() {
       <section className="relative overflow-hidden border-t border-white/10 bg-bg">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-panel/42 to-transparent" />
 
-        <div className="relative mx-auto max-w-[1650px] px-4 py-14 sm:px-6 sm:py-18 md:py-24">
+        <div className="relative mx-auto max-w-[1650px] px-4 py-20 sm:px-6 md:py-28">
           <div data-home-animate className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:gap-20">
             <div className="lg:sticky lg:top-28 lg:self-start">
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">
@@ -410,9 +420,9 @@ export function HomePageView() {
             </ol>
           </div>
 
-          <div data-home-rule className="mt-16 h-px w-full bg-white/10 md:mt-20" />
+          <div data-home-rule className="mt-24 h-px w-full bg-white/10 md:mt-32" />
 
-          <div data-home-animate className="py-12 md:py-16">
+          <div data-home-animate className="py-20 md:py-28">
             <div className="grid gap-6 border-b border-white/10 pb-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)] lg:items-end">
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
@@ -452,37 +462,39 @@ export function HomePageView() {
 
           <div data-home-rule className="h-px w-full bg-white/10" />
 
-          <div data-home-animate className="grid gap-8 py-12 md:py-16 lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,1fr)] lg:gap-20">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
-                Buyer trust
-              </p>
-              <h2 className="mt-6 max-w-md font-display text-5xl leading-[0.95] tracking-tight text-text sm:text-6xl">
-                No mystery fees. No account wall. No lost ticket.
-              </h2>
-            </div>
+          <div data-home-animate className="py-20 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.86fr)_minmax(440px,1fr)] lg:gap-24">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+                  Buyer trust
+                </p>
+                <h2 className="mt-8 max-w-2xl font-display text-6xl leading-[0.9] tracking-tight text-text sm:text-7xl md:text-8xl">
+                  The ticket should feel held before they pay.
+                </h2>
+              </div>
 
-            <div className="flex flex-col gap-3">
-              {HOME_BUYER_FEATURES.map((item, index) => (
-                <div
-                  key={item.title}
-                  className="group flex flex-col gap-4 border-l border-white/10 py-2 pl-5 transition-colors hover:border-nav-accent/70 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
-                >
-                  <div>
-                    <span className="font-mono text-xs text-acid">{`${index + 1}.0`}</span>
-                    <h3 className="mt-2 font-sans text-2xl font-semibold tracking-tight text-text">
-                      {item.title}
-                    </h3>
-                  </div>
-                  <p className="max-w-lg text-sm leading-relaxed text-muted font-sans sm:pt-6">
-                    {item.body}
-                  </p>
-                </div>
-              ))}
+              <div className="divide-y divide-white/10 border-y border-white/10">
+                {HOME_BUYER_FEATURES.map((item, index) => (
+                  <article
+                    key={item.title}
+                    className="group grid gap-6 py-8 transition-colors hover:bg-white/[0.025] sm:grid-cols-[72px_minmax(0,1fr)] sm:px-5 md:py-10"
+                  >
+                    <span className="font-mono text-sm text-acid">{`${index + 1}.0`}</span>
+                    <div className="grid gap-3 md:grid-cols-[0.8fr_1fr] md:gap-8">
+                      <h3 className="font-sans text-3xl font-semibold leading-none tracking-tight text-text">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-muted font-sans">
+                        {item.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div data-home-animate className="relative mt-2 overflow-hidden border-y border-white/10 py-12 md:py-16">
+          <div data-home-animate className="relative mt-4 overflow-hidden border-y border-white/10 py-16 md:py-20">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.84fr)_minmax(420px,1fr)] lg:gap-20">
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">

@@ -10,12 +10,11 @@ import {
   injectedWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
+import { alchemyApiKey, walletConnectProjectId } from '@/lib/wallet-env'
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID
 const walletList = [metaMaskWallet, rainbowWallet, coinbaseWallet, injectedWallet]
 
-if (projectId) {
+if (walletConnectProjectId) {
   walletList.splice(3, 0, walletConnectWallet)
 }
 
@@ -26,11 +25,11 @@ const connectors = connectorsForWallets(
       wallets: walletList,
     },
   ],
-  { projectId, appName: 'Willcall' }
+  { projectId: walletConnectProjectId, appName: 'Willcall' }
 )
 
 function chainTransports(prefix: string) {
-  return alchemyId ? fallback([http(`${prefix}/${alchemyId}`), http()]) : http()
+  return alchemyApiKey ? fallback([http(`${prefix}/${alchemyApiKey}`), http()]) : http()
 }
 
 export const wagmiConfig = createConfig({
