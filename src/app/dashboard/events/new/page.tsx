@@ -52,7 +52,7 @@ function ScheduleField({ label, type, value, onChange }: ScheduleFieldProps) {
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="date-time-control h-12 rounded-pass border-white/12 bg-bg/70 pl-10 pr-3 font-mono text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+          className="date-time-control h-12 rounded-pass border-white/12 bg-bg/70 pl-10 pr-3 font-mono text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:text-sm"
         />
       </div>
     </div>
@@ -71,20 +71,6 @@ function formatCreateDropError(err: unknown): string {
     /* not JSON */
   }
   return err.message || 'Could not create drop'
-}
-
-function datePart(value: string) {
-  return value ? value.slice(0, 10) : ''
-}
-
-function timePart(value: string) {
-  return value ? value.slice(11, 16) : ''
-}
-
-function mergeDateTime(value: string, part: 'date' | 'time', next: string) {
-  const date = part === 'date' ? next : datePart(value)
-  const time = part === 'time' ? next : timePart(value)
-  return date && time ? `${date}T${time}` : ''
 }
 
 export default function CreateEventPage() {
@@ -112,6 +98,12 @@ export default function CreateEventPage() {
     capacity: 500,
     lat: undefined as number | undefined,
     lng: undefined as number | undefined,
+  })
+  const [schedule, setSchedule] = useState({
+    startDate: '',
+    startTime: '',
+    endDate: '',
+    endTime: '',
   })
   const [venueSearch, setVenueSearch] = useState('')
   const [location, setLocation] = useState<USLocationValue>(emptyUSLocation())
@@ -182,20 +174,44 @@ export default function CreateEventPage() {
   const titleValid = form.title.trim().length >= MIN_TITLE_LENGTH
 
   const isSubmitting = createEvent.isPending || createTier.isPending || openSales.isPending || goLive.isPending
+  const detailsMissing = [
+    !titleValid && 'title',
+    !descriptionValid && 'description',
+    form.venueName.trim().length < 2 && 'venue name',
+    form.venueAddress.trim().length < 5 && 'street address',
+    location.displayCity.length < 2 && 'city',
+    !schedule.startDate && 'start date',
+    !schedule.startTime && 'start time',
+    !schedule.endDate && 'end date',
+    !schedule.endTime && 'end time',
+  ].filter(Boolean) as string[]
 
   const canNext =
-    step === 0 ? !!form.posterUrl :
+    step === 0 ? Boolean(form.posterUrl) :
     step === 1
-      ? titleValid &&
-        descriptionValid &&
-        form.venueName.trim().length >= 2 &&
-        location.displayCity.length >= 2 &&
-        form.venueAddress.trim().length >= 5 &&
-        form.startsAt &&
-        form.endsAt
+      ? detailsMissing.length === 0
       :
-    step === 2 ? tierForm.name && tierForm.priceDollars > 0 :
+    step === 2 ? Boolean(tierForm.name && tierForm.priceDollars > 0) :
     true
+
+  const handleContinue = () => {
+    if (canNext) {
+      setStep(step + 1)
+      return
+    }
+
+    if (step === 1 && detailsMissing.length > 0) {
+      toast.error(`Missing ${detailsMissing.slice(0, 3).join(', ')}${detailsMissing.length > 3 ? '…' : ''}`)
+      return
+    }
+
+    if (step === 2) {
+      toast.error('Add a tier name and price before continuing')
+      return
+    }
+
+    toast.error('Finish this step before continuing')
+  }
 
   return (
     <AppShell>
@@ -372,26 +388,42 @@ export default function CreateEventPage() {
                   <ScheduleField
                     label="Start date *"
                     type="date"
-                    value={datePart(form.startsAt)}
-                    onChange={(value) => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'date', value) })}
+                    value={schedule.startDate}
+                    onChange={(value) => {
+                      const next = { ...schedule, startDate: value }
+                      setSchedule(next)
+                      setForm((f) => ({ ...f, startsAt: next.startDate && next.startTime ? `${next.startDate}T${next.startTime}` : '' }))
+                    }}
                   />
                   <ScheduleField
                     label="Start time *"
                     type="time"
-                    value={timePart(form.startsAt)}
-                    onChange={(value) => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'time', value) })}
+                    value={schedule.startTime}
+                    onChange={(value) => {
+                      const next = { ...schedule, startTime: value }
+                      setSchedule(next)
+                      setForm((f) => ({ ...f, startsAt: next.startDate && next.startTime ? `${next.startDate}T${next.startTime}` : '' }))
+                    }}
                   />
                   <ScheduleField
                     label="End date *"
                     type="date"
-                    value={datePart(form.endsAt)}
-                    onChange={(value) => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'date', value) })}
+                    value={schedule.endDate}
+                    onChange={(value) => {
+                      const next = { ...schedule, endDate: value }
+                      setSchedule(next)
+                      setForm((f) => ({ ...f, endsAt: next.endDate && next.endTime ? `${next.endDate}T${next.endTime}` : '' }))
+                    }}
                   />
                   <ScheduleField
                     label="End time *"
                     type="time"
-                    value={timePart(form.endsAt)}
-                    onChange={(value) => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'time', value) })}
+                    value={schedule.endTime}
+                    onChange={(value) => {
+                      const next = { ...schedule, endTime: value }
+                      setSchedule(next)
+                      setForm((f) => ({ ...f, endsAt: next.endDate && next.endTime ? `${next.endDate}T${next.endTime}` : '' }))
+                    }}
                   />
                   <p className="min-w-0 break-words rounded-drop border border-white/10 bg-bg/50 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted sm:col-span-2">
                     Timezone: <span className="text-text">{form.timezone}</span>
@@ -436,7 +468,7 @@ export default function CreateEventPage() {
                 <Button variant="ghost" onClick={() => setStep(step - 1)}>Back</Button>
               )}
               {step < STEPS.length - 1 ? (
-                <Button className="flex-1" disabled={!canNext} onClick={() => setStep(step + 1)}>Continue</Button>
+                <Button className="flex-1" onClick={handleContinue}>Continue</Button>
               ) : (
                 <Button className="flex-1" disabled={isSubmitting} onClick={handleSubmit}>
                   {isSubmitting ? 'Launching...' : launchNow ? COPY.launchDrop : 'Save draft'}
