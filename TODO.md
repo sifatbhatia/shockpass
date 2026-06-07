@@ -1,4 +1,4 @@
-# Turnstile — Development TODO
+# Willcall — Development TODO
 
 > QA: [SPEC.md](SPEC.md) · [docs/TEST_SPEC.md](docs/TEST_SPEC.md) · [docs/QA_SCORECARD.md](docs/QA_SCORECARD.md)
 
@@ -25,7 +25,7 @@
 
 ## V1 features completed this pass
 
-- [x] Turnstile rebrand (`src/lib/brand.ts`, `BrandMark`)
+- [x] Willcall rebrand (`src/lib/brand.ts`, `BrandMark`)
 - [x] Stripe PaymentElement + webhook fulfillment
 - [x] Order holds + inventory reservation
 - [x] Promo CRUD + server-side validation

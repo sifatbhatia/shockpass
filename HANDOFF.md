@@ -1,8 +1,8 @@
-# Turnstile — Agent Handoff
+# Willcall — Agent Handoff
 
 **Project path:** `C:\Users\sifat\Documents\projects\shockpass`  
 **Current date:** June 6, 2026  
-**Product:** Turnstile — drop-style event ticketing for attendees, organizers, and door staff  
+**Product:** Willcall — drop-style event ticketing for attendees, organizers, and door staff  
 **Stack:** Next.js 16.2.7, React 19.2, Tailwind 4, tRPC 11, Prisma 7, PostgreSQL, NextAuth v5 beta, Stripe, RainbowKit/wagmi  
 **Package manager:** npm only (`package-lock.json` is canonical)
 
@@ -12,7 +12,7 @@ This is the file a new agent should read first. The user may continue in another
 
 ## Current Status
 
-Turnstile is presentable as a portfolio product prototype. The core app builds and the main buyer/organizer surfaces exist:
+Willcall is presentable as a portfolio product prototype. The core app builds and the main buyer/organizer surfaces exist:
 
 - Public home, event discovery, event detail, checkout, wallet, ticket detail, scanner, auth, organizer dashboard.
 - Guest checkout exists through wallet access tokens.
@@ -45,13 +45,13 @@ This appears during `vitest`/`next build` from dependency/tooling internals. It 
 - Do not run destructive git commands.
 - `.env` exists locally; do not print secrets.
 - `AGENTS.md` says this is not the Next.js you know. Before touching Next-specific APIs, read the relevant local docs under `node_modules/next/dist/docs/`.
-- The project folder is still named `shockpass`, but the product and package are now `Turnstile`.
+- The project folder is still named `shockpass`, but the product and package are now `Willcall`.
 
 Recommended first commit, only if the user asks:
 
 ```bash
 git add .
-git commit -m "Initial Turnstile V1 prototype"
+git commit -m "Initial Willcall V1 prototype"
 ```
 
 ---
@@ -389,7 +389,7 @@ Findings:
 Suggested sequence:
 
 1. Open home page and visually check desktop/mobile header + footer.
-2. Update `README.md` for Turnstile.
+2. Update `README.md` for Willcall.
 3. Update stale `docs/index.md` and `SPEC.md` score table.
 4. Run or repair Playwright E2E against seeded data.
 5. Start production-hardening auth/payment/email only after UI presentation pass is approved.

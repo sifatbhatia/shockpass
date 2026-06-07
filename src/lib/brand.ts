@@ -1,9 +1,9 @@
 export const BRAND = {
-  name: 'Turnstile',
-  monogram: 'TS',
+  name: 'Willcall',
+  monogram: 'WC',
   tagline: 'Ticketing built for drops, hype, and packed rooms.',
-  domain: 'turnstile.app',
-  demoEmail: 'demo@turnstile.app',
+  domain: 'willcall.app',
+  demoEmail: 'demo@willcall.app',
   logo: {
     nav: '/brand/icon-80x80.png',
     mark: '/brand/icon-120x120.png',

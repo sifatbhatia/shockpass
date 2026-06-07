@@ -103,7 +103,7 @@ export const pageMetadata = {
   wallet: () =>
     buildPageMetadata({
       title: brandTitle(COPY.myWallet),
-      description: 'Your Turnstile passes — rotating QR codes ready at the door.',
+      description: 'Your Willcall passes — rotating QR codes ready at the door.',
       path: '/wallet',
       noIndex: true,
     }),

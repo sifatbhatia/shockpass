@@ -211,7 +211,7 @@ export default function CreateEventPage() {
                     onChange={(e) => setForm({ ...form, posterUrl: e.target.value })}
                     placeholder="https://images.yourdomain.com/poster.jpg"
                   />
-                  <FieldHint>Paste any image URL, or choose a Turnstile preset below.</FieldHint>
+                  <FieldHint>Paste any image URL, or choose a Willcall preset below.</FieldHint>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {posterPresets.map((poster) => (

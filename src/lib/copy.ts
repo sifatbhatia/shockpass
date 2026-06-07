@@ -76,7 +76,7 @@ export const COPY = {
     { title: 'Checkout in seconds', body: 'Guest email, a short hold timer, then pay — no signup wall.' },
     { title: 'Show your pass', body: 'Rotating QR in your wallet when you walk up to the door.' },
   ] as const,
-  homeAcceptsTitle: 'What Turnstile supports',
+  homeAcceptsTitle: 'What Willcall supports',
   homeAcceptsPayments: 'Payments',
   homeAcceptsPaymentsBody: 'Stripe checkout — Apple Pay, Google Pay, and major cards where supported.',
   homeAcceptsBuying: 'Buying',
@@ -128,7 +128,7 @@ export const COPY = {
   scanHideSearch: 'Hide search',
   eventsPageDesc: 'Live drops, upcoming rooms, and sellout campaigns',
   waitlistEmail: 'Email for waitlist',
-  shareDropTitle: (title: string) => `${title} · Turnstile`,
+  shareDropTitle: (title: string) => `${title} · Willcall`,
   fromPrice: (price: string) => `from ${price}`,
 } as const
 

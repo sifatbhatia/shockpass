@@ -76,7 +76,7 @@ function AuthFields() {
       {/* Left: venue imagery */}
       <div className="relative hidden min-h-screen overflow-hidden border-r border-white/10 bg-bg md:block grain-overlay">
         <Image
-          src="/assets/turnstile-hero-drop-v2.png"
+          src="/assets/willcall-hero-drop-v2.png"
           alt=""
           fill
           loading="eager"

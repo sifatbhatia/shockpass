@@ -1,10 +1,10 @@
-# Turnstile
+# Willcall
 
 > Ticketing built for drops, hype, and packed rooms.
 
 ## The Wedge
 
-Most event ticketing platforms are transactional. Turnstile is emotional, social, and conversion-obsessed.
+Most event ticketing platforms are transactional. Willcall is emotional, social, and conversion-obsessed.
 
 **Drop-style ticketing** — Launch tickets like limited-edition product drops. Early Access opens Friday at 10 AM. Price increases after every 100 sold. VIP unlocks after 80% GA sells out.
 
@@ -25,13 +25,13 @@ This turns tickets into a live market, not a checkout form.
 | **Dashboard** | ⏳ Partial | Metrics API; missing attendee list UI, promo CRUD, charts |
 | **Email** | ⏳ Stub | HTML template; console transport only |
 | **Tests** | ❌ Not started | See [SPEC.md](../SPEC.md) regression matrix |
-| **Brand** | ✅ Turnstile | `src/lib/brand.ts` |
+| **Brand** | ✅ Willcall | `src/lib/brand.ts` |
 
 Full QA scorecard and ship criteria: [SPEC.md](../SPEC.md)
 
 ## Market Differentiation vs Ticketmaster
 
-| Dimension | Ticketmaster | Turnstile |
+| Dimension | Ticketmaster | Willcall |
 |-----------|-------------|-----------|
 | **Ticket pricing** | Fixed, opaque fees | Dynamic drops, transparent pricing |
 | **Hype mechanics** | None | Referral unlocks, social proof, waitlist engine |
@@ -44,7 +44,7 @@ Full QA scorecard and ship criteria: [SPEC.md](../SPEC.md)
 ## Architecture
 
 ```
-turnstile/
+willcall/
 ├── prisma/              # Schema + seed
 ├── src/
 │   ├── app/             # Next.js App Router pages
@@ -65,7 +65,7 @@ npx prisma db seed
 npm run dev
 ```
 
-Demo organizer: `demo@turnstile.app` (after seed)
+Demo organizer: `demo@willcall.app` (after seed)
 
 ## Routes
 

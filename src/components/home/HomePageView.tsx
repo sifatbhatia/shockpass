@@ -22,7 +22,7 @@ import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/cn'
 
 const FALLBACK_HERO =
-  '/assets/turnstile-hero-drop-v2.png'
+  '/assets/willcall-hero-drop-v2.png'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -175,7 +175,7 @@ export function HomePageView() {
                 Ticket drops that make the room feel alive.
               </h1>
               <p data-hero-animate className="mt-4 max-w-lg text-pretty text-sm leading-relaxed text-muted font-sans md:text-base">
-                Find the room, see the price, hold the ticket, walk through the door. Turnstile keeps the whole night in one fast, human-made flow.
+                Find the room, see the price, hold the ticket, walk through the door. Willcall keeps the whole night in one fast, human-made flow.
               </p>
 
               <div data-hero-animate className="mt-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
@@ -388,7 +388,7 @@ export function HomePageView() {
                 Sell the room before checkout starts.
               </h2>
               <p className="mt-6 max-w-lg text-pretty text-sm leading-relaxed text-muted font-sans md:text-base">
-                The best ticketing products do three things well: show demand, make price clear, and keep the door calm. Turnstile puts all three on the first screen.
+                The best ticketing products do three things well: show demand, make price clear, and keep the door calm. Willcall puts all three on the first screen.
               </p>
             </div>
 

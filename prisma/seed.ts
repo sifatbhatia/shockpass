@@ -11,11 +11,11 @@ const prisma = new PrismaClient(
 async function main() {
   // Create a sample organizer user
   const organizer = await prisma.user.upsert({
-    where: { email: 'demo@turnstile.app' },
+    where: { email: 'demo@willcall.app' },
     update: {},
     create: {
-      email: 'demo@turnstile.app',
-      name: 'Turnstile Demo',
+      email: 'demo@willcall.app',
+      name: 'Willcall Demo',
       role: UserRole.ORGANIZER,
       authProvider: 'EMAIL',
     },
@@ -33,7 +33,7 @@ async function main() {
       startsAt: new Date('2026-07-18T22:00:00Z'),
       endsAt: new Date('2026-07-19T06:00:00Z'),
       capacity: 900,
-      posterUrl: '/assets/turnstile-hero-drop-v2.png',
+      posterUrl: '/assets/willcall-hero-drop-v2.png',
       timezone: 'America/New_York',
       status: EventStatus.LIVE,
       visibility: EventVisibility.PUBLIC,

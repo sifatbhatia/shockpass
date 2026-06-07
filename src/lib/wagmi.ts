@@ -26,7 +26,7 @@ const connectors = connectorsForWallets(
       wallets: walletList,
     },
   ],
-  { projectId, appName: 'Turnstile' }
+  { projectId, appName: 'Willcall' }
 )
 
 function chainTransports(prefix: string) {

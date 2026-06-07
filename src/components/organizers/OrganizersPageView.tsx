@@ -115,7 +115,7 @@ export function OrganizersPageView() {
                 <span className="block text-acid">Run the room.</span>
               </h1>
               <p data-org-hero className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
-                Turnstile gives promoters and venues a premium ticketing flow: sharp event pages, fast checkout, wallet passes, live capacity, and scanner-ready entry.
+                Willcall gives promoters and venues a premium ticketing flow: sharp event pages, fast checkout, wallet passes, live capacity, and scanner-ready entry.
               </p>
               <div data-org-hero className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button href={launchHref}>{COPY.launchADrop}</Button>
@@ -197,7 +197,7 @@ export function OrganizersPageView() {
                 Open a polished sales room in minutes.
               </h2>
               <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted">
-                Start with a poster and the first tier. Turnstile handles the buyer flow, pass delivery, and the door.
+                Start with a poster and the first tier. Willcall handles the buyer flow, pass delivery, and the door.
               </p>
             </div>
             <Link

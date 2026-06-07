@@ -51,8 +51,8 @@ export type DemoEvent = {
 
 const now = new Date('2026-06-06T09:00:00.000Z')
 const organizer = {
-  id: 'demo_org_turnstile',
-  name: 'Turnstile Demo',
+  id: 'demo_org_willcall',
+  name: 'Willcall Demo',
   avatarUrl: null,
   walletAddress: null,
 }
@@ -83,8 +83,8 @@ export const DEMO_EVENTS: DemoEvent[] = [
     title: 'Neon District Block Party',
     subtitle: "Brooklyn's biggest underground dance night",
     description:
-      'A night of house, techno, and bass music under the Brooklyn Bridge. Three stages, immersive art installations, and a silent disco until sunrise. This is the proof-of-flow demo drop for Turnstile.',
-    posterUrl: '/assets/turnstile-hero-drop-v2.png',
+      'A night of house, techno, and bass music under the Brooklyn Bridge. Three stages, immersive art installations, and a silent disco until sunrise. This is the proof-of-flow demo drop for Willcall.',
+    posterUrl: '/assets/willcall-hero-drop-v2.png',
     heroVideoUrl: null,
     venueName: 'The Warehouse',
     venueAddress: '45 Kent Ave, Brooklyn, NY 11249',

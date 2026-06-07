@@ -1,6 +1,6 @@
-# Turnstile Production Setup
+# Willcall Production Setup
 
-This guide is for wiring the local Turnstile app to real production services while keeping the current local setup usable.
+This guide is for wiring the local Willcall app to real production services while keeping the current local setup usable.
 
 ## 1. Local Development Stays As-Is
 
@@ -106,7 +106,7 @@ Set:
 
 ```env
 RESEND_API_KEY="re_..."
-EMAIL_FROM="Turnstile <tickets@your-domain.com>"
+EMAIL_FROM="Willcall <tickets@your-domain.com>"
 ```
 
 Verify the sending domain in Resend before production.
@@ -186,13 +186,13 @@ Environment variables must be set in the hosting dashboard, not committed.
 Current production alias:
 
 ```text
-https://turnstile-tau.vercel.app
+https://willcall-tau.vercel.app
 ```
 
 Current state:
 
 - Vercel production envs are configured for `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `NEXT_PUBLIC_APP_URL`, and `QR_ROTATION_SECRET`.
-- `NEXTAUTH_URL` and `NEXT_PUBLIC_APP_URL` should remain set to `https://turnstile-tau.vercel.app` until a custom domain is attached.
+- `NEXTAUTH_URL` and `NEXT_PUBLIC_APP_URL` should remain set to `https://willcall-tau.vercel.app` until a custom domain is attached.
 - The production database schema has been initialized and the app has three demo public drops for presentation.
 - `.vercelignore` excludes local `.env` files so Vercel uses dashboard env vars instead of localhost values.
 - The repo includes an initial Prisma migration at `prisma/migrations/20260606192500_init/migration.sql` for future clean databases.
@@ -248,7 +248,7 @@ The current repo is best described as a polished V1 prototype / demo MVP. It is 
 
 Suggested positioning:
 
-> Turnstile is a conversion-focused drop engine for events: live demand, fast checkout, wallet passes, and door scanning in one product.
+> Willcall is a conversion-focused drop engine for events: live demand, fast checkout, wallet passes, and door scanning in one product.
 
 Suggested pricing if sold as custom work:
 

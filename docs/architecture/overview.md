@@ -31,7 +31,7 @@ src/
 │   └── TRPCProvider.tsx     # tRPC React Query provider
 ├── lib/
 │   ├── auth.ts             # NextAuth config (Email, Wallet, Google, Apple)
-│   ├── brand.ts            # Turnstile name, tagline, monogram
+│   ├── brand.ts            # Willcall name, tagline, monogram
 │   ├── prisma.ts           # Prisma client singleton
 │   ├── stripe.ts           # Stripe client factory
 │   ├── email.ts            # Email template (stub)

@@ -1,4 +1,4 @@
-# Turnstile — Living Spec
+# Willcall — Living Spec
 
 > Ticketing built for drops, hype, and packed rooms.
 
@@ -6,13 +6,13 @@
 
 | Asset | Value |
 |-------|-------|
-| **Name** | Turnstile |
-| **Monogram** | TS |
-| **Domain** | turnstile.app |
+| **Name** | Willcall |
+| **Monogram** | WC |
+| **Domain** | willcall.app |
 | **Tagline** | Ticketing built for drops, hype, and packed rooms. |
 | **Source of truth** | `src/lib/brand.ts` |
 
-Turnstile is not just an event ticketing app. It should feel like:
+Willcall is not just an event ticketing app. It should feel like:
 
 > A drop engine for events people fight to get into.
 

@@ -33,7 +33,7 @@ function getDemoTicket(ticketId: string, accessToken: string) {
     updatedAt: new Date(),
     event,
     ticketTier: tier,
-    order: { buyerEmail: 'guest@turnstile.app', createdAt: new Date() },
+    order: { buyerEmail: 'guest@willcall.app', createdAt: new Date() },
   }
 }
 

@@ -75,7 +75,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!credentials?.address || !credentials?.signature) return null
         const address = credentials.address as string
         const signature = credentials.signature as string
-        const message = (credentials.message as string) || 'Sign in to Turnstile'
+        const message = (credentials.message as string) || 'Sign in to Willcall'
 
         const valid = verifyMessage({ address: address as `0x${string}`, message, signature: signature as `0x${string}` })
 

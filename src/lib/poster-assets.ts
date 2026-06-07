@@ -1,5 +1,5 @@
 export const POSTER_PRESETS = [
-  '/assets/turnstile-hero-drop-v2.png',
+  '/assets/willcall-hero-drop-v2.png',
   '/assets/scan-success-moment.png',
   '/assets/empty-drops-gallery.png',
   '/assets/empty-wallet-rope.png',

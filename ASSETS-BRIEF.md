@@ -1,4 +1,4 @@
-# Turnstile — ChatGPT Asset Generation Brief
+# Willcall — ChatGPT Asset Generation Brief
 
 **Paste this entire file into ChatGPT** (or attach it) when asking for logos, icons, illustrations, or textures. It contains brand rules, exact colors, file specs, and ready-made prompts.
 
@@ -7,7 +7,7 @@
 ## Copy-paste opener for ChatGPT
 
 ```
-You are designing brand assets for Turnstile — a premium dark-mode ticketing app for drop-style events (clubs, live shows, limited capacity). Buyers get fast guest checkout and wallet QR passes; organizers run drops, sell-through, and door scanning.
+You are designing brand assets for Willcall — a premium dark-mode ticketing app for drop-style events (clubs, live shows, limited capacity). Buyers get fast guest checkout and wallet QR passes; organizers run drops, sell-through, and door scanning.
 
 Creative direction: "The Lit Gallery" — a near-black exhibition hall, editorial and calm, NOT festival rave, NOT generic SaaS, NOT neon club lasers.
 
@@ -34,23 +34,23 @@ Output: PNG with transparent background where noted, square safe padding ~12%, c
 
 | Field | Value |
 |-------|-------|
-| **Name** | Turnstile |
-| **Monogram** | TS |
+| **Name** | Willcall |
+| **Monogram** | WC |
 | **Tagline** | Ticketing built for drops, hype, and packed rooms. |
-| **Domain** | turnstile.app |
+| **Domain** | willcall.app |
 | **Product** | Drop engine — urgency, live sell-through, wallet passes, organizer hub |
 | **Mood** | Gallery opening meets nightlife drop — confident, curatorial, dark luxury |
 | **Competitor vibe** | DICE (mobile-first, QR at door) + editorial fashion/gallery — **not** Shotgun neon party posters |
 
 ### Metaphor for logo
 
-**Turnstile = entry to a packed room.** Abstract gate: two curved arms, a single vertical entry slit, or a minimal rotation/ passage symbol. Should feel like **access**, not a literal metal subway turnstile photo.
+**Willcall = entry to a packed room.** Abstract guest-list mark: a ticket notch, entry slit, velvet-rope passage, or minimal access symbol. Should feel like **access**, not a literal venue photo or generic ticket stub.
 
 Preferred directions (pick one cohesive system):
 
 1. **Gate mark** — abstract blush symbol on black  
-2. **TS monogram** — serif-inspired ligature, gallery placard feel  
-3. **Wordmark** — “Turnstile” in high-contrast editorial serif + small gate icon  
+2. **WC monogram** — serif-inspired ligature, gallery placard feel  
+3. **Wordmark** — “Willcall” in high-contrast editorial serif + small gate icon  
 
 ---
 
@@ -112,7 +112,7 @@ Save generated files to `public/brand/` in the repo:
 
 ## Master style suffix (append to every prompt)
 
-> Ultra-minimal editorial brand design for Turnstile ticketing app. Near-black canvas #050505, blush #f8d6f7 and lavender #ecdffb accents sparingly. Gallery-grade, calm, confident — not neon, not SaaS clipart, not festival rave. Soft ambient glow only. Clean vector-friendly shapes, high contrast, generous negative space. Flat or subtle depth.
+> Ultra-minimal editorial brand design for Willcall ticketing app. Near-black canvas #050505, blush #f8d6f7 and lavender #ecdffb accents sparingly. Gallery-grade, calm, confident — not neon, not SaaS clipart, not festival rave. Soft ambient glow only. Clean vector-friendly shapes, high contrast, generous negative space. Flat or subtle depth.
 
 ---
 
@@ -121,23 +121,23 @@ Save generated files to `public/brand/` in the repo:
 ### Logo & identity
 
 **1. Primary logomark (icon only)**  
-> Minimal geometric logomark for Turnstile — abstract turnstile gate with two curved arms and a single entry slit, suggesting access to a packed room. One continuous stroke, rounded terminals, editorial not corporate. Blush #f8d6f7 mark on pure black #050505. Centered square, safe padding for app icon crop. Vector logo style, no text, no gradients except one soft blush radial glow at 8% opacity.  
+> Minimal geometric logomark for Willcall — abstract willcall gate with two curved arms and a single entry slit, suggesting access to a packed room. One continuous stroke, rounded terminals, editorial not corporate. Blush #f8d6f7 mark on pure black #050505. Centered square, safe padding for app icon crop. Vector logo style, no text, no gradients except one soft blush radial glow at 8% opacity.  
 > [Master style suffix]
 
-**2. TS monogram**  
-> Monogram “TS” for Turnstile — custom ligature where T and S share a vertical stem like a gallery placard bracket. Simplified geometric letterforms inspired by high-contrast serif. Single color blush #f8d6f7 on transparent background. Ultra clean, readable at 32px. No drop shadow, no 3D.  
+**2. WC monogram**  
+> Monogram “WC” for Willcall — custom ligature where W and C feel like a gallery placard bracket around an entry slit. Simplified geometric letterforms inspired by high-contrast serif. Single color blush #f8d6f7 on transparent background. Ultra clean, readable at 32px. No drop shadow, no 3D.  
 > [Master style suffix]
 
 **3. Horizontal wordmark lockup**  
-> Horizontal logo: abstract turnstile gate icon left + word “Turnstile” in elegant editorial serif wordmark (Fraunces-like), mixed case not uppercase. Blush icon, off-white #f7f5f5 wordmark on #050505. Wide 3:1 ratio, museum exhibition poster aesthetic.  
+> Horizontal logo: abstract willcall gate icon left + word “Willcall” in elegant editorial serif wordmark (Fraunces-like), mixed case not uppercase. Blush icon, off-white #f7f5f5 wordmark on #050505. Wide 3:1 ratio, museum exhibition poster aesthetic.  
 > [Master style suffix]
 
 **4. iOS app icon**  
-> App icon for Turnstile: rounded-square format, near-black #050505 background, centered blush turnstile gate symbol, subtle lavender glow at bottom edge only 5% opacity. No text. Crisp edges, premium nightlife-meets-gallery mood.  
+> App icon for Willcall: rounded-square format, near-black #050505 background, centered blush willcall gate symbol, subtle lavender glow at bottom edge only 5% opacity. No text. Crisp edges, premium nightlife-meets-gallery mood.  
 > [Master style suffix]
 
 **5. Favicon (ultra simple)**  
-> Favicon icon: single blush dot with tiny vertical slit (turnstile entry metaphor). Maximum legibility at 16px, flat, transparent or black background, pixel-sharp vector style.  
+> Favicon icon: single blush dot with tiny vertical slit (willcall entry metaphor). Maximum legibility at 16px, flat, transparent or black background, pixel-sharp vector style.  
 > [Master style suffix]
 
 ---
@@ -213,7 +213,7 @@ logo: {
 
 Favicon + OG also referenced in [src/app/layout.tsx](src/app/layout.tsx).
 
-[BrandMark](src/components/BrandMark.tsx) shows icon-only in nav; default variant shows icon + “Turnstile” in Fraunces (text is code, not baked into nav icon).
+[BrandMark](src/components/BrandMark.tsx) shows icon-only in nav; default variant shows icon + “Willcall” in Fraunces (text is code, not baked into nav icon).
 
 ---
 
@@ -245,7 +245,7 @@ Before accepting an asset, reject if it has:
 ## Suggested ChatGPT workflow
 
 **Step 1 — Logo exploration**  
-> Using the Turnstile brief attached, generate 4 distinct logomark directions (gate, monogram, geometric T, rotation arc). Blush on black. Square 1024×1024 transparent PNG.
+> Using the Willcall brief attached, generate 4 distinct logomark directions (gate, monogram, geometric T, rotation arc). Blush on black. Square 1024×1024 transparent PNG.
 
 **Step 2 — Refine winner**  
 > Direction 2 is closest. Simplify for 32px favicon. Export 3 versions: full detail, medium, ultra-minimal.

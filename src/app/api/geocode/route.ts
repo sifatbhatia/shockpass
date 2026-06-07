@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Too many requests. Try again in a minute.' }, { status: 429 })
   }
 
-  const userAgent = process.env.NOMINATIM_USER_AGENT ?? 'Turnstile/1.0 (turnstile.app)'
+  const userAgent = process.env.NOMINATIM_USER_AGENT ?? 'Willcall/1.0 (willcall.app)'
 
   try {
     const url = new URL('https://nominatim.openstreetmap.org/search')

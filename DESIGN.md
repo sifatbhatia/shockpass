@@ -1,5 +1,5 @@
 ---
-name: Turnstile
+name: Willcall
 description: Editorial gallery ticketing — black canvas, high-contrast serif, blush & lavender accents
 colors:
   canvas-black: "#050505"
@@ -90,13 +90,13 @@ components:
     padding: "1.5rem"
 ---
 
-# Design System: Turnstile
+# Design System: Willcall
 
 ## 1. Overview
 
 **Creative North Star: "The Lit Gallery"**
 
-Turnstile is staged like a dark exhibition hall: a near-black canvas, art (event posters, passes) lit by soft ambient glow, and a high-contrast serif that carries the voice. Tickets are treated as collectible objects, event pages as exhibition openings. The register is **product** (wallet, checkout, command center are real task surfaces) presented with **gallery-grade editorial polish** — calm, curatorial, confident. "Design becomes invisible and the work speaks for itself."
+Willcall is staged like a dark exhibition hall: a near-black canvas, art (event posters, passes) lit by soft ambient glow, and a high-contrast serif that carries the voice. Tickets are treated as collectible objects, event pages as exhibition openings. The register is **product** (wallet, checkout, command center are real task surfaces) presented with **gallery-grade editorial polish** — calm, curatorial, confident. "Design becomes invisible and the work speaks for itself."
 
 Depth comes from tonal layering (`canvas-black` → `panel` → `panel-raised`) plus rare, soft pastel glows — never neon. Accents are a **blush pink** and a **pale lavender** used sparingly on primary actions, live states, and light moments; the canvas stays overwhelmingly black and white.
 
@@ -251,5 +251,5 @@ Hybrid: flat panels at rest, soft pastel glow for live/selected/valid states, de
 | Fonts (Fraunces / DM Sans / Afacad / JetBrains Mono) | `src/app/layout.tsx` |
 | UI primitives | `src/components/ui/` |
 | Sidecar (shadows, motion, z-index) | `.impeccable/design.json` |
-| TS token mirror | `src/lib/design-tokens.ts` |
+| TypeScript token mirror | `src/lib/design-tokens.ts` |
 | Product strategy | `PRODUCT.md` |

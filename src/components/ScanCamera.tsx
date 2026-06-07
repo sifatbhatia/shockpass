@@ -20,7 +20,7 @@ export function ScanCamera({ onScan, active }: ScanCameraProps) {
       const { Html5Qrcode } = await import('html5-qrcode')
       if (cancelled || !ref.current) return
 
-      const id = 'turnstile-qr-reader'
+      const id = 'willcall-qr-reader'
       ref.current.id = id
       const scanner = new Html5Qrcode(id)
       scannerRef.current = scanner

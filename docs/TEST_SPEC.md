@@ -1,10 +1,10 @@
-# Turnstile Test Spec
+# Willcall Test Spec
 
 Full product QA specification. Canonical living spec: [../SPEC.md](../SPEC.md).
 
 ## Product standard
 
-Turnstile is a **drop engine for events people fight to get into** — not generic ticketing CRUD.
+Willcall is a **drop engine for events people fight to get into** — not generic ticketing CRUD.
 
 ## V1 functional QA
 

@@ -198,13 +198,13 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
 
   const organizerLinks = isOrganizer
     ? [
-        { label: 'Why Turnstile', href: '/organizers' },
+        { label: 'Why Willcall', href: '/organizers' },
         { label: COPY.launchDrop, href: '/dashboard/events/new' },
         { label: COPY.manageDrops, href: '/dashboard' },
         { label: COPY.doorScanner, href: '/scan' },
       ]
     : [
-        { label: 'Why Turnstile', href: '/organizers' },
+        { label: 'Why Willcall', href: '/organizers' },
         { label: COPY.launchADrop, href: '/auth?tab=signup' },
       ]
 
