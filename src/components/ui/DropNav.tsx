@@ -29,6 +29,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileRendered, setMobileRendered] = useState(false)
   const [navBarHeight, setNavBarHeight] = useState(72)
+  const [overBrightSurface, setOverBrightSurface] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
   const scrimRef = useRef<HTMLDivElement>(null)
@@ -51,6 +52,27 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
     ro.observe(bar)
     return () => ro.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!heroUnderNav) {
+      return
+    }
+
+    const syncSurface = () => {
+      const footer = document.querySelector('footer')
+      const footerRect = footer?.getBoundingClientRect()
+      setOverBrightSurface(Boolean(footerRect && footerRect.top <= navBarHeight && footerRect.bottom > 0))
+    }
+
+    const frame = window.requestAnimationFrame(syncSurface)
+    window.addEventListener('scroll', syncSurface, { passive: true })
+    window.addEventListener('resize', syncSurface)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', syncSurface)
+      window.removeEventListener('resize', syncSurface)
+    }
+  }, [heroUnderNav, navBarHeight])
 
   useEffect(() => {
     if (megaOpen) queueMicrotask(() => setMegaRendered(true))
@@ -221,6 +243,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           ]
         : []),
   ]
+  const darkNav = overBrightSurface && !megaOpen && !mobileOpen
 
   return (
     <>
@@ -238,17 +261,30 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           className={cn(
             'mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
             'transition-[background,border-color,backdrop-filter] duration-200',
-            heroUnderNav && !megaOpen && !mobileOpen && 'bg-gradient-to-b from-bg/34 via-bg/12 to-transparent backdrop-blur-[1px]',
+            heroUnderNav && !megaOpen && !mobileOpen && (
+              darkNav
+                ? 'bg-gradient-to-b from-nav-accent/42 via-nav-accent/14 to-transparent backdrop-blur-[1px]'
+                : 'bg-gradient-to-b from-bg/34 via-bg/12 to-transparent backdrop-blur-[1px]'
+            ),
             (megaOpen || mobileOpen) && 'bg-bg/96 backdrop-blur-xl'
           )}
         >
-          <BrandMark variant="nav" showPulse={showLivePulse} size="md" />
+          <BrandMark
+            variant="nav"
+            showPulse={showLivePulse}
+            size="md"
+            className={cn(darkNav && '[&_img]:brightness-0')}
+          />
 
           <div className="ml-auto hidden items-center lg:flex">
             <div
               className={cn(
                 'inline-flex items-center gap-0.5 rounded-full border border-white/12 px-1.5 py-1.5',
-                megaOpen ? 'bg-panel/90' : 'bg-white/[0.04] backdrop-blur-md'
+                megaOpen
+                  ? 'bg-panel/90'
+                  : darkNav
+                    ? 'border-bg/15 bg-bg/[0.06] backdrop-blur-md'
+                    : 'bg-white/[0.04] backdrop-blur-md'
               )}
             >
               <button
@@ -260,7 +296,9 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
                   'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
                   megaOpen
                     ? 'border-2 border-nav-accent bg-nav-accent text-bg'
-                    : 'border-2 border-transparent text-muted hover:text-text'
+                    : darkNav
+                      ? 'border-2 border-transparent text-bg/70 hover:text-bg'
+                      : 'border-2 border-transparent text-muted hover:text-text'
                 )}
               >
                 {COPY.dropsNav}
@@ -275,7 +313,10 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
                   key={link.href + link.label}
                   href={link.href}
                   onClick={() => setMegaOpen(false)}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-transparent px-4 py-2 text-sm font-medium font-sans text-muted transition-colors hover:text-text focus-ring"
+                  className={cn(
+                    'inline-flex min-h-11 items-center rounded-full border-2 border-transparent px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
+                    darkNav ? 'text-bg/70 hover:text-bg' : 'text-muted hover:text-text'
+                  )}
                 >
                   {link.label}
                 </Link>
@@ -289,7 +330,10 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
               aria-expanded={mobileOpen}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMobileOpen((open) => !open)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-text backdrop-blur-md focus-ring"
+              className={cn(
+                'inline-flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md focus-ring',
+                darkNav ? 'border-bg/15 bg-bg/[0.06] text-bg' : 'border-white/10 bg-white/[0.04] text-text'
+              )}
             >
               {mobileOpen ? (
                 <X className="h-5 w-5" strokeWidth={1.5} />
