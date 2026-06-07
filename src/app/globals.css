@@ -316,11 +316,26 @@ input[type="search"] {
 }
 
 .date-time-control {
+  appearance: none;
+  -webkit-appearance: none;
   color-scheme: dark;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.date-time-control::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: left;
 }
 
 .date-time-control::-webkit-calendar-picker-indicator {
   cursor: pointer;
+  flex: 0 0 auto;
+  margin-left: 2px;
   opacity: 0.72;
   filter: invert(1) sepia(1) saturate(0.4) hue-rotate(245deg);
   transition: opacity 160ms ease, transform 160ms ease;

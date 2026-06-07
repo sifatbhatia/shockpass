@@ -39,9 +39,9 @@ function ScheduleField({ label, type, value, onChange }: ScheduleFieldProps) {
   const Icon = type === 'date' ? CalendarDays : Clock
 
   return (
-    <div className="min-w-0">
+    <div className="w-full min-w-0 max-w-full overflow-hidden">
       <Label>{label}</Label>
-      <div className="group relative">
+      <div className="group relative w-full min-w-0 max-w-full overflow-hidden">
         <Icon
           className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted transition-colors group-focus-within:text-acid"
           strokeWidth={1.7}
@@ -52,7 +52,7 @@ function ScheduleField({ label, type, value, onChange }: ScheduleFieldProps) {
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="date-time-control h-12 rounded-pass border-white/12 bg-bg/70 pl-10 pr-3 font-mono text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:text-sm"
+          className="date-time-control block h-12 w-full min-w-0 max-w-full appearance-none rounded-pass border-white/12 bg-bg/70 pl-10 pr-2 font-mono text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:pr-3 sm:text-sm"
         />
       </div>
     </div>
