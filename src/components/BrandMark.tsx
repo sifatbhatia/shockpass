@@ -53,7 +53,7 @@ export function BrandMark({
         fetchPriority={variant === 'nav' ? 'high' : 'auto'}
         className={cn(
           'h-full w-full object-contain',
-          variant === 'nav' ? 'mix-blend-screen' : spec.className
+          variant === 'nav' ? '' : spec.className
         )}
       />
       {showPulse && (
