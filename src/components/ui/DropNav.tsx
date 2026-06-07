@@ -21,7 +21,7 @@ function ExternalIcon({ className }: { className?: string }) {
   return <ArrowUpRight className={cn('h-4 w-4 shrink-0 opacity-70', className)} strokeWidth={1.5} />
 }
 
-export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav = false }: DropNavProps) {
+export function DropNav({ className, showLivePulse, sticky = true }: DropNavProps) {
   const { data: session } = useSession()
   const isOrganizer = session?.user?.role === 'ORGANIZER' || session?.user?.role === 'ADMIN'
   const [megaOpen, setMegaOpen] = useState(false)
@@ -54,10 +54,6 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
   }, [])
 
   useEffect(() => {
-    if (!heroUnderNav) {
-      return
-    }
-
     const syncSurface = () => {
       const footer = document.querySelector('footer')
       const footerRect = footer?.getBoundingClientRect()
@@ -72,7 +68,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
       window.removeEventListener('scroll', syncSurface)
       window.removeEventListener('resize', syncSurface)
     }
-  }, [heroUnderNav, navBarHeight])
+  }, [navBarHeight])
 
   useEffect(() => {
     if (megaOpen) queueMicrotask(() => setMegaRendered(true))
@@ -251,8 +247,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
         ref={navRef}
         className={cn(
           sticky && 'sticky top-0 z-[51]',
-          heroUnderNav && 'bg-transparent',
-          !heroUnderNav && 'bg-bg/82 backdrop-blur-xl',
+          'bg-transparent',
           className
         )}
       >
@@ -261,7 +256,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           className={cn(
             'mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
             'transition-[background,border-color,backdrop-filter] duration-500 ease-out',
-            heroUnderNav && !megaOpen && !mobileOpen && (
+            !megaOpen && !mobileOpen && (
               darkNav
                 ? 'bg-gradient-to-b from-nav-accent/42 via-nav-accent/14 to-transparent backdrop-blur-[1px]'
                 : 'bg-gradient-to-b from-bg/34 via-bg/12 to-transparent backdrop-blur-[1px]'

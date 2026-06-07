@@ -29,8 +29,8 @@ export function SiteFooter() {
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),transparent_34%,rgba(5,5,5,0.05))]" aria-hidden />
 
-      <div className="relative mx-auto grid min-h-screen max-w-[1920px] grid-rows-[1fr_auto] px-5 pt-24 sm:px-8 md:px-12 md:pt-28 lg:pt-20">
-        <div className="relative z-10 grid gap-y-14 pb-48 md:grid-cols-12 md:gap-x-8 md:pb-56 lg:gap-x-6 lg:pb-64">
+      <div className="relative mx-auto grid min-h-screen max-w-[1650px] grid-rows-[1fr_auto] px-4 pt-24 sm:px-6 md:pt-28 lg:pt-20">
+        <div className="relative z-10 grid gap-y-14 pb-40 md:grid-cols-12 md:gap-x-8 md:pb-48 lg:gap-x-6 lg:pb-52">
           <section className="md:col-span-8 lg:col-span-7">
             <h2 className="max-w-[18ch] font-mono text-[clamp(3rem,4.6vw,6rem)] font-semibold uppercase leading-[1.02] tracking-normal text-bg">
               Ticket drops need momentum. Let&apos;s launch yours.
@@ -91,13 +91,13 @@ export function SiteFooter() {
         </div>
 
         <p
-          className="pointer-events-none absolute -bottom-[0.09em] left-1/2 z-0 hidden w-max -translate-x-1/2 select-none font-display text-[clamp(14rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg md:block"
+          className="pointer-events-none absolute bottom-[0.03em] left-1/2 z-0 hidden w-max -translate-x-1/2 select-none font-display text-[clamp(12rem,22vw,30rem)] font-medium leading-none tracking-normal text-bg md:block"
           aria-hidden
         >
           {BRAND.name}
         </p>
 
-        <div className="relative z-10 -mx-5 grid min-h-12 items-center gap-3 bg-bg px-5 py-3 font-mono text-sm font-semibold uppercase leading-tight tracking-normal text-text sm:-mx-8 sm:px-8 md:-mx-12 md:grid-cols-3 md:px-12">
+        <div className="relative z-10 -mx-4 grid min-h-12 items-center gap-3 bg-bg px-4 py-3 font-mono text-sm font-semibold uppercase leading-tight tracking-normal text-text sm:-mx-6 sm:px-6 md:grid-cols-3">
           <p>© 2026 · All rights reserved.</p>
           <a
             href="https://sifat.tech"

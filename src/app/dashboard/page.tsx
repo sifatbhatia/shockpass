@@ -52,13 +52,13 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-[1650px] px-4 py-8 sm:px-6 md:py-12">
+      <div className="mx-auto flex min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1650px] flex-col px-4 py-8 sm:px-6 md:py-12">
         <section className="mb-8 overflow-hidden rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_12%_0%,rgba(212,255,82,0.12),transparent_32%),rgba(255,255,255,0.035)] p-5 sm:p-7 md:p-8">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">Organizer hub</p>
               <h1 className="mt-4 max-w-3xl font-display text-5xl leading-[0.92] tracking-tight sm:text-6xl md:text-7xl">
-                Command center for every room you run.
+                Run every room from one place.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted md:text-base">
                 Track demand, revenue, capacity, and launch state without digging through scattered tools.
