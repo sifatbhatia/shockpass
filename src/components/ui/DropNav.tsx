@@ -260,7 +260,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           ref={barRef}
           className={cn(
             'mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
-            'transition-[background,border-color,backdrop-filter] duration-200',
+            'transition-[background,border-color,backdrop-filter] duration-500 ease-out',
             heroUnderNav && !megaOpen && !mobileOpen && (
               darkNav
                 ? 'bg-gradient-to-b from-nav-accent/42 via-nav-accent/14 to-transparent backdrop-blur-[1px]'
@@ -279,12 +279,12 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           <div className="ml-auto hidden items-center lg:flex">
             <div
               className={cn(
-                'inline-flex items-center gap-0.5 rounded-full border border-white/12 px-1.5 py-1.5',
+                'inline-flex items-center gap-0.5 rounded-full border border-white/12 px-1.5 py-1.5 transition-[background,border-color,box-shadow] duration-500 ease-out',
                 megaOpen
                   ? 'bg-panel/90'
                   : darkNav
-                    ? 'border-bg/15 bg-bg/[0.06] backdrop-blur-md'
-                    : 'bg-white/[0.04] backdrop-blur-md'
+                    ? 'border-bg/15 bg-bg/[0.035] shadow-none backdrop-blur-[2px]'
+                    : 'bg-white/[0.035] shadow-none backdrop-blur-[2px]'
               )}
             >
               <button
@@ -293,11 +293,11 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
                 aria-haspopup="true"
                 onClick={() => setMegaOpen((open) => !open)}
                 className={cn(
-                  'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
+                  'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium font-sans transition-colors duration-500 ease-out focus-ring',
                   megaOpen
                     ? 'border-2 border-nav-accent bg-nav-accent text-bg'
                     : darkNav
-                      ? 'border-2 border-transparent text-bg/70 hover:text-bg'
+                      ? 'border-2 border-transparent text-bg/82 hover:text-bg'
                       : 'border-2 border-transparent text-muted hover:text-text'
                 )}
               >
@@ -315,7 +315,7 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
                   onClick={() => setMegaOpen(false)}
                   className={cn(
                     'inline-flex min-h-11 items-center rounded-full border-2 border-transparent px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
-                    darkNav ? 'text-bg/70 hover:text-bg' : 'text-muted hover:text-text'
+                    darkNav ? 'text-bg/82 duration-500 ease-out hover:text-bg' : 'text-muted duration-500 ease-out hover:text-text'
                   )}
                 >
                   {link.label}

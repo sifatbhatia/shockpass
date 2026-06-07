@@ -413,33 +413,40 @@ export function HomePageView() {
 
           <div data-home-rule className="mt-16 h-px w-full bg-white/10 md:mt-20" />
 
-          <div data-home-animate className="grid gap-8 py-12 md:py-16 lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,1fr)] lg:gap-20">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-electric">
-                {COPY.homeAcceptsTitle}
-              </p>
-              <p className="mt-6 max-w-lg text-pretty font-display text-5xl leading-[0.95] tracking-tight text-text sm:text-6xl">
-                Fast enough for buyers. Precise enough for the box office.
+          <div data-home-animate className="py-12 md:py-16">
+            <div className="grid gap-6 border-b border-white/10 pb-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)] lg:items-end">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
+                  {COPY.homeAcceptsTitle}
+                </p>
+                <h2 className="mt-5 max-w-4xl font-display text-5xl leading-[0.95] tracking-tight text-text sm:text-6xl md:text-7xl">
+                  Built for the sale, the pass, and the door.
+                </h2>
+              </div>
+              <p className="max-w-2xl text-sm leading-relaxed text-muted font-sans md:text-base">
+                Willcall keeps the buyer path short and the organizer loop complete: payment, proof, live demand, and entry all stay connected.
               </p>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid border-b border-white/10 lg:grid-cols-4">
               {SUPPORT_ITEMS.map(({ icon: Icon, label, body }, index) => (
-                <div
+                <article
                   key={label}
-                  className="grid gap-4 border-b border-white/10 pb-5 last:border-b-0 sm:grid-cols-[44px_minmax(0,1fr)_56px] sm:items-start"
+                  className="group min-h-[16rem] border-b border-white/10 py-7 transition-colors hover:bg-white/[0.025] lg:border-b-0 lg:border-r lg:px-6 lg:last:border-r-0"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] text-acid">
-                    <Icon className="h-5 w-5" strokeWidth={1.6} />
-                  </span>
-                  <div>
-                    <p className="font-sans text-2xl font-semibold tracking-tight text-text">{label}</p>
-                    <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted font-sans">{body}</p>
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="font-mono text-xs text-electric">{`${index + 1}.0`}</span>
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-acid transition-colors group-hover:border-nav-accent/40 group-hover:text-nav-accent">
+                      <Icon className="h-5 w-5" strokeWidth={1.6} />
+                    </span>
                   </div>
-                  <span className="hidden text-right font-mono text-xs text-electric sm:block">
-                    {`${index + 1}.0`}
-                  </span>
-                </div>
+                  <h3 className="mt-14 font-sans text-3xl font-semibold leading-none tracking-tight text-text">
+                    {label}
+                  </h3>
+                  <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted font-sans">
+                    {body}
+                  </p>
+                </article>
               ))}
             </div>
           </div>
