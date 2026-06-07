@@ -1,0 +1,398 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ATTENDEE
+  ORGANIZER
+  ADMIN
+}
+
+enum UserAuthProvider {
+  EMAIL
+  WALLET
+  GOOGLE
+  APPLE
+}
+
+enum EventStatus {
+  DRAFT
+  SCHEDULED
+  LIVE
+  SOLD_OUT
+  COMPLETED
+  CANCELLED
+}
+
+enum EventVisibility {
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
+
+enum TicketTierStatus {
+  HIDDEN
+  LOCKED
+  ON_SALE
+  SOLD_OUT
+  ENDED
+}
+
+enum OrderPaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum TicketStatus {
+  VALID
+  CHECKED_IN
+  TRANSFERRED
+  REFUNDED
+  VOIDED
+}
+
+enum PromoDiscountType {
+  PERCENT
+  FIXED
+}
+
+enum WaitlistStatus {
+  ACTIVE
+  NOTIFIED
+  CONVERTED
+  EXPIRED
+}
+
+enum ReferralRewardType {
+  VIP_ACCESS
+  PERCENT_REFUND
+  BACKSTAGE
+  CUSTOM
+}
+
+enum ScanResult {
+  VALID
+  ALREADY_SCANNED
+  WRONG_EVENT
+  REFUNDED
+  VIP
+  GUESTLIST
+}
+
+model User {
+  id                    String             @id @default(cuid())
+  email                 String?            @unique
+  emailVerified         DateTime?
+  name                  String?
+  avatarUrl             String?
+  role                  UserRole           @default(ATTENDEE)
+  authProvider          UserAuthProvider   @default(EMAIL)
+  walletAddress         String?            @unique
+  walletChainId         Int?
+  walletVerifiedAt      DateTime?
+  organizerSlug         String?            @unique
+  organizerCity         String?
+  organizerLogoUrl      String?
+  stripeAccountId       String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  accounts              Account[]
+  sessions              Session[]
+  organizedEvents       Event[]            @relation("EventOrganizer")
+  orders                Order[]            @relation("OrderBuyer")
+  tickets               Ticket[]           @relation("TicketAttendee")
+  promoCodes            PromoCode[]        @relation("PromoCodeCreator")
+  referrals             Referral[]         @relation("ReferralUser")
+  referrerReferrals     Referral[]         @relation("ReferralReferrer")
+  waitlistEntries       WaitlistEntry[]
+  scanLogs              ScanLog[]
+
+  @@index([walletAddress])
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Event {
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  organizerId     String
+  title           String
+  subtitle        String?
+  description     String           @db.Text
+  posterUrl       String
+  heroVideoUrl    String?
+  venueName       String
+  venueAddress    String
+  city            String
+  timezone        String
+  lat             Float?
+  lng             Float?
+  startsAt        DateTime
+  endsAt          DateTime
+  capacity        Int
+  status          EventStatus      @default(DRAFT)
+  visibility      EventVisibility  @default(PUBLIC)
+  stripeAccountId String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  organizer       User             @relation("EventOrganizer", fields: [organizerId], references: [id])
+  ticketTiers     TicketTier[]
+  orders          Order[]
+  tickets         Ticket[]
+  promoCodes      PromoCode[]
+  waitlist        WaitlistEntry[]
+  referrals       Referral[]
+  scanLogs        ScanLog[]
+
+  @@index([organizerId])
+  @@index([status])
+  @@index([startsAt])
+  @@index([city])
+  @@index([slug])
+}
+
+model TicketTier {
+  id                String              @id @default(cuid())
+  eventId           String
+  name              String
+  description       String?
+  priceCents        Int
+  currency          String              @default("USD")
+  quantityTotal     Int
+  quantitySold      Int                 @default(0)
+  maxPerOrder       Int                 @default(10)
+  salesStartAt      DateTime?
+  salesEndAt        DateTime?
+  status            TicketTierStatus    @default(HIDDEN)
+  unlockRule        Json?               // Dynamic pricing / unlock rules
+  sortOrder         Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  event             Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  tickets           Ticket[]
+  promoCodes        PromoCode[]
+  orders            Order[]
+
+  @@index([eventId])
+  @@index([status])
+}
+
+model Order {
+  id                     String              @id @default(cuid())
+  eventId                String
+  ticketTierId           String
+  buyerId                String
+  buyerEmail             String
+  buyerPhone             String?
+  buyerName              String?
+  quantity               Int                 @default(1)
+  holdExpiresAt          DateTime?
+  walletAccessToken      String?             @unique
+  subtotalCents          Int
+  feesCents              Int
+  totalCents             Int
+  paymentStatus          OrderPaymentStatus  @default(PENDING)
+  stripePaymentIntentId  String?             @unique
+  stripeChargeId         String?
+  idempotencyKey         String              @unique
+  promoCodeId            String?
+  referralCode           String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  event                  Event               @relation(fields: [eventId], references: [id])
+  buyer                  User                @relation("OrderBuyer", fields: [buyerId], references: [id])
+  tickets                Ticket[]
+  promoCode              PromoCode?          @relation(fields: [promoCodeId], references: [id])
+  ticketTier             TicketTier          @relation(fields: [ticketTierId], references: [id])
+
+  @@index([eventId])
+  @@index([buyerId])
+  @@index([paymentStatus])
+  @@index([stripePaymentIntentId])
+}
+
+model Ticket {
+  id                  String          @id @default(cuid())
+  orderId             String
+  eventId             String
+  ticketTierId        String
+  attendeeId          String?
+  attendeeName        String?
+  attendeeEmail       String?
+  qrTokenHash         String          @unique
+  qrTokenVersion      Int             @default(1)
+  status              TicketStatus    @default(VALID)
+  checkedInAt         DateTime?
+  checkedInBy         String?
+  transferredToEmail  String?
+  transferToken       String?         @unique
+  transferExpiresAt   DateTime?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  order               Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  event               Event           @relation(fields: [eventId], references: [id])
+  ticketTier          TicketTier      @relation(fields: [ticketTierId], references: [id])
+  attendee            User?           @relation("TicketAttendee", fields: [attendeeId], references: [id])
+  scanLogs            ScanLog[]
+
+  @@index([orderId])
+  @@index([eventId])
+  @@index([attendeeId])
+  @@index([qrTokenHash])
+  @@index([transferToken])
+}
+
+model PromoCode {
+  id              String              @id @default(cuid())
+  eventId         String
+  ticketTierId    String?
+  code            String
+  discountType    PromoDiscountType
+  discountValue   Int
+  usageLimit      Int?
+  usedCount       Int                 @default(0)
+  attributedUserId String?
+  startsAt        DateTime?
+  endsAt          DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  event           Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  ticketTier      TicketTier?         @relation(fields: [ticketTierId], references: [id])
+  attributedUser  User?               @relation("PromoCodeCreator", fields: [attributedUserId], references: [id])
+  orders          Order[]
+
+  @@unique([eventId, code])
+  @@index([code])
+}
+
+model WaitlistEntry {
+  id           String           @id @default(cuid())
+  eventId      String
+  userId       String
+  email        String
+  status       WaitlistStatus   @default(ACTIVE)
+  position     Int
+  notifiedAt   DateTime?
+  convertedAt  DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  event        Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user         User             @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+  @@index([eventId, status])
+  @@index([email])
+}
+
+model Referral {
+  id               String              @id @default(cuid())
+  eventId          String
+  userId           String
+  referrerId       String?
+  code             String              @unique
+  clicks           Int                 @default(0)
+  conversions      Int                 @default(0)
+  revenueCents     Int                 @default(0)
+  rewardType       ReferralRewardType?
+  rewardValue      String?
+  rewardClaimedAt  DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  event            Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user             User                @relation("ReferralUser", fields: [userId], references: [id])
+  referrer         User?               @relation("ReferralReferrer", fields: [referrerId], references: [id])
+
+  @@index([eventId])
+  @@index([referrerId])
+  @@index([code])
+}
+
+model ScanLog {
+  id           String       @id @default(cuid())
+  eventId      String
+  ticketId     String
+  scannedBy    String
+  result       ScanResult
+  scannedAt    DateTime     @default(now())
+  deviceInfo   Json?
+
+  event        Event        @relation(fields: [eventId], references: [id])
+  ticket       Ticket       @relation(fields: [ticketId], references: [id])
+  scanner      User         @relation(fields: [scannedBy], references: [id])
+
+  @@index([eventId])
+  @@index([ticketId])
+  @@index([scannedBy])
+  @@index([scannedAt])
+}
+
+model OrganizerPayout {
+  id                    String   @id @default(cuid())
+  organizerId           String
+  stripeAccountId       String
+  amountCents           Int
+  currency              String   @default("USD")
+  status                String   // pending, paid, failed
+  stripeTransferId      String?
+  periodStart           DateTime
+  periodEnd             DateTime
+  createdAt             DateTime @default(now())
+  paidAt                DateTime?
+
+  @@index([organizerId])
+  @@index([stripeAccountId])
+  @@index([status])
+}
