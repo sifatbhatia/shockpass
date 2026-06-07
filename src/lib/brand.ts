@@ -5,7 +5,7 @@ export const BRAND = {
   domain: 'willcall.app',
   demoEmail: 'demo@willcall.app',
   logo: {
-    nav: '/brand/willcall-emblem.png',
+    nav: '/brand/willcall-nav.png',
     mark: '/brand/willcall-emblem.png',
     wordmark: '/brand/willcall-wordmark.png',
     horizontal: '/brand/willcall-horizontal-full.png',

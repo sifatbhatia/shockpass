@@ -18,6 +18,12 @@ const SIZE = {
   lg: { className: 'h-11 w-11', px: 44 },
 } as const
 
+const NAV_SIZE = {
+  sm: { className: 'h-9 w-[10.25rem]', width: 164, height: 36 },
+  md: { className: 'h-10 w-[11.375rem]', width: 182, height: 40 },
+  lg: { className: 'h-11 w-[12.5rem]', width: 200, height: 44 },
+} as const
+
 export function BrandMark({
   href = '/',
   className,
@@ -26,19 +32,29 @@ export function BrandMark({
   size = 'md',
 }: BrandMarkProps) {
   const spec = SIZE[size]
+  const navSpec = NAV_SIZE[size]
   const src = variant === 'nav' ? BRAND.logo.nav : BRAND.logo.mark
 
   const logo = (
-    <span className={cn('relative inline-flex shrink-0', spec.className, className)}>
+    <span
+      className={cn(
+        'relative inline-flex shrink-0 overflow-hidden',
+        variant === 'nav' ? navSpec.className : spec.className,
+        className
+      )}
+    >
       <Image
         src={src}
         alt=""
-        width={spec.px}
-        height={spec.px}
+        width={variant === 'nav' ? navSpec.width : spec.px}
+        height={variant === 'nav' ? navSpec.height : spec.px}
         unoptimized
         loading={variant === 'nav' ? 'eager' : 'lazy'}
         fetchPriority={variant === 'nav' ? 'high' : 'auto'}
-        className={cn('h-full w-full object-contain', spec.className)}
+        className={cn(
+          'h-full w-full object-contain',
+          variant === 'nav' ? 'mix-blend-screen' : spec.className
+        )}
       />
       {showPulse && (
         <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-nav-accent animate-live-pulse ring-2 ring-bg" />
