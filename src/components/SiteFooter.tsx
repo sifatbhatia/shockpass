@@ -91,7 +91,7 @@ export function SiteFooter() {
         </div>
 
         <p
-          className="pointer-events-none absolute -bottom-[0.26em] left-5 right-5 z-0 select-none font-display text-[clamp(9rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg sm:left-8 sm:right-8 md:left-12 md:right-12"
+          className="pointer-events-none absolute -bottom-[0.11em] left-5 right-5 z-0 select-none font-display text-[clamp(9rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg sm:left-8 sm:right-8 md:left-12 md:right-12"
           aria-hidden
         >
           {BRAND.name}
