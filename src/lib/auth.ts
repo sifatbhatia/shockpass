@@ -40,23 +40,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         name: { label: 'Name', type: 'text', optional: true },
-        accountType: { label: 'Account type', type: 'text', optional: true },
       },
       async authorize(credentials) {
         if (!credentials?.email) return null
         const email = credentials.email as string
-        const requestedRole = credentials.accountType === 'organizer' ? UserRole.ORGANIZER : UserRole.ATTENDEE
 
         let user = await prisma.user.findUnique({ where: { email } })
         if (!user) {
           const name = (credentials.name as string) || email.split('@')[0]
           user = await prisma.user.create({
-            data: { email, name, role: requestedRole, authProvider: 'EMAIL' },
-          })
-        } else if (requestedRole === UserRole.ORGANIZER && user.role === UserRole.ATTENDEE) {
-          user = await prisma.user.update({
-            where: { id: user.id },
-            data: { role: UserRole.ORGANIZER },
+            data: { email, name, role: UserRole.ATTENDEE, authProvider: 'EMAIL' },
           })
         }
 

@@ -1,19 +1,18 @@
-import { protectedProcedure } from '../init'
+import { z } from 'zod'
+import { adminProcedure } from '../init'
 import { prisma } from '@/lib/prisma'
 import { UserRole } from '@/generated/prisma/enums'
 
 export const userRouter = {
-  ensureOrganizer: protectedProcedure.mutation(async ({ ctx }) => {
-    if (ctx.user.role === UserRole.ORGANIZER || ctx.user.role === UserRole.ADMIN) {
-      return { role: ctx.user.role }
-    }
+  ensureOrganizer: adminProcedure
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await prisma.user.update({
+        where: { id: input.userId },
+        data: { role: UserRole.ORGANIZER },
+        select: { role: true },
+      })
 
-    const user = await prisma.user.update({
-      where: { id: ctx.user.id },
-      data: { role: UserRole.ORGANIZER },
-      select: { role: true },
+      return { role: user.role }
     })
-
-    return { role: user.role }
-  }),
 }

@@ -33,8 +33,6 @@ function AuthFields() {
   const [tab, setTab] = useState<'login' | 'signup'>(defaultTab)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
-  const [accountType, setAccountType] = useState<'attendee' | 'organizer'>('attendee')
-  const [loginAsOrganizer, setLoginAsOrganizer] = useState(false)
   const [loading, setLoading] = useState(false)
   const walletAuthEnabled = Boolean(walletConnectProjectId)
 
@@ -49,12 +47,6 @@ function AuthFields() {
       const result = await signIn('email', {
         email,
         name: tab === 'signup' ? name : undefined,
-        accountType:
-          tab === 'signup'
-            ? accountType
-            : loginAsOrganizer
-              ? 'organizer'
-              : undefined,
         redirect: false,
       })
       if (result?.error) {
@@ -141,34 +133,15 @@ function AuthFields() {
                 <Label>Email</Label>
                 <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
               </div>
-              {tab === 'login' && (
-                <label className="flex items-center gap-2 text-xs text-muted cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={loginAsOrganizer}
-                    onChange={(e) => setLoginAsOrganizer(e.target.checked)}
-                    className="h-4 w-4 accent-acid"
-                  />
-                  Sign in to {COPY.commandCenter.toLowerCase()}
-                </label>
-              )}
               {tab === 'signup' && (
                 <>
                   <div>
                     <Label>Name</Label>
                     <Input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
                   </div>
-                  <div>
-                    <Label>I want to</Label>
-                    <div className="grid grid-cols-2 gap-2 rounded-drop bg-panel-2 p-1">
-                      <button type="button" onClick={() => setAccountType('attendee')} className={`rounded-drop px-3 py-2 text-xs font-semibold transition-colors ${accountType === 'attendee' ? 'bg-panel text-text' : 'text-muted hover:text-text'}`}>
-                        {COPY.buyTickets}
-                      </button>
-                      <button type="button" onClick={() => setAccountType('organizer')} className={`rounded-drop px-3 py-2 text-xs font-semibold transition-colors ${accountType === 'organizer' ? 'bg-panel text-text' : 'text-muted hover:text-text'}`}>
-                        {COPY.launchADrop}
-                      </button>
-                    </div>
-                  </div>
+                  <p className="rounded-drop border border-white/10 bg-panel-2 px-3 py-2 text-xs leading-relaxed text-muted">
+                    New accounts start as buyers. Organizer access is granted after approval.
+                  </p>
                 </>
               )}
               <Button className="w-full" onClick={handleEmailAuth} disabled={loading}>
