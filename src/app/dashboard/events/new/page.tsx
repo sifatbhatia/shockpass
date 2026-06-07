@@ -166,39 +166,39 @@ export default function CreateEventPage() {
 
   return (
     <AppShell>
-      <div className="max-w-[1200px] mx-auto px-6 py-10">
-        <div className="mb-8">
-          <h1 className="font-display text-4xl tracking-tight mb-2">{COPY.openNewDrop}</h1>
+      <div className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 py-8 sm:px-6 md:py-10">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="font-display text-4xl tracking-tight mb-2 sm:text-5xl">{COPY.openNewDrop}</h1>
           <p className="text-sm text-muted">Poster → Details → Tiers → Launch</p>
         </div>
 
         {/* Stepper */}
-        <div className="flex items-center gap-2 mb-10">
+        <div className="mb-8 grid grid-cols-4 gap-2 sm:mb-10 sm:flex sm:items-center">
           {STEPS.map((label, i) => (
-            <div key={label} className="flex items-center gap-2 flex-1">
+            <div key={label} className="min-w-0 sm:flex sm:flex-1 sm:items-center sm:gap-2">
               <div className={cn(
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+                'mx-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:mx-0',
                 i <= step ? 'bg-acid text-bg' : 'bg-panel-2 text-muted'
               )}>
                 {i + 1}
               </div>
-              <span className={cn('text-xs uppercase tracking-wider hidden sm:inline', i <= step ? 'text-text' : 'text-muted')}>
+              <span className={cn('mt-2 block truncate text-center text-[10px] uppercase tracking-wider sm:mt-0 sm:text-left sm:text-xs', i <= step ? 'text-text' : 'text-muted')}>
                 {label}
               </span>
-              {i < STEPS.length - 1 && <div className="h-px flex-1 bg-border mx-2" />}
+              {i < STEPS.length - 1 && <div className="mx-2 hidden h-px flex-1 bg-border sm:block" />}
             </div>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid min-w-0 gap-8 md:grid-cols-[minmax(0,0.88fr)_minmax(0,1fr)] md:gap-10">
           {/* Live preview */}
-          <div className="sticky top-24">
+          <div className="min-w-0 md:sticky md:top-24">
             <Panel className="overflow-hidden">
-              <div className="relative aspect-[4/5]">
+              <div className="relative aspect-[16/10] md:aspect-[4/5]">
                 <EventPoster src={form.posterUrl} title={form.title || 'Your drop title'} className="absolute inset-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
-                <div className="absolute bottom-0 p-6">
-                  <p className="font-display text-3xl tracking-tight leading-tight">
+                <div className="absolute bottom-0 p-4 sm:p-6">
+                  <p className="font-display text-2xl tracking-tight leading-tight sm:text-3xl">
                     {form.title || 'Your drop title'}
                   </p>
                   {form.subtitle && <p className="text-sm text-muted mt-2">{form.subtitle}</p>}
@@ -214,7 +214,7 @@ export default function CreateEventPage() {
           </div>
 
           {/* Step content */}
-          <div>
+          <div className="min-w-0">
             {step === 0 && (
               <div className="space-y-4">
                 <h2 className="font-display text-2xl tracking-tight">{COPY.pickPoster}</h2>
@@ -227,7 +227,7 @@ export default function CreateEventPage() {
                   />
                   <FieldHint>Paste any image URL, or choose a Willcall preset below.</FieldHint>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2">
                   {posterPresets.map((poster) => (
                     <button
                       key={poster}
@@ -313,27 +313,27 @@ export default function CreateEventPage() {
                     }))
                   }}
                 />
-                <div className="grid gap-4 rounded-pass border border-border bg-panel/40 p-4 sm:grid-cols-2">
+                <div className="grid min-w-0 gap-3 rounded-pass border border-border bg-panel/40 p-3 sm:grid-cols-2 sm:gap-4 sm:p-4">
                   <div className="sm:col-span-2">
                     <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">Schedule</p>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>Start date *</Label>
                     <Input required type="date" value={datePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'date', e.target.value) })} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>Start time *</Label>
                     <Input required type="time" value={timePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'time', e.target.value) })} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>End date *</Label>
                     <Input required type="date" value={datePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'date', e.target.value) })} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>End time *</Label>
                     <Input required type="time" value={timePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'time', e.target.value) })} />
                   </div>
-                  <p className="text-xs text-muted sm:col-span-2">Timezone: {form.timezone}</p>
+                  <p className="min-w-0 break-words text-xs text-muted sm:col-span-2">Timezone: {form.timezone}</p>
                 </div>
                 <div><Label>Capacity *</Label><Input required type="number" value={form.capacity} onChange={e => setForm({ ...form, capacity: parseInt(e.target.value) || 0 })} mono /></div>
               </div>
@@ -344,10 +344,10 @@ export default function CreateEventPage() {
                 <h2 className="font-display text-2xl tracking-tight">{COPY.firstTier}</h2>
                 <div><Label>Tier name *</Label><Input required value={tierForm.name} onChange={e => setTierForm({ ...tierForm, name: e.target.value })} /></div>
                 <div><Label>Description</Label><Input value={tierForm.description} onChange={e => setTierForm({ ...tierForm, description: e.target.value })} /></div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div><Label>Price ($) *</Label><Input required type="number" step="0.01" value={tierForm.priceDollars} onChange={e => setTierForm({ ...tierForm, priceDollars: parseFloat(e.target.value) || 0 })} mono /></div>
-                  <div><Label>Qty *</Label><Input required type="number" value={tierForm.quantityTotal} onChange={e => setTierForm({ ...tierForm, quantityTotal: parseInt(e.target.value) || 0 })} mono /></div>
-                  <div><Label>Max/order *</Label><Input required type="number" value={tierForm.maxPerOrder} onChange={e => setTierForm({ ...tierForm, maxPerOrder: parseInt(e.target.value) || 1 })} mono /></div>
+                <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+                  <div className="min-w-0"><Label>Price ($) *</Label><Input required type="number" step="0.01" value={tierForm.priceDollars} onChange={e => setTierForm({ ...tierForm, priceDollars: parseFloat(e.target.value) || 0 })} mono /></div>
+                  <div className="min-w-0"><Label>Qty *</Label><Input required type="number" value={tierForm.quantityTotal} onChange={e => setTierForm({ ...tierForm, quantityTotal: parseInt(e.target.value) || 0 })} mono /></div>
+                  <div className="min-w-0"><Label>Max/order *</Label><Input required type="number" value={tierForm.maxPerOrder} onChange={e => setTierForm({ ...tierForm, maxPerOrder: parseInt(e.target.value) || 1 })} mono /></div>
                 </div>
               </div>
             )}
@@ -369,7 +369,7 @@ export default function CreateEventPage() {
               </div>
             )}
 
-            <div className="flex gap-3 mt-8">
+            <div className="mt-8 flex gap-3">
               {step > 0 && (
                 <Button variant="ghost" onClick={() => setStep(step - 1)}>Back</Button>
               )}

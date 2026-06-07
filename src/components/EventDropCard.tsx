@@ -48,7 +48,7 @@ export function EventDropCard({ event, variant = 'vertical', className }: EventD
     <Link
       href={`/events/${event.slug}`}
       className={cn(
-        'group focus-ring block overflow-hidden rounded-pass border border-border bg-panel shadow-panel',
+        'group focus-ring block min-w-0 overflow-hidden rounded-pass border border-border bg-panel shadow-panel',
         'transition-[border-color,transform,box-shadow] duration-200 hover:border-acid/45 hover:-translate-y-1 hover:shadow-glow-acid',
         isHorizontal ? 'grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]' : '',
         variant === 'featured' && 'md:min-h-[280px]',
@@ -75,7 +75,7 @@ export function EventDropCard({ event, variant = 'vertical', className }: EventD
         )}
       </div>
 
-      <div className={cn('flex flex-col justify-center p-5 md:p-6', variant === 'featured' && 'md:p-8')}>
+      <div className={cn('flex min-w-0 flex-col justify-center p-4 sm:p-5 md:p-6', variant === 'featured' && 'md:p-8')}>
         <p className="text-[11px] font-mono uppercase tracking-wider text-muted mb-2">
           {format(new Date(event.startsAt), 'EEE · MMM d')}
           {event.city ? ` · ${event.city}` : ''}
@@ -91,8 +91,8 @@ export function EventDropCard({ event, variant = 'vertical', className }: EventD
         {event.venueName && (
           <p className="mt-2 text-sm text-muted font-sans truncate">{event.venueName}</p>
         )}
-        <div className="mt-4 flex items-end justify-between gap-4">
-          <div>
+        <div className="mt-4 flex min-w-0 items-end justify-between gap-4">
+          <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-wider text-muted font-sans">From</p>
             <p className="font-mono text-lg font-semibold text-text">
               {minPrice !== null ? formatPrice(minPrice, currency) : '—'}

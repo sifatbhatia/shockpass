@@ -24,15 +24,16 @@ export default function EventsPage() {
 
   return (
     <AppShell showLivePulse={allEvents.some((e) => e.status === 'LIVE')}>
-      <section className="mx-auto max-w-[1650px] px-4 py-10 sm:px-6 md:py-14">
+      <section className="mx-auto min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1650px] overflow-hidden px-4 py-8 sm:px-6 md:py-14">
         <PageHeader
           title={COPY.findTheDrop}
           description={COPY.eventsPageDesc}
+          className="mb-6 sm:mb-10"
         />
 
-        <div className="sticky top-[calc(4.5rem+env(safe-area-inset-top))] z-[var(--z-dropdown)] -mx-4 mb-10 bg-bg/92 px-4 py-4 backdrop-blur-md sm:-mx-6 sm:px-6">
-          <div className="mx-auto flex max-w-[1650px] flex-col gap-3 sm:flex-row">
-            <div className="relative flex-1">
+        <div className="sticky top-[calc(var(--nav-bar-height,4.5rem)+env(safe-area-inset-top))] z-[var(--z-dropdown)] -mx-4 mb-8 border-y border-white/10 bg-bg/92 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:mb-10 sm:px-6 sm:py-4">
+          <div className="mx-auto grid max-w-[1650px] min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_11rem]">
+            <div className="relative min-w-0">
               <Input
                 type="search"
                 value={search}
@@ -55,14 +56,14 @@ export default function EventsPage() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="City"
-              className="sm:w-44"
+              className="min-w-0"
               aria-label="Filter by city"
             />
           </div>
         </div>
 
         {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <EventCardSkeleton key={i} />
             ))}
@@ -83,7 +84,7 @@ export default function EventsPage() {
           />
         ) : (
           <>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {allEvents.map((event) => (
                 <EventDropCard key={event.id} event={event} />
               ))}

@@ -305,3 +305,12 @@ html {
   background: rgba(248, 214, 247, 0.32);
   color: #050505;
 }
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="number"],
+input[type="search"] {
+  min-width: 0;
+  max-width: 100%;
+}
