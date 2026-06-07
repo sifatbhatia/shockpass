@@ -37,6 +37,18 @@ export const metadata: Metadata = {
   },
   description: BRAND.tagline,
   applicationName: BRAND.name,
+  creator: 'Sift Design',
+  publisher: BRAND.name,
+  category: 'event ticketing',
+  keywords: ['Willcall', 'ticket drops', 'event ticketing', 'wallet passes', 'door scanning'],
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: [
       { url: '/brand/icon-32x32.png', sizes: '32x32', type: 'image/png' },
@@ -45,12 +57,19 @@ export const metadata: Metadata = {
     apple: [{ url: '/brand/icon-180x180.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
+    title: brandTitle(),
+    description: BRAND.tagline,
+    url: siteConfig.url,
     siteName: BRAND.name,
     locale: 'en_US',
     type: 'website',
+    images: [{ url: siteConfig.ogImage, width: 512, height: 512, alt: `${BRAND.name} ticket logo` }],
   },
   twitter: {
     card: 'summary_large_image',
+    title: brandTitle(),
+    description: BRAND.tagline,
+    images: [siteConfig.ogImage],
   },
 }
 

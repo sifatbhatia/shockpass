@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { CalendarDays, Clock } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button } from '@/components/ui/Button'
 import { Input, Label, FieldHint } from '@/components/ui/Input'
@@ -26,6 +27,37 @@ const posterPresets: string[] = [...POSTER_PRESETS]
 const STEPS = ['Poster', 'Details', 'Tiers', 'Launch'] as const
 const MIN_DESCRIPTION_LENGTH = 10
 const MIN_TITLE_LENGTH = 3
+
+type ScheduleFieldProps = {
+  label: string
+  type: 'date' | 'time'
+  value: string
+  onChange: (value: string) => void
+}
+
+function ScheduleField({ label, type, value, onChange }: ScheduleFieldProps) {
+  const Icon = type === 'date' ? CalendarDays : Clock
+
+  return (
+    <div className="min-w-0">
+      <Label>{label}</Label>
+      <div className="group relative">
+        <Icon
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted transition-colors group-focus-within:text-acid"
+          strokeWidth={1.7}
+          aria-hidden
+        />
+        <Input
+          required
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="date-time-control h-12 rounded-pass border-white/12 bg-bg/70 pl-10 pr-3 font-mono text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+        />
+      </div>
+    </div>
+  )
+}
 
 function formatCreateDropError(err: unknown): string {
   if (!(err instanceof Error)) return 'Could not create drop'
@@ -81,6 +113,7 @@ export default function CreateEventPage() {
     lat: undefined as number | undefined,
     lng: undefined as number | undefined,
   })
+  const [venueSearch, setVenueSearch] = useState('')
   const [location, setLocation] = useState<USLocationValue>(emptyUSLocation())
   const [tierForm, setTierForm] = useState({
     name: 'General Admission',
@@ -281,9 +314,17 @@ export default function CreateEventPage() {
                 <USAddressAutocomplete
                   label="Venue search *"
                   placeholder="Search by venue name or street address..."
-                  value={form.venueAddress}
-                  onChange={(venueAddress) => setForm({ ...form, venueAddress })}
+                  value={venueSearch}
+                  onChange={(value) => {
+                    const previousSearch = venueSearch
+                    setVenueSearch(value)
+                    setForm((f) => ({
+                      ...f,
+                      venueName: f.venueName.trim().length === 0 || f.venueName === previousSearch ? value : f.venueName,
+                    }))
+                  }}
                   onSelect={(patch) => {
+                    setVenueSearch(patch.venueName || patch.venueAddress)
                     setForm((f) => ({
                       ...f,
                       venueAddress: patch.venueAddress,
@@ -301,6 +342,16 @@ export default function CreateEventPage() {
                   <Label>Venue name *</Label>
                   <Input required value={form.venueName} onChange={e => setForm({ ...form, venueName: e.target.value })} placeholder="The Echo" />
                 </div>
+                <div>
+                  <Label>Street address *</Label>
+                  <Input
+                    required
+                    value={form.venueAddress}
+                    onChange={e => setForm({ ...form, venueAddress: e.target.value })}
+                    placeholder="1822 Sunset Blvd"
+                  />
+                  <FieldHint>Auto-filled from venue search when available. You can edit it before launch.</FieldHint>
+                </div>
                 <USStateCitySelect
                   required
                   value={location}
@@ -313,27 +364,38 @@ export default function CreateEventPage() {
                     }))
                   }}
                 />
-                <div className="grid min-w-0 gap-3 rounded-pass border border-border bg-panel/40 p-3 sm:grid-cols-2 sm:gap-4 sm:p-4">
+                <div className="grid min-w-0 gap-3 rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_top_left,rgba(248,214,247,0.08),transparent_34%),rgba(255,255,255,0.035)] p-3 shadow-panel sm:grid-cols-2 sm:gap-4 sm:p-4">
                   <div className="sm:col-span-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">Schedule</p>
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-acid">Schedule</p>
+                    <p className="mt-1 text-xs text-muted">Separate door date and time. Timezone follows the selected city.</p>
                   </div>
-                  <div className="min-w-0">
-                    <Label>Start date *</Label>
-                    <Input required type="date" value={datePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'date', e.target.value) })} />
-                  </div>
-                  <div className="min-w-0">
-                    <Label>Start time *</Label>
-                    <Input required type="time" value={timePart(form.startsAt)} onChange={e => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'time', e.target.value) })} />
-                  </div>
-                  <div className="min-w-0">
-                    <Label>End date *</Label>
-                    <Input required type="date" value={datePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'date', e.target.value) })} />
-                  </div>
-                  <div className="min-w-0">
-                    <Label>End time *</Label>
-                    <Input required type="time" value={timePart(form.endsAt)} onChange={e => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'time', e.target.value) })} />
-                  </div>
-                  <p className="min-w-0 break-words text-xs text-muted sm:col-span-2">Timezone: {form.timezone}</p>
+                  <ScheduleField
+                    label="Start date *"
+                    type="date"
+                    value={datePart(form.startsAt)}
+                    onChange={(value) => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'date', value) })}
+                  />
+                  <ScheduleField
+                    label="Start time *"
+                    type="time"
+                    value={timePart(form.startsAt)}
+                    onChange={(value) => setForm({ ...form, startsAt: mergeDateTime(form.startsAt, 'time', value) })}
+                  />
+                  <ScheduleField
+                    label="End date *"
+                    type="date"
+                    value={datePart(form.endsAt)}
+                    onChange={(value) => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'date', value) })}
+                  />
+                  <ScheduleField
+                    label="End time *"
+                    type="time"
+                    value={timePart(form.endsAt)}
+                    onChange={(value) => setForm({ ...form, endsAt: mergeDateTime(form.endsAt, 'time', value) })}
+                  />
+                  <p className="min-w-0 break-words rounded-drop border border-white/10 bg-bg/50 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted sm:col-span-2">
+                    Timezone: <span className="text-text">{form.timezone}</span>
+                  </p>
                 </div>
                 <div><Label>Capacity *</Label><Input required type="number" value={form.capacity} onChange={e => setForm({ ...form, capacity: parseInt(e.target.value) || 0 })} mono /></div>
               </div>

@@ -17,8 +17,10 @@ function normalizeResult(item: {
   lat: string
   lon: string
   address?: Record<string, string>
+  namedetails?: Record<string, string>
 }): GeocodeResult | null {
   const addr = item.address ?? {}
+  const namedetails = item.namedetails ?? {}
   const stateCode = resolveStateCode(addr.state)
 
   const city =
@@ -31,6 +33,17 @@ function normalizeResult(item: {
 
   const street = [addr.house_number, addr.road].filter(Boolean).join(' ')
   const venueAddress = street || item.display_name.split(',')[0]?.trim() || ''
+  const venueName =
+    namedetails.name ||
+    addr.name ||
+    addr.amenity ||
+    addr.tourism ||
+    addr.leisure ||
+    addr.office ||
+    addr.building ||
+    addr.shop ||
+    addr.craft ||
+    null
 
   if (!city && !stateCode) return null
 
@@ -40,7 +53,7 @@ function normalizeResult(item: {
   return {
     label: item.display_name,
     venueAddress,
-    venueName: addr.amenity || addr.building || addr.shop || null,
+    venueName,
     city: displayCity,
     stateCode: resolvedState,
     lat: parseFloat(item.lat),
@@ -66,8 +79,9 @@ export async function GET(request: NextRequest) {
     url.searchParams.set('q', q)
     url.searchParams.set('format', 'json')
     url.searchParams.set('addressdetails', '1')
+    url.searchParams.set('namedetails', '1')
     url.searchParams.set('countrycodes', 'us')
-    url.searchParams.set('limit', '5')
+    url.searchParams.set('limit', '8')
 
     const res = await fetch(url.toString(), {
       headers: { 'User-Agent': userAgent, Accept: 'application/json' },
@@ -83,6 +97,7 @@ export async function GET(request: NextRequest) {
       lat: string
       lon: string
       address?: Record<string, string>
+      namedetails?: Record<string, string>
     }>
 
     const results = data.map(normalizeResult).filter((r): r is GeocodeResult => r !== null)

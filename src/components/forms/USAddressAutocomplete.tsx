@@ -51,10 +51,13 @@ export function USAddressAutocomplete({
     const el = inputRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
+    const gutter = 16
+    const availableWidth = Math.max(0, window.innerWidth - gutter * 2)
+    const width = Math.min(rect.width, availableWidth)
     setDropdownStyle({
       top: rect.bottom + window.scrollY + 4,
-      left: rect.left + window.scrollX,
-      width: rect.width,
+      left: Math.max(gutter, Math.min(rect.left, window.innerWidth - width - gutter)) + window.scrollX,
+      width,
     })
   }, [])
 
@@ -107,8 +110,14 @@ export function USAddressAutocomplete({
       }
     }
     document.addEventListener('mousedown', onDocClick)
-    return () => document.removeEventListener('mousedown', onDocClick)
-  }, [])
+    window.addEventListener('resize', updateDropdownPosition)
+    window.addEventListener('scroll', updateDropdownPosition, true)
+    return () => {
+      document.removeEventListener('mousedown', onDocClick)
+      window.removeEventListener('resize', updateDropdownPosition)
+      window.removeEventListener('scroll', updateDropdownPosition, true)
+    }
+  }, [updateDropdownPosition])
 
   const pickResult = (result: GeocodeResult) => {
     const state = US_STATES.find((s) => s.code === result.stateCode)
@@ -154,7 +163,7 @@ export function USAddressAutocomplete({
           <ul
             id={listId}
             role="listbox"
-            className="fixed z-[100] max-h-60 overflow-y-auto rounded-drop border border-border bg-panel shadow-glow-acid"
+            className="fixed z-[100] max-h-72 overflow-y-auto rounded-pass border border-white/12 bg-bg/95 p-1 shadow-panel backdrop-blur-xl"
             style={{
               top: dropdownStyle.top,
               left: dropdownStyle.left,
@@ -175,16 +184,16 @@ export function USAddressAutocomplete({
                 <button
                   type="button"
                   className={cn(
-                    'w-full px-4 py-3 text-left text-sm hover:bg-panel-2 transition-colors',
-                    i === activeIndex && 'bg-panel-2'
+                    'w-full rounded-drop px-3 py-3 text-left text-sm transition-colors hover:bg-white/[0.055]',
+                    i === activeIndex && 'bg-white/[0.07]'
                   )}
                   onMouseDown={(e) => {
                     e.preventDefault()
                     pickResult(result)
                   }}
                 >
-                  <span className="block truncate font-medium">{result.venueName || result.venueAddress}</span>
-                  <span className="block truncate text-xs text-muted mt-0.5">{result.label}</span>
+                  <span className="block truncate font-medium text-text">{result.venueName || result.venueAddress}</span>
+                  <span className="mt-1 block truncate text-xs text-muted">{result.label}</span>
                 </button>
               </li>
             ))}

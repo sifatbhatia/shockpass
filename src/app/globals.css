@@ -314,3 +314,19 @@ input[type="search"] {
   min-width: 0;
   max-width: 100%;
 }
+
+.date-time-control {
+  color-scheme: dark;
+}
+
+.date-time-control::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.72;
+  filter: invert(1) sepia(1) saturate(0.4) hue-rotate(245deg);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.date-time-control::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.04);
+}

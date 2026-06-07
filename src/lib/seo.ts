@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BRAND, brandTitle } from '@/lib/brand'
+import { BRAND } from '@/lib/brand'
 import { COPY } from '@/lib/copy'
 
 export const siteConfig = {
@@ -15,6 +15,7 @@ type PageMetaInput = {
   path?: string
   noIndex?: boolean
   images?: NonNullable<Metadata['openGraph']>['images']
+  keywords?: string[]
 }
 
 export function buildPageMetadata({
@@ -23,14 +24,28 @@ export function buildPageMetadata({
   path = '',
   noIndex = false,
   images,
+  keywords,
 }: PageMetaInput): Metadata {
   const url = `${siteConfig.url}${path}`
 
   return {
     title,
     description,
+    keywords,
     alternates: { canonical: url },
-    robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
+    robots: noIndex
+      ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+          },
+        },
     openGraph: {
       title,
       description,
@@ -54,24 +69,27 @@ export function buildPageMetadata({
 export const pageMetadata = {
   home: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.liveNow),
+      title: `${BRAND.name} — Ticket drops for rooms that sell out`,
       description: `${BRAND.tagline} Live drops, fast checkout, and wallet passes for rooms that sell out.`,
       path: '/',
+      keywords: ['ticket drops', 'event ticketing', 'guest checkout', 'wallet tickets', 'door scanning'],
     }),
 
   events: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.findTheDrop),
+      title: COPY.findTheDrop,
       description: 'Live drops, upcoming rooms, and sellout campaigns ranked by demand.',
       path: '/events',
+      keywords: ['live events', 'ticket drops', 'concert tickets', 'club tickets', 'event discovery'],
     }),
 
   organizers: () =>
     buildPageMetadata({
-      title: brandTitle('For organizers'),
+      title: 'For organizers',
       description:
         'Launch ticket drops with human-made pages, short checkout, wallet passes, and door scanning.',
       path: '/organizers',
+      keywords: ['event organizer software', 'ticketing platform', 'sell tickets online', 'door scanning', 'Stripe ticketing'],
     }),
 
   eventDetail: (event: {
@@ -82,7 +100,7 @@ export const pageMetadata = {
     slug: string
   }) =>
     buildPageMetadata({
-      title: brandTitle(event.title),
+      title: `${event.title} · ${BRAND.name}`,
       description:
         event.subtitle?.trim() ||
         event.description.replace(/\s+/g, ' ').trim().slice(0, 160),
@@ -94,7 +112,7 @@ export const pageMetadata = {
 
   checkout: (eventTitle: string, slug: string) =>
     buildPageMetadata({
-      title: brandTitle(`${COPY.completeOrder} · ${eventTitle}`),
+      title: `${COPY.completeOrder} · ${eventTitle} · ${BRAND.name}`,
       description: COPY.secureCheckout,
       path: `/events/${slug}/checkout`,
       noIndex: true,
@@ -102,7 +120,7 @@ export const pageMetadata = {
 
   wallet: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.myWallet),
+      title: COPY.myWallet,
       description: 'Your Willcall passes — rotating QR codes ready at the door.',
       path: '/wallet',
       noIndex: true,
@@ -110,14 +128,15 @@ export const pageMetadata = {
 
   auth: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.signIn),
+      title: COPY.signIn,
       description: `${COPY.joinTheRoom} or ${COPY.launchADrop.toLowerCase()} with email or wallet.`,
       path: '/auth',
+      noIndex: true,
     }),
 
   scan: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.doorScanner),
+      title: COPY.doorScanner,
       description: 'Scan rotating QR passes and check guests in at the door.',
       path: '/scan',
       noIndex: true,
@@ -125,7 +144,7 @@ export const pageMetadata = {
 
   dashboard: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.commandCenter),
+      title: COPY.commandCenter,
       description: COPY.trackDemand,
       path: '/dashboard',
       noIndex: true,
@@ -133,7 +152,7 @@ export const pageMetadata = {
 
   newDrop: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.openNewDrop),
+      title: COPY.openNewDrop,
       description: 'Set your poster, tiers, and go live with a drop-first sales page.',
       path: '/dashboard/events/new',
       noIndex: true,
@@ -141,7 +160,7 @@ export const pageMetadata = {
 
   onboarding: () =>
     buildPageMetadata({
-      title: brandTitle(COPY.setupBrand),
+      title: COPY.setupBrand,
       description: COPY.setupBrandHint,
       path: '/dashboard/onboarding',
       noIndex: true,
@@ -149,7 +168,7 @@ export const pageMetadata = {
 
   notFound: () =>
     buildPageMetadata({
-      title: brandTitle('Page not found'),
+      title: 'Page not found',
       description: COPY.dropNotFound,
       noIndex: true,
     }),
