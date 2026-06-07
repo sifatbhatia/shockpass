@@ -17,7 +17,7 @@ const SOCIAL_LINKS = [
 
 const LEGAL_LINKS = [
   { label: 'Privacy policy', href: '/' },
-  { label: 'Terms of services', href: '/' },
+  { label: 'Terms of service', href: '/' },
 ] as const
 
 export function SiteFooter() {
@@ -29,25 +29,23 @@ export function SiteFooter() {
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),transparent_34%,rgba(5,5,5,0.05))]" aria-hidden />
 
-      <div className="relative mx-auto grid min-h-screen max-w-[1920px] grid-rows-[1fr_auto] px-5 pt-28 sm:px-8 md:px-12 md:pt-32 lg:pt-24">
-        <div className="relative z-10 grid gap-12 pb-40 md:grid-cols-12 md:gap-8 md:pb-48 lg:gap-6 lg:pb-56">
-          <section className="md:col-span-10 lg:col-span-7">
-            <h2 className="max-w-[20ch] font-mono text-[clamp(3rem,4.5vw,5.8rem)] font-semibold uppercase leading-[1.02] tracking-normal text-bg lg:max-w-[21ch]">
-              Good rooms take good partners. Let&apos;s talk
+      <div className="relative mx-auto grid min-h-screen max-w-[1920px] grid-rows-[1fr_auto] px-5 pt-24 sm:px-8 md:px-12 md:pt-28 lg:pt-20">
+        <div className="relative z-10 grid gap-y-14 pb-48 md:grid-cols-12 md:gap-x-8 md:pb-56 lg:gap-x-6 lg:pb-64">
+          <section className="md:col-span-8 lg:col-span-7">
+            <h2 className="max-w-[18ch] font-mono text-[clamp(3rem,4.6vw,6rem)] font-semibold uppercase leading-[1.02] tracking-normal text-bg">
+              Ticket drops need momentum. Let&apos;s launch yours.
             </h2>
 
             <Link
-              href="/organizers"
+              href="/dashboard/events/new"
               className="mt-10 inline-flex items-center gap-3 border-b-2 border-bg pb-1 font-mono text-xl font-semibold uppercase tracking-normal transition-opacity hover:opacity-70 focus-ring md:text-2xl"
             >
-              Partner with us
+              Launch a drop
               <ArrowRight className="h-6 w-6" strokeWidth={2.25} />
             </Link>
           </section>
 
-          <div className="hidden lg:block" />
-
-          <div className="hidden content-start gap-10 font-mono text-lg font-semibold uppercase leading-tight lg:col-span-6 lg:grid lg:grid-cols-3 lg:pt-3">
+          <div className="grid content-start gap-6 font-mono text-base font-semibold uppercase leading-tight md:col-span-4 md:pt-2 lg:col-span-4 lg:col-start-9 lg:grid-cols-2">
             <a className="group inline-flex items-start gap-2 transition-opacity hover:opacity-70" href={`mailto:${BRAND.demoEmail}`}>
               <span aria-hidden>•</span>
               <span>{BRAND.demoEmail}</span>
@@ -60,7 +58,7 @@ export function SiteFooter() {
 
           <nav
             aria-label="Footer primary"
-            className="self-end font-mono text-[2rem] font-semibold uppercase leading-[1.18] tracking-normal md:col-span-4 md:text-[2.5rem] lg:col-span-3"
+            className="self-start font-mono text-[2rem] font-semibold uppercase leading-[1.18] tracking-normal md:col-span-3 md:row-start-2 md:text-[2.35rem]"
           >
             {PRIMARY_LINKS.map((link) => (
               <Link key={link.href} href={link.href} className="block w-fit transition-opacity hover:opacity-65 focus-ring">
@@ -71,7 +69,7 @@ export function SiteFooter() {
 
           <nav
             aria-label="Social"
-            className="self-end font-mono text-xl font-semibold uppercase leading-[1.55] tracking-normal md:col-span-4 md:col-start-7 md:text-2xl lg:col-span-3 lg:col-start-8"
+            className="self-start font-mono text-xl font-semibold uppercase leading-[1.55] tracking-normal md:col-span-3 md:col-start-7 md:row-start-2 md:text-2xl"
           >
             {SOCIAL_LINKS.map((link) => (
               <a key={link.label} href={link.href} className="block w-fit transition-opacity hover:opacity-65 focus-ring">
@@ -80,20 +78,9 @@ export function SiteFooter() {
             ))}
           </nav>
 
-          <div className="grid content-end gap-10 font-mono text-xl font-semibold uppercase leading-[1.35] tracking-normal md:col-span-4 md:col-start-1 md:row-start-3 md:text-2xl lg:hidden">
-            <a href={`mailto:${BRAND.demoEmail}`} className="w-fit transition-opacity hover:opacity-65 focus-ring">
-              {BRAND.demoEmail}
-            </a>
-            <p>
-              Los Angeles
-              <br />
-              California, USA
-            </p>
-          </div>
-
           <nav
             aria-label="Legal"
-            className="self-end font-mono text-xl font-semibold uppercase leading-[1.35] tracking-normal md:col-span-4 md:col-start-7 md:text-2xl lg:col-span-3 lg:col-start-11 lg:row-start-2"
+            className="self-start font-mono text-xl font-semibold uppercase leading-[1.35] tracking-normal md:col-span-3 md:col-start-10 md:row-start-2 md:text-2xl"
           >
             {LEGAL_LINKS.map((link) => (
               <Link key={link.label} href={link.href} className="block w-fit transition-opacity hover:opacity-65 focus-ring">
@@ -104,7 +91,7 @@ export function SiteFooter() {
         </div>
 
         <p
-          className="pointer-events-none absolute -bottom-[0.24em] left-5 right-5 z-0 select-none font-display text-[clamp(10rem,30vw,40rem)] font-medium leading-none tracking-normal text-bg sm:left-8 sm:right-8 md:left-12 md:right-12"
+          className="pointer-events-none absolute -bottom-[0.26em] left-5 right-5 z-0 select-none font-display text-[clamp(9rem,28vw,38rem)] font-medium leading-none tracking-normal text-bg sm:left-8 sm:right-8 md:left-12 md:right-12"
           aria-hidden
         >
           {BRAND.name}

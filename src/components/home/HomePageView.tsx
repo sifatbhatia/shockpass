@@ -369,14 +369,7 @@ export function HomePageView() {
 
       {/* Editorial system — less dashboard, more night-out magazine */}
       <section className="relative overflow-hidden border-t border-white/10 bg-bg">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(24,24,24,0.42),rgba(5,5,5,0)_26%),radial-gradient(ellipse_at_82%_16%,rgba(248,214,247,0.13),transparent_34%),radial-gradient(ellipse_at_12%_88%,rgba(143,217,189,0.08),transparent_34%)]" />
-        <Image
-          src="/assets/pass-texture.png"
-          alt=""
-          fill
-          sizes="100vw"
-          className="pointer-events-none object-cover opacity-[0.12] mix-blend-screen"
-        />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-panel/42 to-transparent" />
 
         <div className="relative mx-auto max-w-[1650px] px-4 py-14 sm:px-6 sm:py-18 md:py-24">
           <div data-home-animate className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:gap-20">
@@ -484,7 +477,7 @@ export function HomePageView() {
           </div>
 
           <div data-home-animate className="relative mt-2 overflow-hidden border-y border-white/10 py-10 md:py-14">
-            <div className="absolute inset-y-0 right-0 hidden w-1/2 opacity-50 md:block">
+            <div className="absolute inset-y-0 right-0 hidden w-1/2 opacity-20 md:block">
               <Image
                 src="/assets/scan-success-moment.png"
                 alt=""
@@ -492,7 +485,7 @@ export function HomePageView() {
                 sizes="50vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/45 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/80 to-bg/40" />
             </div>
 
             <div className="relative grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(360px,0.72fr)] lg:gap-20">

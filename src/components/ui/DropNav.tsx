@@ -237,9 +237,9 @@ export function DropNav({ className, showLivePulse, sticky = true, heroUnderNav 
           ref={barRef}
           className={cn(
             'mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
-            'border-b border-white/10 transition-[background,border-color,backdrop-filter] duration-200',
-            heroUnderNav && !megaOpen && !mobileOpen && 'bg-gradient-to-b from-bg/76 via-bg/36 to-transparent backdrop-blur-[2px] border-white/5',
-            (megaOpen || mobileOpen) && 'bg-bg/96 backdrop-blur-xl border-white/10'
+            'transition-[background,border-color,backdrop-filter] duration-200',
+            heroUnderNav && !megaOpen && !mobileOpen && 'bg-gradient-to-b from-bg/76 via-bg/36 to-transparent backdrop-blur-[2px]',
+            (megaOpen || mobileOpen) && 'bg-bg/96 backdrop-blur-xl'
           )}
         >
           <BrandMark variant="nav" showPulse={showLivePulse} size="md" />
