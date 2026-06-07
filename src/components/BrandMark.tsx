@@ -13,9 +13,9 @@ type BrandMarkProps = {
 }
 
 const SIZE = {
-  sm: { className: 'h-9 w-9', px: 36, src: BRAND.logo.nav },
-  md: { className: 'h-10 w-10', px: 40, src: BRAND.logo.nav },
-  lg: { className: 'h-11 w-11', px: 44, src: BRAND.logo.mark },
+  sm: { className: 'h-9 w-9', px: 36 },
+  md: { className: 'h-10 w-10', px: 40 },
+  lg: { className: 'h-11 w-11', px: 44 },
 } as const
 
 export function BrandMark({
@@ -57,12 +57,16 @@ export function BrandMark({
   return (
     <Link
       href={href}
-      className={cn('inline-flex items-center gap-2.5 group focus-ring rounded-full min-h-11', className)}
+      className={cn('inline-flex items-center group focus-ring rounded-full min-h-11', className)}
     >
-      {logo}
-      <span className="font-display text-xl tracking-tight text-text group-hover:text-acid transition-colors sm:text-2xl">
-        {BRAND.name}
-      </span>
+      <Image
+        src={BRAND.logo.wordmark}
+        alt={BRAND.name}
+        width={186}
+        height={58}
+        unoptimized
+        className="h-9 w-auto object-contain transition-opacity group-hover:opacity-85 sm:h-10"
+      />
     </Link>
   )
 }
