@@ -5,15 +5,21 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { format } from 'date-fns'
-import { Activity, CalendarDays, DollarSign, Users } from 'lucide-react'
+import { Activity, CalendarDays, DollarSign, Users, Plus, Ticket } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button } from '@/components/ui/Button'
+import { Panel } from '@/components/ui/Panel'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { DashboardShellSkeleton } from '@/components/ui/Skeleton'
 import { EventPoster } from '@/components/EventPoster'
 import { SellThroughBar } from '@/components/SellThroughBar'
 import { trpc } from '@/trpc/client'
 import { COPY } from '@/lib/copy'
+import { cn } from '@/lib/cn'
+
+function formatCurrency(cents: number): string {
+  return `$${(cents / 100).toFixed(2)}`
+}
 
 export default function DashboardPage() {
   const { status } = useSession()
@@ -43,59 +49,69 @@ export default function DashboardPage() {
     { sold: 0, capacity: 0, gross: 0, live: 0 }
   )
   const fillRate = totals.capacity > 0 ? Math.round((totals.sold / totals.capacity) * 100) : 0
-  const metrics = [
-    { label: 'Gross', value: `$${Math.round(totals.gross / 100).toLocaleString()}`, icon: DollarSign },
-    { label: 'Tickets out', value: `${totals.sold}/${totals.capacity}`, icon: Users },
-    { label: 'Live drops', value: totals.live.toString(), icon: Activity },
-    { label: 'Fill rate', value: `${fillRate}%`, icon: CalendarDays },
-  ] as const
 
   return (
     <AppShell>
-      <div className="mx-auto flex min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1650px] flex-col px-4 py-8 sm:px-6 md:py-12">
-        <section className="mb-8 overflow-hidden rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_12%_0%,rgba(212,255,82,0.12),transparent_32%),rgba(255,255,255,0.035)] p-5 sm:p-7 md:p-8">
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">Organizer hub</p>
-              <h1 className="mt-4 max-w-3xl font-display text-5xl leading-[0.92] tracking-tight sm:text-6xl md:text-7xl">
-                Run every room from one place.
-              </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted md:text-base">
-                Track demand, revenue, capacity, and launch state without digging through scattered tools.
-              </p>
-            </div>
-            <Button href="/dashboard/events/new" className="w-full lg:w-auto">{COPY.launchDrop}</Button>
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-8 sm:px-6 md:py-10">
+        {/* ── Header ── */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-nav-accent mb-1">Organizer hub</p>
+            <h1 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl leading-[1.05]">
+              {events.length > 0 ? `You have ${events.length} drop${events.length !== 1 ? 's' : ''}` : 'Welcome to your hub'}
+            </h1>
+            <p className="text-sm text-muted font-sans mt-1 max-w-xl">
+              Track demand, revenue, capacity, and launch state from one place.
+            </p>
           </div>
+          <Button href="/dashboard/events/new" className="shrink-0">
+            <Plus className="h-4 w-4 mr-1.5" />
+            {COPY.launchDrop}
+          </Button>
+        </div>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {metrics.map(({ label, value, icon: Icon }) => (
-              <div key={label} className="rounded-drop border border-white/10 bg-bg/64 p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">{label}</p>
-                  <Icon className="h-4 w-4 text-acid" strokeWidth={1.6} />
-                </div>
-                <p className="mt-5 font-mono text-2xl font-semibold text-text">{value}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* ── Stats ── */}
+        <div className="grid grid-cols-2 gap-3 mb-8 sm:grid-cols-4">
+          <Panel className="p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted mb-1">Gross</p>
+            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{formatCurrency(totals.gross)}</p>
+          </Panel>
+          <Panel className="p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted mb-1">Tickets sold</p>
+            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{totals.sold}/{totals.capacity}</p>
+          </Panel>
+          <Panel className="p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted mb-1">Live drops</p>
+            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{totals.live}</p>
+          </Panel>
+          <Panel className="p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted mb-1">Fill rate</p>
+            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{fillRate}%</p>
+          </Panel>
+        </div>
 
+        {/* ── Events / Empty State ── */}
         {events.length === 0 ? (
-          <EmptyState
-            title="No drops yet"
-            description={COPY.firstDropHint}
-            actionLabel={COPY.openNewDrop}
-            actionHref="/dashboard/events/new"
-          />
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <Ticket className="h-12 w-12 text-muted-deep mb-4" strokeWidth={1.5} />
+            <h2 className="font-display text-2xl tracking-tight mb-2">No drops yet</h2>
+            <p className="text-sm text-muted font-sans mb-6 max-w-md">{COPY.firstDropHint}</p>
+            <Button href="/dashboard/events/new">
+              <Plus className="h-4 w-4 mr-1.5" />
+              {COPY.openNewDrop}
+            </Button>
+          </div>
         ) : (
-          <div className="overflow-hidden rounded-pass border border-white/10 bg-panel/40">
-            <div className="hidden grid-cols-[minmax(0,1.3fr)_0.8fr_0.7fr_0.7fr_0.8fr] gap-5 border-b border-white/10 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted lg:grid">
+          <div className="overflow-hidden rounded-pass border border-border bg-panel/40">
+            {/* Table header (desktop) */}
+            <div className="hidden lg:grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 border-b border-border font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
               <span>Drop</span>
               <span>When</span>
               <span>Fill</span>
               <span>Gross</span>
               <span>Status</span>
             </div>
+
             {events.map((event) => {
               const totalSold = event.ticketTiers.reduce((s, t) => s + t.quantitySold, 0)
               const totalCap = event.ticketTiers.reduce((s, t) => s + t.quantityTotal, 0)
@@ -114,44 +130,80 @@ export default function DashboardPage() {
                 <Link
                   key={event.id}
                   href={`/dashboard/events/${event.id}`}
-                  className="focus-ring grid gap-4 border-b border-white/10 p-4 transition-colors last:border-b-0 hover:bg-white/[0.035] sm:p-5 lg:grid-cols-[minmax(0,1.3fr)_0.8fr_0.7fr_0.7fr_0.8fr] lg:items-center lg:gap-5"
+                  className="focus-ring block border-b border-border last:border-b-0 transition-colors hover:bg-white/[0.025]"
                 >
-                  <div className="flex min-w-0 gap-4">
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-drop bg-panel-2">
-                      <EventPoster src={event.posterUrl} title={event.title} />
+                  <div className="p-4 sm:p-5">
+                    {/* Mobile layout */}
+                    <div className="lg:hidden">
+                      <div className="flex gap-4">
+                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-drop bg-panel-2">
+                          <EventPoster src={event.posterUrl} title={event.title} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <h3 className="text-sm font-semibold font-sans truncate">{event.title}</h3>
+                              <p className="text-xs text-muted font-sans truncate mt-0.5">
+                                {event.venueName} · {event.city} · {format(new Date(event.startsAt), 'MMM d')}
+                              </p>
+                            </div>
+                            <span className={cn(
+                              'shrink-0 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-sans',
+                              event.status === 'LIVE' ? 'border-success/40 bg-success/10 text-success' :
+                              event.status === 'SCHEDULED' ? 'border-acid/30 bg-acid/10 text-acid' :
+                              'border-muted/20 bg-muted/10 text-muted'
+                            )}>
+                              {event.status === 'LIVE' ? 'Live' :
+                               event.status === 'SCHEDULED' ? 'Scheduled' :
+                               event.status === 'DRAFT' ? 'Draft' :
+                               event.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 mt-2 text-xs text-muted font-mono">
+                            <span>{totalSold}/{totalCap} sold</span>
+                            <span>${gross.toLocaleString()}</span>
+                          </div>
+                          {totalCap > 0 && (
+                            <div className="mt-2">
+                              <SellThroughBar sold={totalSold} capacity={totalCap} />
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="min-w-0 self-center">
-                      <h3 className="truncate text-base font-semibold font-sans">{event.title}</h3>
-                      <p className="mt-1 truncate text-sm text-muted">
-                        {event.venueName} · {event.city}
-                      </p>
-                      <span className="mt-3 inline-flex rounded-full border border-acid/30 px-2 py-0.5 text-xs text-acid lg:hidden">{nextAction}</span>
+
+                    {/* Desktop layout */}
+                    <div className="hidden lg:grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 items-center">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-drop bg-panel-2">
+                          <EventPoster src={event.posterUrl} title={event.title} />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="text-sm font-semibold font-sans truncate">{event.title}</h3>
+                          <p className="text-xs text-muted font-sans truncate">{event.venueName} · {event.city}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted font-mono">{format(new Date(event.startsAt), 'MMM d, yyyy')}</p>
+                      <div>
+                        <p className="text-xs text-muted font-mono mb-1">{totalSold}/{totalCap}</p>
+                        {totalCap > 0 && <SellThroughBar sold={totalSold} capacity={totalCap} />}
+                      </div>
+                      <p className="font-mono text-sm text-text">${gross.toLocaleString()}</p>
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-sans',
+                          event.status === 'LIVE' ? 'border-success/40 bg-success/10 text-success' :
+                          event.status === 'SCHEDULED' ? 'border-acid/30 bg-acid/10 text-acid' :
+                          'border-muted/20 bg-muted/10 text-muted'
+                        )}>
+                          {event.status === 'LIVE' ? 'Live' :
+                           event.status === 'SCHEDULED' ? 'Scheduled' :
+                           event.status === 'DRAFT' ? 'Draft' :
+                           event.status}
+                        </span>
+                        <span className="text-[10px] text-muted-deep font-sans">{nextAction}</span>
+                      </div>
                     </div>
-                  </div>
-
-                  <p className="font-mono text-sm text-muted lg:text-text">
-                    {format(new Date(event.startsAt), 'MMM d, yyyy')}
-                  </p>
-
-                  <div>
-                    <p className="mb-2 font-mono text-xs text-muted">{totalSold}/{totalCap}</p>
-                    {totalCap > 0 && <SellThroughBar sold={totalSold} capacity={totalCap} />}
-                  </div>
-
-                  <div>
-                    <p className="font-mono text-base font-bold">${gross.toLocaleString()}</p>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-muted lg:hidden">gross</p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2 lg:justify-between">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        event.status === 'LIVE' ? 'bg-success/10 text-success' :
-                        event.status === 'SCHEDULED' ? 'bg-acid/10 text-acid' :
-                        'bg-muted/10 text-muted'
-                      }`}>
-                      {event.status}
-                    </span>
-                    <span className="hidden text-xs rounded-full border border-acid/30 text-acid px-2 py-0.5 lg:inline-flex">{nextAction}</span>
                   </div>
                 </Link>
               )
