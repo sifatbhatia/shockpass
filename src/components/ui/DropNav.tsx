@@ -313,7 +313,9 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                   className={cn(
                     'inline-flex min-h-11 items-center rounded-full border-2 border-transparent px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
                     pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
-                      ? 'border-nav-accent/40 bg-nav-accent/10 text-nav-accent'
+                      ? darkNav
+                        ? 'border-bg/40 bg-bg/15 text-bg'
+                        : 'border-nav-accent/40 bg-nav-accent/10 text-nav-accent'
                       : darkNav
                         ? 'text-bg/82 duration-500 ease-out hover:text-bg'
                         : 'text-muted duration-500 ease-out hover:text-text'
