@@ -170,17 +170,17 @@ export function HomePageView() {
               Find the room, see the price, hold the ticket, walk through the door. Willcall keeps the whole night in one fast, human-made flow.
             </p>
 
-            <div data-hero-animate className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div data-hero-animate className="mt-6 flex items-center justify-center gap-3 sm:mt-7">
               <Button
                 href={featured ? `/events/${featured.slug}` : '/events'}
-                className="w-full sm:w-auto"
+                className="flex-1 sm:flex-none"
               >
                 {featured ? COPY.getTickets : COPY.seeWhatsLive}
               </Button>
               <Button
                 href={session && isOrganizer ? '/dashboard' : '/organizers'}
                 variant="ghost"
-                className="w-full sm:w-auto text-muted hover:text-text"
+                className="flex-1 sm:flex-none text-muted hover:text-text"
               >
                 Launch a drop →
               </Button>
