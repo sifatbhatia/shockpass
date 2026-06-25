@@ -286,9 +286,6 @@ export function HomePageView() {
         <div className="relative mx-auto max-w-[1650px] px-4 py-20 sm:px-6 md:py-28">
           <div data-home-animate className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:gap-20">
             <div className="lg:sticky lg:top-28 lg:self-start">
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">
-                Product thesis
-              </p>
               <h2 className="mt-8 max-w-3xl font-display text-6xl leading-[0.88] tracking-tight text-text sm:text-7xl md:text-8xl">
                 Sell the room before checkout starts.
               </h2>
@@ -366,9 +363,6 @@ export function HomePageView() {
           <div data-home-animate className="py-20 md:py-28">
             <div className="grid gap-12 lg:grid-cols-[minmax(0,0.86fr)_minmax(440px,1fr)] lg:gap-24">
               <div className="lg:sticky lg:top-28 lg:self-start">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
-                  Buyer trust
-                </p>
                 <h2 className="mt-8 max-w-2xl font-display text-6xl leading-[0.9] tracking-tight text-text sm:text-7xl md:text-8xl">
                   The ticket should feel held before they pay.
                 </h2>
