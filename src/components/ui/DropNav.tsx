@@ -362,50 +362,29 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
             ref={scrimRef}
             role="presentation"
             aria-hidden
-            className="fixed left-0 right-0 bottom-0 z-[var(--z-nav)] hidden bg-bg/32 backdrop-blur-sm lg:block"
+            className="fixed left-0 right-0 bottom-0 z-[var(--z-nav)] hidden bg-bg/24 backdrop-blur-sm lg:block"
             style={{ top: navBarHeight, opacity: 0 }}
             onClick={closeAll}
           />
           <div
             ref={megaPanelRef}
-            className="fixed left-1/2 z-[var(--z-dropdown)] hidden max-h-[calc(100dvh-var(--nav-bar-height)-1rem)] w-[min(calc(100vw-2rem),1650px)] -translate-x-1/2 overflow-hidden rounded-b-pass border-x border-b border-white/10 bg-bg/94 shadow-sheet backdrop-blur-xl lg:block"
+            className="fixed left-1/2 z-[var(--z-dropdown)] hidden max-h-[calc(100dvh-var(--nav-bar-height)-1rem)] w-[min(calc(100vw-2rem),900px)] -translate-x-1/2 overflow-hidden rounded-b-pass border-x border-b border-white/10 bg-bg/94 shadow-sheet backdrop-blur-md lg:block"
             style={{ top: navBarHeight, opacity: 0 }}
           >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_10%,rgba(248,214,247,0.08),transparent_40%),radial-gradient(ellipse_at_82%_75%,rgba(236,223,251,0.055),transparent_38%)]" aria-hidden />
-            <div className="relative grid gap-10 px-6 py-8 md:grid-cols-2 md:px-8 md:py-10">
+            <div className="relative grid gap-8 px-6 py-6 md:grid-cols-3 md:px-8 md:py-8">
+              {/* Left — Discover */}
               <div>
-                <div className="mb-8 flex items-center gap-4" data-nav-animate>
-                  <h2 className="font-sans text-3xl font-medium tracking-tight text-text md:text-4xl">
-                    {COPY.seeWhatsLive}
-                  </h2>
-                  <Link
-                    href="/events"
-                    onClick={closeAll}
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-text text-bg transition-opacity hover:opacity-90 focus-ring"
-                    aria-label={COPY.findTheDrop}
-                  >
-                    <ArrowRight className="h-5 w-5" strokeWidth={1.5} />
-                  </Link>
-                </div>
-
-                <ul className="space-y-5">
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Discover</p>
+                <ul className="space-y-3">
                   <li data-nav-animate>
-                    <Link
-                      href="/events"
-                      onClick={closeAll}
-                      className="group inline-flex items-center gap-3 font-sans text-2xl font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm"
-                    >
+                    <Link href="/events" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
                       {COPY.seeWhatsLive}
                       <ExternalIcon className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Link>
                   </li>
                   {session && (
                     <li data-nav-animate>
-                      <Link
-                        href="/wallet"
-                        onClick={closeAll}
-                        className="group inline-flex items-center gap-3 font-sans text-2xl font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm"
-                      >
+                      <Link href="/wallet" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
                         {COPY.myWallet}
                         <ExternalIcon className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </Link>
@@ -414,25 +393,13 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                 </ul>
               </div>
 
+              {/* Middle — Organize */}
               <div>
-                <Link
-                  href="/organizers"
-                  onClick={closeAll}
-                  data-nav-animate
-                  className="mb-6 inline-flex items-center gap-2 font-sans text-sm font-medium text-muted transition-colors hover:text-text focus-ring rounded-sm"
-                >
-                  {COPY.organizers}
-                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-                </Link>
-
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Organize</p>
                 <ul className="divide-y divide-white/10">
                   {organizerLinks.map((link) => (
                     <li key={link.href + link.label} data-nav-animate>
-                      <Link
-                        href={link.href}
-                        onClick={closeAll}
-                        className="group flex items-center justify-between py-4 font-sans text-lg text-text transition-colors hover:text-nav-accent focus-ring"
-                      >
+                      <Link href={link.href} onClick={closeAll} className="group flex items-center justify-between py-3 font-sans text-sm font-medium text-text transition-colors hover:text-nav-accent focus-ring">
                         {link.label}
                         <ExternalIcon />
                       </Link>
@@ -440,21 +407,25 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                   ))}
                 </ul>
               </div>
-            </div>
 
-            <div className="relative flex flex-wrap gap-x-8 gap-y-3 border-t border-white/10 px-6 py-5 md:px-8">
-              {NAV_QUICK_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={closeAll}
-                  data-nav-animate
-                  className="group inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-text focus-ring"
-                >
-                  {link.label}
-                  <ExternalIcon className="h-3.5 w-3.5" />
+              {/* Right — Quick links */}
+              <div>
+                <Link href="/organizers" onClick={closeAll} data-nav-animate className="mb-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-muted transition-colors hover:text-text focus-ring rounded-sm">
+                  {COPY.organizers}
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
                 </Link>
-              ))}
+
+                <ul className="space-y-2">
+                  {NAV_QUICK_LINKS.map((link) => (
+                    <li key={link.href} data-nav-animate>
+                      <Link href={link.href} onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-text focus-ring">
+                        {link.label}
+                        <ExternalIcon className="h-3.5 w-3.5" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </>
