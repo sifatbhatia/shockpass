@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react'
 import { BrandMark } from '@/components/BrandMark'
 import { COPY, NAV_QUICK_LINKS } from '@/lib/copy'
@@ -106,104 +104,8 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
     setMobileOpen(false)
   }, [])
 
-  useGSAP(
-    () => {
-      if (!megaRendered) return
-
-      const scrim = scrimRef.current
-      const panel = megaPanelRef.current
-      if (!scrim || !panel) return
-
-      const links = panel.querySelectorAll('[data-nav-animate]')
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-      if (reducedMotion) {
-        gsap.set(scrim, { opacity: megaOpen ? 1 : 0 })
-        gsap.set(panel, { opacity: megaOpen ? 1 : 0, y: 0 })
-        gsap.set(links, { opacity: megaOpen ? 1 : 0, y: 0 })
-        if (!megaOpen) setMegaRendered(false)
-        return
-      }
-
-      if (megaOpen) {
-        gsap.fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' })
-        gsap.fromTo(
-          panel,
-          { opacity: 0, y: -12 },
-          { opacity: 1, y: 0, duration: 0.32, ease: 'power3.out' }
-        )
-        gsap.fromTo(
-          links,
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.28, stagger: 0.04, ease: 'power2.out', delay: 0.06 }
-        )
-      } else {
-        gsap.to(links, { opacity: 0, y: 6, duration: 0.15, stagger: 0.02, ease: 'power2.in' })
-        gsap.to(panel, {
-          opacity: 0,
-          y: -8,
-          duration: 0.22,
-          ease: 'power2.in',
-          delay: 0.04,
-        })
-        gsap.to(scrim, {
-          opacity: 0,
-          duration: 0.2,
-          ease: 'power2.in',
-          onComplete: () => setMegaRendered(false),
-        })
-      }
-    },
-    { dependencies: [megaOpen, megaRendered], scope: navRef }
-  )
-
-  useGSAP(
-    () => {
-      if (!mobileRendered) return
-
-      const drawer = mobileDrawerRef.current
-      const scrim = mobileScrimRef.current
-      if (!drawer) return
-
-      const links = drawer.querySelectorAll('[data-nav-animate]')
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-      if (reducedMotion) {
-        if (scrim) gsap.set(scrim, { opacity: mobileOpen ? 1 : 0 })
-        gsap.set(drawer, { opacity: mobileOpen ? 1 : 0, y: 0, scale: 1 })
-        gsap.set(links, { opacity: mobileOpen ? 1 : 0, y: 0 })
-        if (!mobileOpen) setMobileRendered(false)
-        return
-      }
-
-      if (mobileOpen) {
-        if (scrim) gsap.fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: 'power2.out' })
-        gsap.fromTo(
-          drawer,
-          { opacity: 0, y: -10, scale: 0.985 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power3.out' }
-        )
-        gsap.fromTo(
-          links,
-          { opacity: 0, y: -4 },
-          { opacity: 1, y: 0, duration: 0.22, stagger: 0.035, ease: 'power2.out', delay: 0.06 }
-        )
-      } else {
-        gsap.to(links, { opacity: 0, y: -4, duration: 0.12, stagger: 0.018, ease: 'power2.in' })
-        if (scrim) gsap.to(scrim, { opacity: 0, duration: 0.18, ease: 'power2.in' })
-        gsap.to(drawer, {
-          opacity: 0,
-          y: -8,
-          scale: 0.985,
-          duration: 0.2,
-          ease: 'power2.in',
-          onComplete: () => setMobileRendered(false),
-        })
-      }
-    },
-    { dependencies: [mobileOpen, mobileRendered] }
-  )
-
+  
+  
   const pillLinks = session
     ? [
         { label: COPY.organizers, href: '/organizers' },

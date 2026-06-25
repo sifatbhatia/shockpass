@@ -2,12 +2,10 @@
 
 import { SessionProvider } from 'next-auth/react'
 import { Toaster } from 'react-hot-toast'
-import { SmoothScroll } from '@/components/SmoothScroll'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <SmoothScroll />
       {children}
       <Toaster
         position="top-center"

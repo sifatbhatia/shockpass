@@ -1,12 +1,8 @@
 'use client'
-
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRef } from 'react'
 import { format } from 'date-fns'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowRight, CheckCircle2, ShieldCheck, Ticket, Zap } from 'lucide-react'
 import { trpc } from '@/trpc/client'
 import { AppShell } from '@/components/AppShell'
@@ -20,12 +16,8 @@ import { HomeLiveRow, HomeLiveRowSkeleton } from '@/components/home/HomeLiveRow'
 import { COPY, HOME_BUYER_FEATURES } from '@/lib/copy'
 import { useSession } from 'next-auth/react'
 import { MOCK_HOME_EVENTS } from '@/lib/mock-data'
-
 const FALLBACK_HERO =
   '/assets/willcall-grid-hero.png'
-
-gsap.registerPlugin(ScrollTrigger)
-
 const PLATFORM_LANES = [
   {
     kicker: 'Discovery',
@@ -46,14 +38,12 @@ const PLATFORM_LANES = [
     href: '/scan',
   },
 ] as const
-
 const SUPPORT_ITEMS = [
   { icon: ShieldCheck, label: 'Payments', body: 'Apple Pay, Google Pay, cards, and clean payout-ready records.' },
   { icon: Zap, label: 'Buying', body: 'Guest checkout by default. No account required to grab tickets.' },
   { icon: Ticket, label: 'Drops', body: 'Public drop pages with tiers, limits, status, and urgency.' },
   { icon: CheckCircle2, label: 'Door', body: 'Rotating QR, scanner mode, check-in status, and guest lookup.' },
 ] as const
-
 function getFeaturedDropState(sold: number, capacity: number, status: string) {
   if (capacity > 0 && sold >= capacity) return 'sold_out' as const
   if (status === 'LIVE') {
@@ -62,7 +52,6 @@ function getFeaturedDropState(sold: number, capacity: number, status: string) {
   }
   return 'before_sale' as const
 }
-
 export function HomePageView() {
   const rootRef = useRef<HTMLDivElement>(null)
   const { data: session } = useSession()
@@ -71,7 +60,6 @@ export function HomePageView() {
   const featured = events[0]
   const isOrganizer = session?.user?.role === 'ORGANIZER' || session?.user?.role === 'ADMIN'
   const liveEvents = events.filter((e) => e.status === 'LIVE')
-
   const featuredSold = featured
     ? featured.ticketTiers.reduce((s, t) => s + t.quantitySold, 0)
     : 0
@@ -86,54 +74,6 @@ export function HomePageView() {
     ? getFeaturedDropState(featuredSold, featuredCap, featured.status)
     : null
   const heroImage = FALLBACK_HERO
-
-  useGSAP(
-    () => {
-      gsap.from('[data-hero-animate]', {
-        autoAlpha: 0,
-        y: 18,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: 'power3.out',
-      })
-
-      gsap.utils.toArray<HTMLElement>('[data-home-animate]').forEach((el) => {
-        gsap.fromTo(
-          el,
-          { autoAlpha: 0, y: 34 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 84%',
-              once: true,
-            },
-          }
-        )
-      })
-
-      gsap.utils.toArray<HTMLElement>('[data-home-rule]').forEach((el) => {
-        gsap.fromTo(
-          el,
-          { scaleX: 0, transformOrigin: 'left center' },
-          {
-            scaleX: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 88%',
-              once: true,
-            },
-          }
-        )
-      })
-    },
-    { scope: rootRef }
-  )
 
   return (
     <AppShell showLivePulse={liveEvents.length > 0} heroUnderNav>
@@ -153,7 +93,6 @@ export function HomePageView() {
           className="object-cover opacity-82 saturate-110"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-bg/75 via-bg/45 to-bg/95" />
-
         <div className="relative mx-auto flex min-h-[min(70vh,600px)] max-w-[1650px] flex-col items-center justify-center px-4 pt-[calc(var(--nav-bar-height,4.5rem)+1rem)] sm:px-6">
           <div className="flex flex-col items-center text-center max-w-2xl">
             <p data-hero-animate className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-bg/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted backdrop-blur font-sans">
@@ -162,14 +101,12 @@ export function HomePageView() {
                 ? `${liveEvents.length} ${liveEvents.length === 1 ? 'drop' : 'drops'} on sale now`
                 : COPY.liveNow}
             </p>
-
             <h1 data-hero-animate className="font-display text-balance text-5xl leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem]">
               Ticket drops that make the room feel alive.
             </h1>
             <p data-hero-animate className="mt-4 max-w-lg text-pretty text-sm leading-relaxed text-muted font-sans md:text-base">
               Find the room, see the price, hold the ticket, walk through the door. Willcall keeps the whole night in one fast, human-made flow.
             </p>
-
             <div data-hero-animate className="mt-6 flex items-center justify-center gap-2 sm:gap-3">
               <Button
                 href={featured ? `/events/${featured.slug}` : '/events'}
@@ -188,7 +125,6 @@ export function HomePageView() {
           </div>
         </div>
       </section>
-
       {/* Live board — immediately below hero, peeking to entice scroll */}
       <section data-home-animate className="mx-auto max-w-[1650px] px-4 pt-6 pb-12 sm:px-6 sm:pt-8 sm:pb-16 md:py-10">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
@@ -211,7 +147,6 @@ export function HomePageView() {
             {COPY.findTheDrop} →
           </Link>
         </div>
-
         <div className="overflow-hidden rounded-pass border border-border bg-panel/40 sm:rounded-pass">
           <div className="hidden bg-panel/80 px-4 py-2 sm:grid sm:grid-cols-[56px_minmax(0,1.3fr)_minmax(0,0.9fr)_100px_90px_96px] sm:gap-4">
             {[
@@ -230,7 +165,6 @@ export function HomePageView() {
               </span>
             ))}
           </div>
-
           {isLoading ? (
             <div className="pb-3 sm:pb-0">
               {MOCK_HOME_EVENTS.map((event, index) => (
@@ -278,11 +212,9 @@ export function HomePageView() {
           )}
         </div>
       </section>
-
       {/* Editorial system — less dashboard, more night-out magazine */}
       <section className="relative overflow-hidden border-t border-white/10 bg-bg">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-panel/42 to-transparent" />
-
         <div className="relative mx-auto max-w-[1650px] px-4 py-20 sm:px-6 md:py-28">
           <div data-home-animate className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:gap-20">
             <div className="lg:sticky lg:top-28 lg:self-start">
@@ -293,7 +225,6 @@ export function HomePageView() {
                 The best ticketing products do three things well: show demand, make price clear, and keep the door calm. Willcall puts all three on the first screen.
               </p>
             </div>
-
             <ol className="border-y border-white/10">
               {PLATFORM_LANES.map((step, index) => (
                 <li key={step.title} className="border-b border-white/10 last:border-b-0">
@@ -318,9 +249,7 @@ export function HomePageView() {
               ))}
             </ol>
           </div>
-
           <div data-home-rule className="mt-24 h-px w-full bg-white/10 md:mt-32" />
-
           <div data-home-animate className="py-20 md:py-28">
             <div className="grid gap-6 border-b border-white/10 pb-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)] lg:items-end">
               <div>
@@ -335,7 +264,6 @@ export function HomePageView() {
                 Willcall keeps the buyer path short and the organizer loop complete: payment, proof, live demand, and entry all stay connected.
               </p>
             </div>
-
             <div className="grid border-b border-white/10 lg:grid-cols-4">
               {SUPPORT_ITEMS.map(({ icon: Icon, label, body }, index) => (
                 <article
@@ -357,9 +285,7 @@ export function HomePageView() {
               ))}
             </div>
           </div>
-
           <div data-home-rule className="h-px w-full bg-white/10" />
-
           <div data-home-animate className="py-20 md:py-28">
             <div className="grid gap-12 lg:grid-cols-[minmax(0,0.86fr)_minmax(440px,1fr)] lg:gap-24">
               <div className="lg:sticky lg:top-28 lg:self-start">
@@ -367,7 +293,6 @@ export function HomePageView() {
                   The ticket should feel held before they pay.
                 </h2>
               </div>
-
               <div className="divide-y divide-white/10 border-y border-white/10">
                 {HOME_BUYER_FEATURES.map((item, index) => (
                   <article
@@ -387,7 +312,6 @@ export function HomePageView() {
               </div>
             </div>
           </div>
-
           <div data-home-animate className="relative mt-4 overflow-hidden border-y border-white/10 py-16 md:py-20">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.84fr)_minmax(420px,1fr)] lg:gap-20">
               <div>
@@ -399,12 +323,10 @@ export function HomePageView() {
                   <span className="block text-electric">Know when it moves.</span>
                 </h2>
               </div>
-
               <div className="grid gap-6">
                 <p className="max-w-xl text-sm leading-relaxed text-muted font-sans md:text-base">
                   Willcall gives organizers one command view for tiers, promos, live sell-through, guest lookup, and door scan. No spreadsheet handoff when the room starts filling.
                 </p>
-
                 <div className="grid border-y border-white/10 sm:grid-cols-3">
                   {[
                     ['Drop tiers', 'Timed releases and capacity checks.'],
@@ -417,7 +339,6 @@ export function HomePageView() {
                     </div>
                   ))}
                 </div>
-
                 <Button
                   href={session && isOrganizer ? '/dashboard' : '/organizers'}
                   variant="outline"
@@ -430,7 +351,6 @@ export function HomePageView() {
           </div>
         </div>
       </section>
-
       </div>
     </AppShell>
   )
