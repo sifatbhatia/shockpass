@@ -104,9 +104,6 @@ export function OrganizersPageView() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,0.84)_42%,rgba(5,5,5,0.36)_76%,#050505_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.7)_0%,rgba(5,5,5,0.22)_36%,#050505_100%)]" />
-          <div className="absolute left-10 top-[16vh] hidden font-mono text-xs uppercase tracking-[0.22em] text-muted md:block">
-            <p>{'///Plan / Manage / Execute / Elevate'}</p>
-          </div>
           <div className="absolute bottom-14 left-[9vw] hidden font-mono text-xs uppercase leading-relaxed tracking-[0.18em] text-muted md:block">
             <p>Built for those</p>
             <p>who build culture.</p>

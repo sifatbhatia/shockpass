@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, JetBrains_Mono, Fraunces, Afacad } from 'next/font/google'
+import { DM_Sans, JetBrains_Mono, DM_Serif_Display, Afacad } from 'next/font/google'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
 import { Providers } from '@/components/Providers'
@@ -22,11 +22,10 @@ const mono = JetBrains_Mono({
   subsets: ['latin'],
 })
 
-const display = Fraunces({
+const display = DM_Serif_Display({
   variable: '--font-display',
   subsets: ['latin'],
-  axes: ['opsz', 'SOFT', 'WONK'],
-  style: ['normal', 'italic'],
+  weight: '400',
 })
 
 export const metadata: Metadata = {

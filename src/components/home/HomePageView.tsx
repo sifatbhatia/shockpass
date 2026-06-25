@@ -19,6 +19,7 @@ import { EventPoster } from '@/components/EventPoster'
 import { HomeLiveRow, HomeLiveRowSkeleton } from '@/components/home/HomeLiveRow'
 import { COPY, HOME_BUYER_FEATURES } from '@/lib/copy'
 import { useSession } from 'next-auth/react'
+import { MOCK_HOME_EVENTS } from '@/lib/mock-data'
 
 const FALLBACK_HERO =
   '/assets/willcall-grid-hero.png'
@@ -44,12 +45,6 @@ const PLATFORM_LANES = [
     body: 'Rotating QR, camera scan, manual lookup, VIP/guestlist states, and organizer health metrics live in the same loop.',
     href: '/scan',
   },
-] as const
-
-const MARKET_PROOF = [
-  { value: '10 sec', label: 'target checkout' },
-  { value: '0', label: 'signup walls' },
-  { value: 'live', label: 'demand read' },
 ] as const
 
 const SUPPORT_ITEMS = [
@@ -145,7 +140,7 @@ export function HomePageView() {
       <div ref={rootRef}>
       {/* Attendee-first hero — full bleed under transparent nav */}
       <section
-        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(92vh,820px)] overflow-hidden grain-overlay"
+        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(80vh,640px)] overflow-hidden grain-overlay"
       >
         <Image
           src={heroImage}
@@ -157,8 +152,7 @@ export function HomePageView() {
           sizes="100vw"
           className="object-cover opacity-82 saturate-110"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.74)_0%,rgba(5,5,5,0.36)_30%,rgba(5,5,5,0.82)_72%,#050505_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-bg/92 via-bg/38 to-bg/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-bg/70 via-bg/30 to-bg/90" />
         <div className="absolute bottom-8 left-[8vw] hidden font-mono text-xs uppercase tracking-[0.24em] text-muted md:block">
           <p>Global rooms</p>
           <p>Art, culture</p>
@@ -170,7 +164,7 @@ export function HomePageView() {
           <p>74.0060° W</p>
         </div>
 
-        <div className="relative mx-auto flex min-h-[min(92vh,820px)] max-w-[1650px] flex-col justify-end px-4 pb-12 pt-[calc(var(--nav-bar-height,4.5rem)+1.5rem)] sm:px-6 sm:pb-16 md:pb-20">
+        <div className="relative mx-auto flex min-h-[min(80vh,640px)] max-w-[1650px] flex-col justify-end px-4 pb-12 pt-[calc(var(--nav-bar-height,4.5rem)+1.5rem)] sm:px-6 sm:pb-16 md:pb-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-end lg:gap-12">
             <div className="max-w-2xl">
               <p data-hero-animate className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-bg/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted backdrop-blur font-sans">
@@ -206,15 +200,6 @@ export function HomePageView() {
                   </Link>
                 )}
               </div>
-
-              <ul data-hero-animate className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted font-sans">
-                {MARKET_PROOF.map((item) => (
-                  <li key={item.label} className="flex items-center gap-2">
-                    <span className="font-mono text-acid">{item.value}</span>
-                    <span>{item.label}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
 
             <aside data-hero-animate className="min-h-[224px] overflow-hidden rounded-pass border border-white/12 bg-bg/75 backdrop-blur-md">
@@ -263,18 +248,38 @@ export function HomePageView() {
               ) : (
                 <div className="flex h-full min-h-[224px] flex-col justify-between p-5">
                   <div className="flex gap-4">
-                    <div className="h-20 w-20 shrink-0 rounded-drop skeleton-shimmer" />
-                    <div className="min-w-0 flex-1 space-y-3 pt-1">
-                      <div className="h-3 w-20 rounded skeleton-shimmer" />
-                      <div className="h-6 w-4/5 rounded skeleton-shimmer" />
-                      <div className="h-3 w-2/3 rounded skeleton-shimmer" />
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-drop bg-gradient-to-br from-acid/30 to-acid/10 flex items-center justify-center">
+                      <span className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-acid">live</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2">
+                        <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted font-sans">
+                          {COPY.homeSellingNow}
+                        </p>
+                      </div>
+                      <p className="font-display text-xl leading-tight tracking-tight">
+                        {MOCK_HOME_EVENTS[0].title}
+                      </p>
+                      <p className="mt-1 text-xs text-muted font-sans">
+                        {MOCK_HOME_EVENTS[0].venueName} · {MOCK_HOME_EVENTS[0].city} · {format(new Date(MOCK_HOME_EVENTS[0].startsAt), 'EEE, MMM d')}
+                      </p>
                     </div>
                   </div>
-                  <div className="border-t border-white/10 pt-4">
-                    <div className="h-2 w-full rounded skeleton-shimmer" />
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                      <div className="h-11 flex-1 rounded-full skeleton-shimmer" />
-                      <div className="h-4 w-12 rounded skeleton-shimmer" />
+                  <div className="border-t border-white/10 px-0 pb-0 pt-4">
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between gap-2 text-xs text-muted font-sans mb-1">
+                        <span>Fill</span>
+                        <span>225 / 250</span>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-panel-2">
+                        <div className="h-full w-[90%] rounded-full bg-acid transition-all" />
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <Button href="/events" className="flex-1">
+                        {COPY.getTickets}
+                      </Button>
+                      <span className="font-mono text-sm text-text">from $35</span>
                     </div>
                   </div>
                 </div>
@@ -334,9 +339,14 @@ export function HomePageView() {
           </div>
 
           {isLoading ? (
-            <div className="py-2 sm:py-0">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <HomeLiveRowSkeleton key={i} />
+            <div className="pb-3 sm:pb-0">
+              {MOCK_HOME_EVENTS.map((event, index) => (
+                <HomeLiveRow
+                  key={event.id}
+                  event={event as any}
+                  rank={index + 1}
+                  featured={index === 0}
+                />
               ))}
             </div>
           ) : error ? (

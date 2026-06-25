@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
@@ -23,6 +24,7 @@ function ExternalIcon({ className }: { className?: string }) {
 
 export function DropNav({ className, showLivePulse, sticky = true }: DropNavProps) {
   const { data: session } = useSession()
+  const pathname = usePathname()
   const isOrganizer = session?.user?.role === 'ORGANIZER' || session?.user?.role === 'ADMIN'
   const [megaOpen, setMegaOpen] = useState(false)
   const [megaRendered, setMegaRendered] = useState(false)
@@ -310,7 +312,11 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                   onClick={() => setMegaOpen(false)}
                   className={cn(
                     'inline-flex min-h-11 items-center rounded-full border-2 border-transparent px-4 py-2 text-sm font-medium font-sans transition-colors focus-ring',
-                    darkNav ? 'text-bg/82 duration-500 ease-out hover:text-bg' : 'text-muted duration-500 ease-out hover:text-text'
+                    pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+                      ? 'border-nav-accent/40 bg-nav-accent/10 text-nav-accent'
+                      : darkNav
+                        ? 'text-bg/82 duration-500 ease-out hover:text-bg'
+                        : 'text-muted duration-500 ease-out hover:text-text'
                   )}
                 >
                   {link.label}
@@ -467,7 +473,12 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                     <Link
                       href={link.href}
                       onClick={closeAll}
-                      className="flex min-h-12 items-center justify-between rounded-drop px-3 py-3 font-sans text-2xl font-medium text-text/90 transition-colors hover:bg-white/[0.05] hover:text-nav-accent focus-ring sm:text-3xl"
+                      className={cn(
+                        'flex min-h-12 items-center justify-between rounded-drop px-3 py-3 font-sans text-2xl font-medium transition-colors focus-ring sm:text-3xl',
+                        pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+                          ? 'text-nav-accent'
+                          : 'text-text/90 hover:bg-white/[0.05] hover:text-nav-accent'
+                      )}
                     >
                       {link.label}
                       <ArrowRight className="h-5 w-5 shrink-0 opacity-70 sm:h-6 sm:w-6" strokeWidth={1.5} />

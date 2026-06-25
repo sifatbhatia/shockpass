@@ -9,13 +9,13 @@
   --color-text: #f7f5f5;
   --color-muted: #a3a1a8;
   --color-muted-deep: #4a4a4a;
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-hot: #f59ac0;
-  --color-acid: #f8d6f7;
-  --color-acid-dim: #f0bdee;
-  --color-electric: #ecdffb;
-  --color-success: #8fd9bd;
-  --color-danger: #ef6f6f;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-hot: #ff5a3c;
+  --color-acid: #ff581a;
+  --color-acid-dim: #e04a12;
+  --color-electric: #ff9f66;
+  --color-success: #4ade80;
+  --color-danger: #ef4444;
   --color-nav-accent: #d4ff52;
   --color-nav-pill: rgba(255, 255, 255, 0.06);
   --font-sans: var(--font-inter);
@@ -24,8 +24,8 @@
   --font-display: var(--font-display);
   --radius-drop: 0.75rem;
   --radius-pass: 1.25rem;
-  --shadow-glow-acid: 0 0 48px rgba(248, 214, 247, 0.16);
-  --shadow-glow-hot: 0 0 36px rgba(245, 154, 192, 0.18);
+  --shadow-glow-acid: 0 0 36px rgba(255, 88, 26, 0.12);
+  --shadow-glow-hot: 0 0 24px rgba(255, 90, 60, 0.12);
   --shadow-panel: 0 24px 60px rgba(0, 0, 0, 0.5);
   --shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.55);
   --z-nav: 40;
@@ -55,8 +55,7 @@ html {
 
 .font-display {
   font-family: var(--font-display), Georgia, serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.01em;
 }
 
@@ -67,8 +66,7 @@ html {
 /* Editorial display: high-contrast serif headlines, mixed case, never uppercase. */
 .display-xl {
   font-family: var(--font-display), Georgia, serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 0.95;
 }
@@ -102,21 +100,6 @@ html {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(236, 223, 251, 0.07), transparent 72%);
-}
-
-.ambient-glow {
-  position: relative;
-}
-
-.ambient-glow::before {
-  content: '';
-  pointer-events: none;
-  position: absolute;
-  inset: -20% 0;
-  background: radial-gradient(ellipse 50% 40% at 20% 50%, rgba(248, 214, 247, 0.05), transparent),
-    radial-gradient(ellipse 40% 30% at 80% 60%, rgba(236, 223, 251, 0.045), transparent),
-    radial-gradient(ellipse 30% 30% at 60% 30%, rgba(143, 217, 189, 0.035), transparent);
 }
 
 .ticket-perforation {
@@ -234,7 +217,7 @@ html {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  opacity: 0.025;
+  opacity: 0.015;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
