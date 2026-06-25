@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { AppShell } from '@/components/AppShell'
 import { Panel } from '@/components/ui/Panel'
-import { Input, Label } from '@/components/ui/Input'
+import { Input, Label, FieldHint } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { SellThroughBar } from '@/components/SellThroughBar'
@@ -405,14 +405,34 @@ export default function EventManagePage() {
               </div>
               <div>
                 <Label>Discount</Label>
-                <Input
-                  id="promo-discount"
-                  type="number"
-                  value={promoForm.discountValue}
-                  onChange={(e) => setPromoForm({ ...promoForm, discountValue: parseInt(e.target.value) || 0 })}
-                  placeholder="10"
-                  mono
-                />
+                <div className="relative">
+                  {promoForm.discountType === 'FIXED' && (
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted font-mono z-10">$</span>
+                  )}
+                  <Input
+                    id="promo-discount"
+                    type="number"
+                    step={promoForm.discountType === 'PERCENT' ? '1' : '0.01'}
+                    min={promoForm.discountType === 'PERCENT' ? 1 : 0.01}
+                    max={promoForm.discountType === 'PERCENT' ? 100 : undefined}
+                    value={promoForm.discountValue}
+                    onChange={(e) => {
+                      const v = parseFloat(e.target.value)
+                      if (!isNaN(v)) setPromoForm({ ...promoForm, discountValue: v > 0 ? v : 0 })
+                    }}
+                    placeholder={promoForm.discountType === 'PERCENT' ? '10' : '5.00'}
+                    mono
+                    className={promoForm.discountType === 'FIXED' ? 'pl-7' : ''}
+                  />
+                  {promoForm.discountType === 'PERCENT' && (
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted font-mono">%</span>
+                  )}
+                </div>
+                <FieldHint>
+                  {promoForm.discountType === 'PERCENT'
+                    ? 'Discount must be between 1 and 100.'
+                    : 'Discount will be taken off each ticket.'}
+                </FieldHint>
               </div>
               <div>
                   <Label>Type</Label>
@@ -422,12 +442,17 @@ export default function EventManagePage() {
                       { value: 'FIXED', label: 'Fixed amount' },
                     ]}
                     value={promoForm.discountType}
-                    onChange={(v) => setPromoForm({ ...promoForm, discountType: v as 'PERCENT' | 'FIXED' })}
+                    onChange={(v) => setPromoForm({ ...promoForm, discountType: v as 'PERCENT' | 'FIXED', discountValue: v === 'PERCENT' ? 10 : 5 })}
                   />
                 </div>
               <Button
-                onClick={() => createPromo.mutate({ eventId: id, code: promoForm.code, discountType: promoForm.discountType, discountValue: promoForm.discountValue })}
-                disabled={!promoForm.code}
+                onClick={() => createPromo.mutate({
+                  eventId: id,
+                  code: promoForm.code,
+                  discountType: promoForm.discountType,
+                  discountValue: promoForm.discountType === 'FIXED' ? Math.round(promoForm.discountValue * 100) : Math.round(promoForm.discountValue),
+                })}
+                disabled={!promoForm.code || !promoForm.discountValue || (promoForm.discountType === 'PERCENT' && promoForm.discountValue > 100)}
                 className="text-sm"
               >
                 <Plus className="h-3.5 w-3.5 mr-1.5" />
@@ -436,16 +461,33 @@ export default function EventManagePage() {
             </div>
 
             {promos && promos.length > 0 ? (
-              <div className="space-y-2">
-                {promos.map((p) => (
-                  <div key={p.id} className="flex items-center justify-between py-2.5 border-t border-border first:border-0">
-                    <div className="flex items-center gap-3">
+              <div>
+                {/* Existing codes header */}
+                <div className="grid grid-cols-[1.5fr_1fr_1fr_0.8fr_0.8fr] gap-3 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-muted border-b border-border">
+                  <span>Code</span>
+                  <span>Discount</span>
+                  <span>Type</span>
+                  <span>Used</span>
+                  <span>Status</span>
+                </div>
+                <div className="divide-y divide-border">
+                  {promos.map((p) => (
+                    <div key={p.id} className="grid grid-cols-[1.5fr_1fr_1fr_0.8fr_0.8fr] gap-3 px-3 py-3 items-center">
                       <span className="font-mono text-sm text-text">{p.code}</span>
-                      <span className="text-xs text-muted font-mono">{p.discountType === 'PERCENT' ? `${p.discountValue}% off` : `$${(p.discountValue / 100).toFixed(2)} off`}</span>
+                      <span className="font-mono text-sm text-text">
+                        {p.discountType === 'PERCENT' ? `${p.discountValue}%` : `$${(p.discountValue / 100).toFixed(2)}`}
+                      </span>
+                      <span className="text-xs text-muted font-sans">{p.discountType === 'PERCENT' ? 'Percent' : 'Fixed amount'}</span>
+                      <span className="font-mono text-sm text-text">{p.usedCount}</span>
+                      <span className={cn(
+                        'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-sans w-fit',
+                        (p.usedCount ?? 0) > 0 ? 'border-success/40 bg-success/10 text-success' : 'border-muted/20 bg-muted/10 text-muted'
+                      )}>
+                        {(p.usedCount ?? 0) > 0 ? 'Active' : 'Unused'}
+                      </span>
                     </div>
-                    <span className="text-xs text-muted font-sans">{p.usedCount} used</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-6 text-center">

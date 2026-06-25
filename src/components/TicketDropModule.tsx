@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { trpc } from '@/trpc/client'
 import { COPY } from '@/lib/copy'
@@ -35,6 +35,14 @@ type TicketDropModuleProps = {
   totalSold: number
 }
 
+function formatPrice(cents: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+  }).format(cents / 100)
+}
+
 export function TicketDropModule({
   eventId,
   eventSlug,
@@ -47,6 +55,7 @@ export function TicketDropModule({
   const [selectedTier, setSelectedTier] = useState<string | null>(defaultTierId)
   const [quantity, setQuantity] = useState(1)
   const [waitlistEmail, setWaitlistEmail] = useState('')
+  const [copied, setCopied] = useState(false)
 
   const joinWaitlist = trpc.waitlist.join.useMutation({
     onSuccess: (data) => {
@@ -55,7 +64,7 @@ export function TicketDropModule({
     onError: (e) => toast.error(e.message),
   })
 
-  const shareDrop = async () => {
+  const shareDrop = useCallback(async () => {
     const url = `${window.location.origin}/events/${eventSlug}`
     const title = COPY.shareDropTitle(eventTitle)
     try {
@@ -63,13 +72,13 @@ export function TicketDropModule({
         await navigator.share({ title, url })
         return
       }
-
       await navigator.clipboard.writeText(url)
-      toast.success('Link copied')
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     } catch {
       toast.error('Copy blocked by this browser. Use the address bar link.')
     }
-  }
+  }, [eventSlug, eventTitle])
 
   const isOnSale = tiers.some((t) => t.status === 'ON_SALE')
   const nextSaleStart = tiers
@@ -77,15 +86,29 @@ export function TicketDropModule({
     .filter(Boolean)
     .sort((a, b) => new Date(a!).getTime() - new Date(b!).getTime())[0]
 
-  const overallState = totalSold >= totalCapacity
-    ? 'sold_out'
-    : totalSold / Math.max(1, totalCapacity) >= 0.9
-      ? 'almost_sold_out'
-      : isOnSale
-        ? 'on_sale'
-        : 'before_sale'
+  const overallState =
+    totalSold >= totalCapacity
+      ? 'sold_out'
+      : totalSold / Math.max(1, totalCapacity) >= 0.9
+        ? 'almost_sold_out'
+        : isOnSale
+          ? 'on_sale'
+          : 'before_sale'
 
   const selectedTierData = tiers.find((t) => t.id === selectedTier)
+  const selectedAvailable = selectedTierData
+    ? selectedTierData.quantityTotal - selectedTierData.quantitySold
+    : 0
+  const maxQty = Math.min(10, selectedAvailable > 0 ? selectedAvailable : 1)
+
+  // Reset quantity to 1 when tier changes
+  const handleTierSelect = useCallback((tierId: string | null) => {
+    setSelectedTier(tierId)
+    setQuantity(1)
+  }, [])
+
+  const isCheckoutDisabled =
+    !selectedTier || !selectedTierData || selectedTierData.status === 'SOLD_OUT' || selectedAvailable <= 0
 
   const dropContent = (
     <>
@@ -97,7 +120,14 @@ export function TicketDropModule({
         <DropStatePill state={overallState} />
       </div>
 
-      {!isOnSale && nextSaleStart && (
+      {overallState === 'sold_out' && (
+        <div className="mb-6 rounded-pass border border-hot/30 bg-hot/5 p-4 text-center">
+          <p className="font-display text-lg text-hot tracking-tight">Sold out</p>
+          <p className="mt-1 text-xs text-muted font-sans">All tickets have been claimed for this drop.</p>
+        </div>
+      )}
+
+      {overallState === 'before_sale' && !isOnSale && nextSaleStart && (
         <div className="mb-6 rounded-pass border border-electric/25 bg-electric/5 p-4">
           <SectionLabel className="mb-2">{COPY.ticketsUnlock}</SectionLabel>
           <CountdownTimer target={nextSaleStart} />
@@ -106,7 +136,7 @@ export function TicketDropModule({
 
       {totalCapacity > 0 && <HypeMeter sold={totalSold} capacity={totalCapacity} className="mb-6" />}
 
-      <TierLadder tiers={tiers} selectedTier={selectedTier} onSelect={setSelectedTier} />
+      <TierLadder tiers={tiers} selectedTier={selectedTier} onSelect={handleTierSelect} />
 
       {tiers.some((t) => t.status === 'SOLD_OUT' || (t.salesStartAt && new Date(t.salesStartAt) > new Date())) && (
         <div className="mt-5 flex gap-2">
@@ -131,24 +161,48 @@ export function TicketDropModule({
 
       {selectedTier && selectedTierData && (
         <div className="mt-6 space-y-4 animate-fade-up">
-          <div className="flex items-center justify-between rounded-pass border border-border bg-panel-2/80 px-4 py-3">
-            <span className="text-sm font-sans text-muted">{selectedTierData.name}</span>
-            <span className="font-mono text-sm font-semibold">
-              ${((selectedTierData.priceCents * quantity) / 100).toFixed(0)}
+          <div className="flex items-center justify-between rounded-pass border border-acid/30 bg-acid/5 px-4 py-3">
+            <div className="min-w-0">
+              <span className="text-sm font-semibold font-sans">{selectedTierData.name}</span>
+              {selectedTierData.description && (
+                <p className="mt-0.5 text-xs text-muted font-sans truncate">{selectedTierData.description}</p>
+              )}
+            </div>
+            <span className="font-mono text-lg font-bold text-acid shrink-0 ml-3">
+              {formatPrice(selectedTierData.priceCents * quantity)}
             </span>
           </div>
-          <QuantityStepper value={quantity} onChange={setQuantity} />
-          <Button
-            href={`/events/${eventSlug}/checkout?tier=${selectedTier}&qty=${quantity}`}
-            className="hidden w-full md:inline-flex"
-          >
-            {COPY.getTickets}
-          </Button>
+
+          <QuantityStepper
+            value={quantity}
+            onChange={setQuantity}
+            min={1}
+            max={maxQty}
+          />
+
+          {isCheckoutDisabled ? (
+            <Button disabled className="w-full">
+              {selectedTierData.status === 'SOLD_OUT' || selectedAvailable <= 0
+                ? COPY.soldOut
+                : COPY.getTickets}
+            </Button>
+          ) : (
+            <Button
+              href={`/events/${eventSlug}/checkout?tier=${selectedTier}&qty=${quantity}`}
+              className="w-full"
+            >
+              {COPY.getTickets}
+            </Button>
+          )}
         </div>
       )}
 
-      <Button variant="ghost" className="mt-5 w-full" onClick={shareDrop}>
-        {COPY.shareDrop}
+      <Button
+        variant="ghost"
+        className="mt-5 w-full"
+        onClick={shareDrop}
+      >
+        {copied ? 'Copied!' : COPY.shareDrop}
       </Button>
 
       <p className="mt-4 border-t border-border pt-4 text-xs text-muted font-sans">{COPY.secureCheckout}</p>
@@ -163,14 +217,6 @@ export function TicketDropModule({
 
       <Panel glow={isOnSale ? 'acid' : 'none'} className="p-5 shadow-panel md:hidden">
         {dropContent}
-        {selectedTier && (
-          <Button
-            href={`/events/${eventSlug}/checkout?tier=${selectedTier}&qty=${quantity}`}
-            className="mt-5 w-full"
-          >
-            {COPY.getTickets} · {quantity}
-          </Button>
-        )}
       </Panel>
     </>
   )

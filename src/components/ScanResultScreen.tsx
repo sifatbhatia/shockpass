@@ -1,5 +1,6 @@
-import Image from 'next/image'
-import { Button } from '@/components/ui/Button'
+'use client'
+
+import { useEffect, useCallback, useRef } from 'react'
 import { cn } from '@/lib/cn'
 
 type ScanResultScreenProps = {
@@ -13,66 +14,159 @@ type ScanResultScreenProps = {
   flash?: boolean
 }
 
-const RESULT_COPY: Record<string, { label: string; tone: string; bg: string }> = {
-  VALID: { label: 'VALID', tone: 'text-success', bg: 'bg-success/10' },
-  ALREADY_SCANNED: { label: 'ALREADY SCANNED', tone: 'text-danger', bg: 'bg-danger/10' },
-  WRONG_EVENT: { label: 'WRONG EVENT', tone: 'text-muted', bg: 'bg-panel' },
-  REFUNDED: { label: 'REFUNDED', tone: 'text-danger', bg: 'bg-danger/10' },
-  VIP: { label: 'VIP', tone: 'text-electric', bg: 'bg-electric/10' },
-  GUESTLIST: { label: 'GUESTLIST', tone: 'text-electric', bg: 'bg-electric/10' },
+type ResultMeta = {
+  label: string
+  color: string // Tailwind arbitrary color
+  bg: string
+  icon: 'check' | 'warning' | 'x'
+}
+
+function getMeta(result: string): ResultMeta {
+  switch (result) {
+    case 'VALID':
+    case 'VIP':
+    case 'GUESTLIST':
+      return {
+        label: result === 'VIP' ? 'VIP' : result === 'GUESTLIST' ? 'Guest List' : 'Checked In',
+        color: 'text-[#22c55e]',
+        bg: 'bg-[#22c55e]/10',
+        icon: 'check',
+      }
+    case 'ALREADY_SCANNED':
+      return {
+        label: 'Already Checked In',
+        color: 'text-[#f59e0b]',
+        bg: 'bg-[#f59e0b]/10',
+        icon: 'warning',
+      }
+    case 'WRONG_EVENT':
+      return {
+        label: 'Wrong Event',
+        color: 'text-[#ef4444]',
+        bg: 'bg-[#ef4444]/10',
+        icon: 'x',
+      }
+    case 'REFUNDED':
+      return {
+        label: 'Refunded / Invalid',
+        color: 'text-[#ef4444]',
+        bg: 'bg-[#ef4444]/10',
+        icon: 'x',
+      }
+    default:
+      return {
+        label: result.replace(/_/g, ' '),
+        color: 'text-[#ef4444]',
+        bg: 'bg-[#ef4444]/10',
+        icon: 'x',
+      }
+  }
+}
+
+function StatusIcon({ type, className }: { type: ResultMeta['icon']; className?: string }) {
+  if (type === 'check') {
+    return (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
+    )
+  }
+  if (type === 'warning') {
+    return (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+    )
+  }
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="m15 9-6 6" />
+      <path d="m9 9 6 6" />
+    </svg>
+  )
 }
 
 export function ScanResultScreen({ result, ticket, onDismiss, flash }: ScanResultScreenProps) {
-  const meta = RESULT_COPY[result] || {
-    label: result.replace('_', ' '),
-    tone: 'text-muted',
-    bg: 'bg-panel',
-  }
-
+  const meta = getMeta(result)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isSuccess = result === 'VALID' || result === 'VIP' || result === 'GUESTLIST'
+
+  const dismiss = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    onDismiss()
+  }, [onDismiss])
+
+  useEffect(() => {
+    timerRef.current = setTimeout(dismiss, 5000)
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [dismiss])
 
   return (
     <div
       className={cn(
-        'fixed inset-0 z-[var(--z-modal)] flex flex-col items-center justify-center px-6 backdrop-blur-sm',
-        meta.bg,
+        'fixed inset-x-0 bottom-0 z-[var(--z-modal)] animate-slide-up',
         flash && isSuccess && 'animate-scan-flash'
       )}
       role="dialog"
       aria-modal
       aria-labelledby="scan-result-label"
     >
-      {isSuccess && (
-        <div className="relative mb-5 aspect-video w-full max-w-xl overflow-hidden rounded-pass border border-success/25 shadow-panel">
-          <Image
-            src="/assets/scan-success-moment.png"
-            alt=""
-            fill
-            sizes="(min-width: 768px) 560px, 90vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-bg/45 via-transparent to-transparent" />
+      <div className={cn('rounded-t-2xl border border-border/60 p-5 pb-8 shadow-sheet backdrop-blur-xl', meta.bg)}>
+        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" />
+
+        <div className="flex items-start gap-4">
+          <div className={cn('flex h-12 w-12 shrink-0 items-center justify-center rounded-full', meta.bg)}>
+            <StatusIcon type={meta.icon} className={cn('h-6 w-6', meta.color)} />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p id="scan-result-label" className={cn('text-lg font-semibold font-sans', meta.color)}>
+              {meta.label}
+            </p>
+
+            {ticket && (
+              <>
+                <p className="mt-1 text-base text-text font-sans">
+                  {ticket.attendeeName || 'Guest'}
+                </p>
+                <p className="text-sm text-muted font-sans">{ticket.tierName}</p>
+              </>
+            )}
+
+            {result === 'ALREADY_SCANNED' && ticket?.checkedInAt && (
+              <p className="mt-1 text-xs text-muted font-sans">
+                First scanned at {new Date(ticket.checkedInAt).toLocaleTimeString()}
+              </p>
+            )}
+
+            <p className="mt-1 text-xs text-muted/60 font-sans">
+              {new Date().toLocaleTimeString()}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={dismiss}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-panel-2 text-muted transition-colors hover:text-text focus-ring"
+            aria-label="Dismiss"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
         </div>
-      )}
-      <p
-        id="scan-result-label"
-        className={cn('mb-4 text-center font-display text-6xl uppercase tracking-wider md:text-8xl', meta.tone)}
-      >
-        {meta.label}
-      </p>
-      {ticket && (
-        <p className="font-mono text-lg text-text">
-          {ticket.attendeeName || 'Guest'} · {ticket.tierName}
+
+        <p className="mt-3 text-center text-[11px] text-muted/40 font-sans">
+          Auto-dismissing in 5s · Tap to keep
         </p>
-      )}
-      {result === 'ALREADY_SCANNED' && ticket?.checkedInAt && (
-        <p className="mt-3 font-mono text-sm text-muted">
-          First scan {new Date(ticket.checkedInAt).toLocaleTimeString()}
-        </p>
-      )}
-      <Button variant="ghost" onClick={onDismiss} className="mt-12">
-        Scan next
-      </Button>
+      </div>
     </div>
   )
 }

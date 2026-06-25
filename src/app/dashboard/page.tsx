@@ -16,6 +16,7 @@ import { SellThroughBar } from '@/components/SellThroughBar'
 import { trpc } from '@/trpc/client'
 import { COPY } from '@/lib/copy'
 import { cn } from '@/lib/cn'
+import toast from 'react-hot-toast'
 
 function formatCurrency(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
@@ -48,7 +49,7 @@ export default function DashboardPage() {
     },
     { sold: 0, capacity: 0, gross: 0, live: 0 }
   )
-  const fillRate = totals.capacity > 0 ? Math.round((totals.sold / totals.capacity) * 100) : 0
+  const fillRate = totals.capacity > 0 ? ((totals.sold / totals.capacity) * 100) : 0
 
   return (
     <AppShell>
@@ -86,7 +87,7 @@ export default function DashboardPage() {
           </Panel>
           <Panel className="p-4">
             <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted mb-1">Fill rate</p>
-            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{fillRate}%</p>
+            <p className="font-mono text-xl font-semibold text-text sm:text-2xl">{fillRate.toFixed(1)}%</p>
           </Panel>
         </div>
 
@@ -116,6 +117,7 @@ export default function DashboardPage() {
               const totalSold = event.ticketTiers.reduce((s, t) => s + t.quantitySold, 0)
               const totalCap = event.ticketTiers.reduce((s, t) => s + t.quantityTotal, 0)
               const gross = event.ticketTiers.reduce((s, t) => s + t.priceCents * t.quantitySold, 0) / 100
+              const isCancelled = event.status === 'CANCELLED'
 
               const nextAction =
                 event.status === 'DRAFT'
@@ -126,23 +128,32 @@ export default function DashboardPage() {
                       ? 'Almost full'
                       : 'Share drop'
 
+              const handleShare = (e: React.MouseEvent) => {
+                e.preventDefault()
+                e.stopPropagation()
+                navigator.clipboard.writeText(`${window.location.origin}/events/${event.slug}`)
+                toast.success('Link copied')
+              }
+
               return (
-                <Link
+                <div
                   key={event.id}
-                  href={`/dashboard/events/${event.id}`}
-                  className="focus-ring block border-b border-border last:border-b-0 transition-colors hover:bg-white/[0.025]"
+                  className={cn(
+                    'focus-ring block border-b border-border last:border-b-0 transition-colors hover:bg-white/[0.025]',
+                    isCancelled && 'opacity-55 pointer-events-none'
+                  )}
                 >
                   <div className="p-4 sm:p-5">
                     {/* Mobile layout */}
                     <div className="lg:hidden">
                       <div className="flex gap-4">
-                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-drop bg-panel-2">
+                        <Link href={`/dashboard/events/${event.id}`} className="relative h-16 w-16 shrink-0 overflow-hidden rounded-drop bg-panel-2">
                           <EventPoster src={event.posterUrl} title={event.title} />
-                        </div>
+                        </Link>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0">
-                              <h3 className="text-sm font-semibold font-sans truncate">{event.title}</h3>
+                              <Link href={`/dashboard/events/${event.id}`} className="text-sm font-semibold font-sans truncate hover:text-acid transition-colors">{event.title}</Link>
                               <p className="text-xs text-muted font-sans truncate mt-0.5">
                                 {event.venueName} · {event.city} · {format(new Date(event.startsAt), 'MMM d')}
                               </p>
@@ -151,6 +162,7 @@ export default function DashboardPage() {
                               'shrink-0 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-sans',
                               event.status === 'LIVE' ? 'border-success/40 bg-success/10 text-success' :
                               event.status === 'SCHEDULED' ? 'border-acid/30 bg-acid/10 text-acid' :
+                              event.status === 'CANCELLED' ? 'border-hot/20 bg-hot/10 text-hot' :
                               'border-muted/20 bg-muted/10 text-muted'
                             )}>
                               {event.status === 'LIVE' ? 'Live' :
@@ -161,13 +173,26 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center gap-3 mt-2 text-xs text-muted font-mono">
                             <span>{totalSold}/{totalCap} sold</span>
-                            <span>${gross.toLocaleString()}</span>
+                            <span>${gross.toFixed(2)}</span>
                           </div>
                           {totalCap > 0 && (
                             <div className="mt-2">
                               <SellThroughBar sold={totalSold} capacity={totalCap} />
                             </div>
                           )}
+                          {/* Mobile actions */}
+                          <div className="flex items-center gap-2 mt-3">
+                            {isCancelled ? (
+                              <>
+                                <Link href={`/dashboard/events/${event.id}`} className="text-[11px] font-medium text-muted hover:text-text transition-colors font-sans">View</Link>
+                              </>
+                            ) : (
+                              <>
+                                <button onClick={handleShare} className="text-[11px] font-medium text-acid hover:underline font-sans">{COPY.shareDrop}</button>
+                                <Link href={`/dashboard/events/${event.id}`} className="text-[11px] font-medium text-muted hover:text-text transition-colors font-sans">Manage</Link>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -175,11 +200,11 @@ export default function DashboardPage() {
                     {/* Desktop layout */}
                     <div className="hidden lg:grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 items-center">
                       <div className="flex items-center gap-4 min-w-0">
-                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-drop bg-panel-2">
+                        <Link href={`/dashboard/events/${event.id}`} className="relative h-14 w-14 shrink-0 overflow-hidden rounded-drop bg-panel-2">
                           <EventPoster src={event.posterUrl} title={event.title} />
-                        </div>
+                        </Link>
                         <div className="min-w-0">
-                          <h3 className="text-sm font-semibold font-sans truncate">{event.title}</h3>
+                          <Link href={`/dashboard/events/${event.id}`} className="text-sm font-semibold font-sans truncate hover:text-acid transition-colors">{event.title}</Link>
                           <p className="text-xs text-muted font-sans truncate">{event.venueName} · {event.city}</p>
                         </div>
                       </div>
@@ -188,12 +213,13 @@ export default function DashboardPage() {
                         <p className="text-xs text-muted font-mono mb-1">{totalSold}/{totalCap}</p>
                         {totalCap > 0 && <SellThroughBar sold={totalSold} capacity={totalCap} />}
                       </div>
-                      <p className="font-mono text-sm text-text">${gross.toLocaleString()}</p>
+                      <p className="font-mono text-sm text-text">${gross.toFixed(2)}</p>
                       <div className="flex items-center gap-2">
                         <span className={cn(
                           'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-sans',
                           event.status === 'LIVE' ? 'border-success/40 bg-success/10 text-success' :
                           event.status === 'SCHEDULED' ? 'border-acid/30 bg-acid/10 text-acid' :
+                          event.status === 'CANCELLED' ? 'border-hot/20 bg-hot/10 text-hot' :
                           'border-muted/20 bg-muted/10 text-muted'
                         )}>
                           {event.status === 'LIVE' ? 'Live' :
@@ -201,11 +227,15 @@ export default function DashboardPage() {
                            event.status === 'DRAFT' ? 'Draft' :
                            event.status}
                         </span>
-                        <span className="text-[10px] text-muted-deep font-sans">{nextAction}</span>
+                        {isCancelled ? (
+                          <Link href={`/dashboard/events/${event.id}`} className="pointer-events-auto text-[11px] font-medium text-muted hover:text-text transition-colors font-sans">View</Link>
+                        ) : (
+                          <button onClick={handleShare} className="pointer-events-auto text-[12px] font-medium text-acid hover:underline font-sans">{nextAction}</button>
+                        )}
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               )
             })}
           </div>

@@ -3,16 +3,19 @@
 import { useEffect, useState } from 'react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import toast from 'react-hot-toast'
-import { COPY } from '@/lib/copy'
 
 type StripePaymentFormProps = {
   walletAccessToken: string
   onSuccess: (walletAccessToken: string, paymentIntentId: string) => void
+  buttonLabel?: string
+  disabled?: boolean
 }
 
 export function StripePaymentForm({
   walletAccessToken,
   onSuccess,
+  buttonLabel = 'Pay now',
+  disabled,
 }: StripePaymentFormProps) {
   const stripe = useStripe()
   const elements = useElements()
@@ -44,10 +47,10 @@ export function StripePaymentForm({
       <button
         type="button"
         onClick={handlePay}
-        disabled={!stripe || loading}
-        className="w-full bg-acid text-bg py-3.5 rounded-xl font-semibold text-sm hover:opacity-90 disabled:opacity-50"
+        disabled={!stripe || loading || disabled}
+        className="w-full h-14 rounded-[999px] bg-acid text-bg font-semibold text-sm hover:bg-[#ff6f3d] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:text-muted disabled:hover:bg-acid disabled:hover:translate-y-0 transition-all duration-200"
       >
-        {loading ? 'Processing...' : COPY.payNow}
+        {loading ? 'Processing...' : buttonLabel}
       </button>
       <p className="text-xs text-muted text-center">Apple Pay / Google Pay available where supported</p>
     </div>
@@ -56,28 +59,45 @@ export function StripePaymentForm({
 
 export function HoldTimer({ expiresAt }: { expiresAt: Date | string }) {
   const [remaining, setRemaining] = useState('')
+  const [state, setState] = useState<'normal' | 'warm' | 'urgent' | 'expired'>('normal')
 
   useEffect(() => {
     const target = new Date(expiresAt).getTime()
     const tick = () => {
       const diff = target - Date.now()
       if (diff <= 0) {
-        setRemaining('Expired')
+        setRemaining('0:00')
+        setState('expired')
         return
       }
-      const m = Math.floor(diff / 60000)
-      const s = Math.floor((diff % 60000) / 1000)
+      const totalSeconds = Math.floor(diff / 1000)
+      const m = Math.floor(totalSeconds / 60)
+      const s = totalSeconds % 60
       setRemaining(`${m}:${s.toString().padStart(2, '0')}`)
+
+      if (totalSeconds <= 30) setState('urgent')
+      else if (totalSeconds <= 120) setState('warm')
+      else setState('normal')
     }
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [expiresAt])
 
+  const stateStyles = {
+    normal: 'text-acid',
+    warm: 'text-[#ff9f66]',
+    urgent: 'text-danger',
+    expired: 'text-muted line-through',
+  }
+
   return (
-    <div className="rounded-pass border border-hot/40 bg-hot/10 px-4 py-3">
-      <p className="text-xs uppercase tracking-wider text-muted mb-1">Hold expires</p>
-      <span className="font-display text-3xl text-hot tabular-nums">{remaining}</span>
-    </div>
+    <p className="text-sm text-muted text-pretty font-sans">
+      Your ticket is held for{' '}
+      <span className={`font-mono font-semibold tabular-nums ${stateStyles[state]}`}>
+        {remaining}
+      </span>
+      . Complete checkout before the timer runs out.
+    </p>
   )
 }

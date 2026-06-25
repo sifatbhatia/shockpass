@@ -52,8 +52,19 @@ function WalletContent() {
       }))
     : data?.tickets || []
 
-  const upcoming = tickets.filter((t) => t.status === 'VALID')
+  // Group tickets: "Ready for entry" (VALID + within 24h), "Upcoming" (VALID + beyond 24h), "Past"
+  const now = new Date()
+  const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+
+  const readyForEntry = tickets.filter(
+    (t) => t.status === 'VALID' && new Date(t.event.startsAt) <= in24Hours
+  )
+  const upcoming = tickets.filter(
+    (t) => t.status === 'VALID' && new Date(t.event.startsAt) > in24Hours
+  )
   const past = tickets.filter((t) => t.status !== 'VALID')
+
+  const hasAnyReady = readyForEntry.length > 0 || upcoming.length > 0
 
   return (
     <AppShell footer={false}>
@@ -82,36 +93,65 @@ function WalletContent() {
           </div>
         ) : (
           <div className="space-y-4">
-            {upcoming.map((ticket) => (
-              <TicketPassCard
-                key={ticket.id}
-                id={ticket.id}
-                event={ticket.event}
-                ticketTier={ticket.ticketTier}
-                status={ticket.status}
-                href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
-              />
-            ))}
-
-            {past.length > 0 && (
-              <div className="mt-10">
-                <h2 className="font-display text-lg tracking-tight text-muted mb-3">Past passes</h2>
-                {past.map((ticket) => (
-                  <TicketPassCard
-                    key={ticket.id}
-                    id={ticket.id}
-                    event={ticket.event}
-                    ticketTier={ticket.ticketTier}
-                    status={ticket.status}
-                    href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
-                  />
-                ))}
+            {readyForEntry.length > 0 && (
+              <div>
+                <h2 className="font-display text-lg tracking-tight text-text mb-3">Ready for entry</h2>
+                <div className="space-y-4">
+                  {readyForEntry.map((ticket) => (
+                    <TicketPassCard
+                      key={ticket.id}
+                      id={ticket.id}
+                      event={ticket.event}
+                      ticketTier={ticket.ticketTier}
+                      status={ticket.status}
+                      href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
+                    />
+                  ))}
+                </div>
               </div>
             )}
 
-            <p className="mt-6 text-xs text-muted-deep font-sans text-center">
-              Need to transfer a pass? Open a pass to manage it.
-            </p>
+            {upcoming.length > 0 && (
+              <div>
+                <h2 className="font-display text-lg tracking-tight text-text mb-3">Upcoming</h2>
+                <div className="space-y-4">
+                  {upcoming.map((ticket) => (
+                    <TicketPassCard
+                      key={ticket.id}
+                      id={ticket.id}
+                      event={ticket.event}
+                      ticketTier={ticket.ticketTier}
+                      status={ticket.status}
+                      href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {past.length > 0 && (
+              <div>
+                <h2 className="font-display text-lg tracking-tight text-muted mb-3">Past</h2>
+                <div className="space-y-4">
+                  {past.map((ticket) => (
+                    <TicketPassCard
+                      key={ticket.id}
+                      id={ticket.id}
+                      event={ticket.event}
+                      ticketTier={ticket.ticketTier}
+                      status={ticket.status}
+                      href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {hasAnyReady && (
+              <p className="mt-6 text-xs text-muted-deep font-sans text-center">
+                Need to transfer a pass? Open a pass to manage it.
+              </p>
+            )}
           </div>
         )}
       </div>

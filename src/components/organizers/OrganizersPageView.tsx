@@ -142,7 +142,7 @@ export function OrganizersPageView() {
             </div>
             <div className="grid gap-3 md:grid-cols-3">
               {ORGANIZER_VALUES.map((item) => (
-                <article key={item.title} className="rounded-pass border border-white/10 bg-white/[0.035] p-5">
+                <article key={item.title} className="rounded-pass border border-white/10 bg-white/[0.035] p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.055] hover:-translate-y-0.5 focus-within:border-acid/40 focus-within:ring-1 focus-within:ring-acid/20">
                   <Check className="mb-8 h-5 w-5 text-nav-accent" strokeWidth={1.7} />
                   <h3 className="font-sans text-xl font-semibold tracking-tight">{item.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
@@ -158,7 +158,7 @@ export function OrganizersPageView() {
               <span className="hidden md:block">What improves</span>
             </div>
             {ORGANIZER_ROWS.map((row) => (
-              <div key={row.feature} className="grid gap-4 border-b border-white/10 px-5 py-5 last:border-b-0 md:grid-cols-[0.7fr_1.15fr_1fr] md:gap-8">
+              <div key={row.feature} className="grid gap-4 border-b border-white/10 px-5 py-5 last:border-b-0 md:grid-cols-[0.7fr_1.15fr_1fr] md:gap-8 transition-colors hover:bg-white/[0.02]">
                 <h3 className="font-sans text-xl font-semibold tracking-tight text-text">{row.feature}</h3>
                 <p className="text-sm leading-relaxed text-text">{row.detail}</p>
                 <p className="text-sm leading-relaxed text-muted">{row.result}</p>
@@ -176,13 +176,13 @@ export function OrganizersPageView() {
               <h2 className="mt-5 max-w-xl font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl">
                 Launch, sell, read, scan.
               </h2>
-              <p className="mt-5 max-w-md text-sm leading-relaxed text-muted">
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-muted sm:text-base">
                 The public page and the organizer hub share the same truth: capacity, orders, tiers, wallet passes, and door state.
               </p>
             </div>
             <div data-org-animate className="grid gap-3 sm:grid-cols-2">
               {OPERATING_STACK.map(({ icon: Icon, title, body }) => (
-                <article key={title} className="rounded-pass border border-white/10 bg-bg/72 p-5">
+                <article key={title} className="rounded-pass border border-white/10 bg-bg/72 p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.06] hover:-translate-y-0.5 focus-within:border-acid/40 focus-within:ring-1 focus-within:ring-acid/20">
                   <Icon className="mb-8 h-5 w-5 text-acid" strokeWidth={1.6} />
                   <h3 className="font-sans text-2xl font-semibold tracking-tight">{title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
@@ -193,7 +193,7 @@ export function OrganizersPageView() {
         </section>
 
         <section className="mx-auto max-w-[1650px] px-4 py-12 sm:px-6 sm:py-16 md:py-20">
-          <div data-org-animate className="grid gap-8 rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_16%_0%,rgba(248,214,247,0.13),transparent_38%),rgba(255,255,255,0.035)] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div data-org-animate className="grid gap-8 rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_16%_0%,rgba(248,214,247,0.13),transparent_38%),rgba(255,255,255,0.035)] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end transition-all duration-300 hover:border-white/20 hover:shadow-[0_8px_40px_rgba(248,214,247,0.06)]">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
                 Ready to show it

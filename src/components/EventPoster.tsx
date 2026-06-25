@@ -39,7 +39,7 @@ export function EventPoster({ src, title, className, priority = false }: EventPo
               <span className="text-xl font-black text-acid">{BRAND.monogram}</span>
             </div>
             <p className="text-sm font-semibold text-text">{title}</p>
-            <p className="mt-1 text-xs text-muted">Poster drop pending</p>
+            <p className="mt-1 text-xs text-muted">Ready for entry</p>
           </div>
         </div>
       )}

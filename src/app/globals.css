@@ -239,6 +239,15 @@ html {
   animation: scanFlash 0.35s ease-out forwards;
 }
 
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @keyframes passGlow {
   0%, 100% { box-shadow: 0 0 16px rgba(248, 214, 247, 0.1); }
   50% { box-shadow: 0 0 30px rgba(248, 214, 247, 0.22); }

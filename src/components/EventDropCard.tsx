@@ -42,14 +42,18 @@ export function EventDropCard({ event, variant = 'vertical', className }: EventD
     event.ticketTiers.length > 0 ? Math.min(...event.ticketTiers.map((t) => t.priceCents)) : null
   const currency = event.ticketTiers[0]?.currency ?? 'USD'
 
+  const isDisabled = event.status === 'SOLD_OUT' || event.status === 'CANCELLED'
   const isHorizontal = variant === 'horizontal' || variant === 'featured'
 
   return (
     <Link
       href={`/events/${event.slug}`}
       className={cn(
-        'group focus-ring block min-w-0 overflow-hidden rounded-pass border border-border bg-panel shadow-panel',
-        'transition-[border-color,transform,box-shadow] duration-200 hover:border-acid/45 hover:-translate-y-1 hover:shadow-glow-acid',
+        'group focus-ring block h-full min-w-0 overflow-hidden rounded-pass border border-border bg-panel shadow-panel',
+        'transition-[border-color,transform,box-shadow] duration-200',
+        isDisabled
+          ? 'pointer-events-none opacity-60 saturate-[0.3]'
+          : 'hover:border-acid/45 hover:-translate-y-1 hover:shadow-glow-acid',
         isHorizontal ? 'grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]' : '',
         variant === 'featured' && 'md:min-h-[280px]',
         className
@@ -66,6 +70,16 @@ export function EventDropCard({ event, variant = 'vertical', className }: EventD
           <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full border border-white/10 bg-bg/85 px-3 py-1 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-success animate-live-pulse" />
             <span className="text-[11px] font-medium font-sans">{COPY.onSaleNow}</span>
+          </div>
+        )}
+        {event.status === 'SOLD_OUT' && (
+          <div className="absolute top-3 left-3 rounded-full border border-hot/40 bg-bg/85 px-3 py-1 text-[11px] font-semibold text-hot backdrop-blur-md font-sans">
+            {COPY.soldOut}
+          </div>
+        )}
+        {event.status === 'CANCELLED' && (
+          <div className="absolute top-3 left-3 rounded-full border border-border bg-bg/85 px-3 py-1 text-[11px] font-semibold text-muted backdrop-blur-md font-sans">
+            {COPY.saleEnded}
           </div>
         )}
         {soldPercent >= 75 && event.status !== 'SOLD_OUT' && (

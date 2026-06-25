@@ -72,8 +72,13 @@ function TicketDetailContent() {
     )
   }
 
-  const isValid = ticket.status === 'VALID'
-  const isCheckedIn = ticket.status === 'CHECKED_IN'
+  const s = ticket.status
+  const isValid = s === 'VALID'
+  const isCheckedIn = s === 'CHECKED_IN'
+  const isTransferred = s === 'TRANSFERRED'
+  const isUnavailable = s === 'REFUNDED' || s === 'VOIDED'
+  const canTransfer = isValid && !accessToken
+  const statusLabel = isValid ? 'Valid' : isCheckedIn ? 'Checked in' : isTransferred ? 'Transferred' : s === 'REFUNDED' ? 'Refunded' : 'Voided'
 
   return (
     <div
@@ -86,8 +91,8 @@ function TicketDetailContent() {
         `
       }}
     >
-      <div className="mx-auto w-full max-w-[1180px] px-4 py-6 pb-16 sm:px-6 sm:pb-24 sm:pt-8">
-        {/* ── Back ── */}
+      <div className="mx-auto w-full max-w-[1180px] px-5 py-6 pb-16 sm:px-6 sm:pb-24 sm:pt-8">
+        {/* ── Back —— */}
         <a
           href={accessToken ? `/wallet?access=${accessToken}` : '/wallet'}
           className="inline-flex items-center gap-1.5 h-10 text-sm text-muted font-sans transition-colors hover:text-text focus-ring rounded-sm mb-6"
@@ -96,10 +101,140 @@ function TicketDetailContent() {
           My Wallet
         </a>
 
-        {/* ── Two-column layout ── */}
+        {/* ── Two-column layout —— */}
+        {/* QR card first in DOM for mobile ordering (appears on top on small screens) */}
         <div className="grid gap-10 items-start md:grid-cols-[minmax(280px,420px)_minmax(360px,520px)] md:gap-16">
-          {/* ── Left: Event Summary ── */}
-          <div>
+
+          {/* ── Right: QR Pass Card (first in DOM for mobile) —— */}
+          <div
+            className="w-full overflow-hidden rounded-[28px] border border-white/12 md:order-2"
+            style={{
+              maxWidth: 'min(100%, 460px)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.55), 0 0 80px rgba(255,122,61,0.08)',
+            }}
+          >
+            {/* QR panel */}
+            <div className="bg-[#f5f5f5] px-9 pb-7 pt-9 grid place-items-center text-center">
+              {isCheckedIn ? (
+                <div className="flex flex-col items-center gap-4 py-4">
+                  <div className="flex h-60 w-60 items-center justify-center rounded-[18px] bg-black/5 border border-black/10">
+                    <span className="font-display text-4xl text-black/30">✓</span>
+                  </div>
+                  <p className="text-sm font-sans text-black/60">Checked in — QR no longer active</p>
+                </div>
+              ) : isTransferred ? (
+                <div className="flex flex-col items-center gap-4 py-4">
+                  <div className="flex h-60 w-60 items-center justify-center rounded-[18px] bg-black/5 border border-black/10">
+                    <span className="font-mono text-sm text-black/40">Transferred</span>
+                  </div>
+                  <p className="text-sm font-sans text-black/60">This pass has been transferred to another wallet</p>
+                </div>
+              ) : isUnavailable ? (
+                <div className="flex flex-col items-center gap-4 py-4">
+                  <div className="flex h-60 w-60 items-center justify-center rounded-[18px] bg-black/5 border border-black/10">
+                    <span className="font-mono text-sm text-black/40">Unavailable</span>
+                  </div>
+                  <p className="text-sm font-sans text-black/60">Pass unavailable</p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex h-60 w-60 items-center justify-center rounded-[18px] border-8 border-[rgba(0,0,0,0.08)] bg-white p-2">
+                    {qr?.token ? (
+                      <QRCodeSVG value={qr.token} size={200} bgColor="#ffffff" fgColor="#050505" level="M" />
+                    ) : (
+                      <div className="flex h-48 w-48 items-center justify-center rounded bg-black/5">
+                        <span className="font-mono text-3xl font-bold text-black/50">{BRAND.monogram}</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="mt-3 text-xs text-[#111] font-mono text-center">
+                    Rotating QR · refreshes every 25s
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Pass info section */}
+            <div
+              className="p-6"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), #070707',
+              }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-display text-2xl tracking-tight text-white">{ticket.ticketTier.name}</span>
+                <span
+                  className={cn(
+                    'inline-flex items-center h-7 rounded-full px-3 text-[11px] font-bold uppercase tracking-wider font-sans border',
+                    isCheckedIn
+                      ? 'border-electric/30 bg-electric/15 text-electric'
+                      : isValid
+                        ? 'border-success/30 bg-success/12 text-success'
+                        : isTransferred
+                          ? 'border-yellow/30 bg-yellow/15 text-yellow'
+                          : 'border-border bg-panel-2 text-muted'
+                  )}
+                >
+                  {statusLabel}
+                </span>
+              </div>
+              <p className="text-sm text-muted font-sans">{ticket.event.venueName || 'Venue TBD'}</p>
+              <p className="mt-1 text-xs text-muted-deep font-mono">
+                {format(new Date(ticket.event.startsAt), 'EEE MMM d · h:mm a')}
+              </p>
+
+              {/* Transfer button (only for valid, non-guest tickets) */}
+              {canTransfer && (
+                <div className="mt-6">
+                  <button
+                    onClick={() => setShowTransfer(!showTransfer)}
+                    className="w-full inline-flex items-center justify-center min-h-[44px] rounded-full border border-border bg-transparent text-sm font-medium font-sans text-text transition-colors hover:bg-white/[0.05] hover:border-white/20 focus-ring"
+                  >
+                    Transfer pass
+                  </button>
+                  {showTransfer && (
+                    <div className="mt-3 space-y-2">
+                      <Input
+                        value={transferEmail}
+                        onChange={(e) => setTransferEmail(e.target.value)}
+                        placeholder="Recipient email"
+                        type="email"
+                      />
+                      <Button
+                        className="w-full min-h-[44px]"
+                        onClick={() => initiateTransfer.mutate({ ticketId: id, recipientEmail: transferEmail })}
+                      >
+                        Send transfer
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Past / transferred notice */}
+              {!canTransfer && !accessToken && (
+                <div className="mt-6">
+                  <button
+                    disabled
+                    className="w-full inline-flex items-center justify-center min-h-[44px] rounded-full border border-border/40 bg-transparent text-sm font-medium font-sans text-muted-deep cursor-not-allowed"
+                  >
+                    {isCheckedIn ? 'Already checked in' : isTransferred ? 'Pass transferred' : isUnavailable ? 'Pass unavailable' : 'Transfer pass'}
+                  </button>
+                </div>
+              )}
+
+              {/* Entry details */}
+              <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-deep font-sans space-y-1">
+                {(ticket as any).id && (
+                  <p>Ticket ID: {(ticket as any).id.slice(0, 12).toUpperCase()}</p>
+                )}
+                <p className="mt-3 text-muted">Have this ready at the door.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Left: Event Summary —— */}
+          <div className="md:order-1">
             <p className="font-mono text-[11px] uppercase tracking-wider text-nav-accent mb-2">
               Door pass
             </p>
@@ -123,18 +258,15 @@ function TicketDetailContent() {
                     ? 'border-electric/30 bg-electric/15 text-electric'
                     : isValid
                       ? 'border-success/30 bg-success/12 text-success'
-                      : 'border-border bg-panel-2 text-muted'
+                      : isTransferred
+                        ? 'border-yellow/30 bg-yellow/15 text-yellow'
+                        : 'border-border bg-panel-2 text-muted'
                 )}
-              >
-                {(() => {
-                  const s = ticket.status
-                  if (s === 'VALID') return 'Valid'
-                  if (s === 'CHECKED_IN') return 'Checked in'
-                  return s.replace('_', ' ')
-                })()}
-              </span>
-              <span className="text-sm text-muted font-sans">{ticket.ticketTier.name}</span>
-            </div>
+                >
+                {statusLabel}
+                </span>
+                <span className="text-sm text-muted font-sans">{ticket.ticketTier.name}</span>
+                </div>
 
             {/* Mobile: poster badge */}
             <div className="mt-6 md:hidden">
@@ -150,107 +282,6 @@ function TicketDetailContent() {
             </div>
           </div>
 
-          {/* ── Right: QR Pass Card ── */}
-          <div
-            className="w-full overflow-hidden rounded-[28px] border border-border"
-            style={{
-              maxWidth: 'min(100%, 460px)',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.55), 0 0 80px rgba(255,122,61,0.08)',
-            }}
-          >
-            {/* QR section */}
-            <div className="bg-[#f5f5f5] px-6 py-8 sm:px-8 sm:py-10 grid place-items-center text-center">
-              {isCheckedIn ? (
-                <div className="flex flex-col items-center gap-4 py-4">
-                  <div className="flex h-56 w-56 items-center justify-center rounded-[18px] bg-black/5 border border-black/10">
-                    <span className="font-display text-4xl text-black/30">✓</span>
-                  </div>
-                  <p className="text-sm font-sans text-black/60">Checked in — QR no longer active</p>
-                </div>
-              ) : (
-                <>
-                  <div className="flex h-56 w-56 items-center justify-center rounded-[18px] border-8 border-black/8 bg-white p-2 sm:h-60 sm:w-60">
-                    {qr?.token ? (
-                      <QRCodeSVG value={qr.token} size={200} bgColor="#ffffff" fgColor="#050505" level="M" />
-                    ) : (
-                      <div className="flex h-48 w-48 items-center justify-center rounded bg-black/5">
-                        <span className="font-mono text-3xl font-bold text-black/50">{BRAND.monogram}</span>
-                      </div>
-                    )}
-                  </div>
-                  <p className="mt-3 text-xs text-black/60 font-mono">
-                    Rotating QR — refreshes every 25 seconds
-                  </p>
-                </>
-              )}
-            </div>
-
-            {/* Pass info section */}
-            <div
-              className="px-6 py-6 sm:px-8 sm:py-6"
-              style={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), #070707',
-              }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-display text-2xl tracking-tight">{ticket.ticketTier.name}</span>
-                <span
-                  className={cn(
-                    'inline-flex items-center h-7 rounded-full px-3 text-[11px] font-bold uppercase tracking-wider font-sans border',
-                    isCheckedIn
-                      ? 'border-electric/30 bg-electric/15 text-electric'
-                      : isValid
-                        ? 'border-success/30 bg-success/12 text-success'
-                        : 'border-border bg-panel-2 text-muted'
-                  )}
-                >
-                  {isValid ? 'Valid' :
-                   isCheckedIn ? 'Used' :
-                   ticket.status.replace('_', ' ')}
-                </span>
-              </div>
-              <p className="text-sm text-muted font-sans">{ticket.event.venueName || 'Venue TBD'}</p>
-              <p className="mt-1 text-xs text-muted-deep font-mono">
-                {format(new Date(ticket.event.startsAt), 'EEE MMM d · h:mm a')}
-              </p>
-
-              {/* Transfer */}
-              {!accessToken && isValid && (
-                <div className="mt-6">
-                  <button
-                    onClick={() => setShowTransfer(!showTransfer)}
-                    className="w-full inline-flex items-center justify-center h-11 rounded-full border border-border bg-transparent text-sm font-medium font-sans text-text transition-colors hover:bg-white/[0.05] hover:border-white/20 focus-ring"
-                  >
-                    Transfer pass
-                  </button>
-                  {showTransfer && (
-                    <div className="mt-3 space-y-2">
-                      <Input
-                        value={transferEmail}
-                        onChange={(e) => setTransferEmail(e.target.value)}
-                        placeholder="Recipient email"
-                        type="email"
-                      />
-                      <Button
-                        className="w-full"
-                        onClick={() => initiateTransfer.mutate({ ticketId: id, recipientEmail: transferEmail })}
-                      >
-                        Send transfer
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Entry details */}
-              <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-deep font-sans space-y-1">
-                {(ticket as any).id && (
-                  <p>Ticket ID: {(ticket as any).id.slice(0, 12).toUpperCase()}</p>
-                )}
-                <p className="mt-3 text-muted">Have this ready at the door.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

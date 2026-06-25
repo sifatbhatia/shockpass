@@ -24,15 +24,15 @@ export default function EventsPage() {
 
   return (
     <AppShell showLivePulse={allEvents.some((e) => e.status === 'LIVE')}>
-      <section className="mx-auto min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1650px] overflow-hidden px-4 py-8 sm:px-6 md:py-14">
+      <section className="mx-auto min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1280px] px-4 py-8 sm:px-6 md:py-14 pb-20">
         <PageHeader
           title={COPY.findTheDrop}
           description={COPY.eventsPageDesc}
           className="mb-6 sm:mb-10"
         />
 
-        <div className="sticky top-[calc(var(--nav-bar-height,4.5rem)+env(safe-area-inset-top))] z-[var(--z-dropdown)] -mx-4 mb-8 border-y border-white/10 bg-bg/92 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:mb-10 sm:px-6 sm:py-4">
-          <div className="mx-auto grid max-w-[1650px] min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_11rem]">
+        <div className="sticky top-[calc(var(--nav-bar-height,4.5rem)+env(safe-area-inset-top))] z-[var(--z-dropdown)] mb-8 border-y border-white/10 bg-bg/92 px-4 py-3 backdrop-blur-md sm:mb-10 sm:px-6 sm:py-4 -mx-4 sm:-mx-6">
+          <div className="mx-auto grid max-w-[1280px] min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_180px]">
             <div className="relative min-w-0">
               <Input
                 type="search"
@@ -63,7 +63,7 @@ export default function EventsPage() {
         </div>
 
         {isLoading ? (
-          <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <div className="grid min-w-0 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <EventCardSkeleton key={i} />
             ))}
@@ -84,7 +84,7 @@ export default function EventsPage() {
           />
         ) : (
           <>
-            <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <div className="grid min-w-0 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {allEvents.map((event) => (
                 <EventDropCard key={event.id} event={event} />
               ))}
