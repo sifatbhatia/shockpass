@@ -249,21 +249,29 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
         ref={navRef}
         className={cn(
           sticky && 'sticky top-0 z-[51]',
-          'bg-transparent',
+          'w-full',
           className
         )}
       >
+        {/* Full-width effect layer */}
         <div
-          ref={barRef}
           className={cn(
-            'mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
-            'transition-[background,border-color,backdrop-filter] duration-500 ease-out',
+            'absolute inset-0 w-screen left-1/2 -translate-x-1/2 pointer-events-none transition-[background,backdrop-filter] duration-500 ease-out',
             !megaOpen && !mobileOpen && (
               darkNav
                 ? 'bg-gradient-to-b from-nav-accent/42 via-nav-accent/14 to-transparent backdrop-blur-[1px]'
                 : 'bg-gradient-to-b from-bg/34 via-bg/12 to-transparent backdrop-blur-[1px]'
             ),
             (megaOpen || mobileOpen) && 'bg-bg/96 backdrop-blur-xl'
+          )}
+          style={{ maskImage: 'linear-gradient(to bottom, black 0%, black 68%, transparent 100%)' }}
+        />
+        <div
+          ref={barRef}
+          className={cn(
+            'relative z-[2] mx-auto flex max-w-[1650px] items-center gap-3 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4',
+            !megaOpen && !mobileOpen && 'bg-transparent',
+            (megaOpen || mobileOpen) && 'bg-transparent'
           )}
         >
           <BrandMark
