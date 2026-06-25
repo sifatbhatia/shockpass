@@ -10,6 +10,7 @@ import { PassSkeleton } from '@/components/ui/Skeleton'
 import { TicketPassCard } from '@/components/TicketPassCard'
 import { trpc } from '@/trpc/client'
 import { COPY } from '@/lib/copy'
+import { ArrowRight, Ticket } from 'lucide-react'
 
 function WalletContent() {
   const { status } = useSession()
@@ -35,8 +36,7 @@ function WalletContent() {
   if (isLoading || guestLoading || status === 'loading') {
     return (
       <AppShell footer={false}>
-        <div className="mx-auto max-w-2xl space-y-4 px-6 py-10">
-          <PassSkeleton />
+        <div className="mx-auto w-full max-w-[960px] px-4 py-8 sm:px-6 md:py-10">
           <PassSkeleton />
         </div>
       </AppShell>
@@ -52,39 +52,37 @@ function WalletContent() {
       }))
     : data?.tickets || []
 
-  const [first, ...rest] = tickets
+  const upcoming = tickets.filter((t) => t.status === 'VALID')
+  const past = tickets.filter((t) => t.status !== 'VALID')
 
   return (
     <AppShell footer={false}>
-      <div className="mx-auto max-w-2xl px-6 py-10 md:py-14">
-        <PageHeader
-          title={COPY.myWallet}
-          description={`${tickets.length} pass${tickets.length !== 1 ? 'es' : ''} ready for the door`}
-          display={false}
-        />
+      <div className="mx-auto w-full max-w-[960px] px-4 py-8 sm:px-6 md:py-10">
+        <div className="mb-8">
+          <h1 className="font-display text-3xl tracking-tight sm:text-4xl" style={{ fontSize: 'clamp(32px, 4vw, 44px)', letterSpacing: '-0.04em' }}>
+            {COPY.myWallet}
+          </h1>
+          <p className="mt-1 text-sm text-muted font-sans">
+            {tickets.length} pass{tickets.length !== 1 ? 'es' : ''} ready for the door
+          </p>
+        </div>
 
         {tickets.length === 0 ? (
-          <EmptyState
-            title="No passes yet"
-            description="Grab a ticket from a live drop"
-            actionLabel={COPY.seeWhatsLive}
-            actionHref="/events"
-            illustration="wallet"
-          />
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <Ticket className="h-12 w-12 text-muted-deep mb-4" strokeWidth={1.5} />
+            <h2 className="font-display text-2xl tracking-tight mb-2">No passes yet</h2>
+            <p className="text-sm text-muted font-sans mb-6 max-w-md">Your purchased passes will appear here when they are ready.</p>
+            <a
+              href="/events"
+              className="inline-flex items-center justify-center min-h-11 rounded-full bg-acid text-bg px-6 py-2.5 text-sm font-medium font-sans tracking-tight transition-[background,transform] hover:bg-acid-dim active:scale-[0.98] focus-ring"
+            >
+              Browse drops
+              <ArrowRight className="h-4 w-4 ml-1.5" strokeWidth={1.6} />
+            </a>
+          </div>
         ) : (
-          <div className="space-y-4 animate-fade-up">
-            {first && (
-              <TicketPassCard
-                key={first.id}
-                id={first.id}
-                event={first.event}
-                ticketTier={first.ticketTier}
-                status={first.status}
-                href={accessToken ? `/tickets/${first.id}?access=${accessToken}` : `/tickets/${first.id}`}
-                featured
-              />
-            )}
-            {rest.map((ticket) => (
+          <div className="space-y-4">
+            {upcoming.map((ticket) => (
               <TicketPassCard
                 key={ticket.id}
                 id={ticket.id}
@@ -94,6 +92,26 @@ function WalletContent() {
                 href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
               />
             ))}
+
+            {past.length > 0 && (
+              <div className="mt-10">
+                <h2 className="font-display text-lg tracking-tight text-muted mb-3">Past passes</h2>
+                {past.map((ticket) => (
+                  <TicketPassCard
+                    key={ticket.id}
+                    id={ticket.id}
+                    event={ticket.event}
+                    ticketTier={ticket.ticketTier}
+                    status={ticket.status}
+                    href={accessToken ? `/tickets/${ticket.id}?access=${accessToken}` : `/tickets/${ticket.id}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            <p className="mt-6 text-xs text-muted-deep font-sans text-center">
+              Need to transfer a pass? Open a pass to manage it.
+            </p>
           </div>
         )}
       </div>
@@ -106,7 +124,7 @@ export default function WalletPage() {
     <Suspense
       fallback={
         <AppShell footer={false}>
-          <div className="mx-auto max-w-2xl px-6 py-10">
+          <div className="mx-auto w-full max-w-[960px] px-4 py-8 sm:px-6 md:py-10">
             <PassSkeleton />
           </div>
         </AppShell>
