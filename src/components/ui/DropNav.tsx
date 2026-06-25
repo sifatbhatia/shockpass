@@ -104,8 +104,47 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
     setMobileOpen(false)
   }, [])
 
-  
-  
+  // Mega menu open/close (no gsap)
+  useEffect(() => {
+    if (!megaRendered) return
+    const scrim = scrimRef.current
+    const panel = megaPanelRef.current
+    if (!panel) return
+    const links = panel.querySelectorAll('[data-nav-animate]')
+    if (megaOpen) {
+      if (scrim) scrim.style.opacity = '1'
+      panel.style.opacity = '1'
+      panel.style.transform = 'translateY(0)'
+      links.forEach((l) => { (l as HTMLElement).style.opacity = '1'; (l as HTMLElement).style.transform = 'translateY(0)' })
+    } else {
+      if (scrim) scrim.style.opacity = '0'
+      panel.style.opacity = '0'
+      panel.style.transform = 'translateY(-12px)'
+      links.forEach((l) => { (l as HTMLElement).style.opacity = '0'; (l as HTMLElement).style.transform = 'translateY(6px)' })
+      setTimeout(() => setMegaRendered(false), 200)
+    }
+  }, [megaOpen, megaRendered])
+
+  useEffect(() => {
+    if (!mobileRendered) return
+    const drawer = mobileDrawerRef.current
+    const scrim = mobileScrimRef.current
+    if (!drawer) return
+    const links = drawer.querySelectorAll('[data-nav-animate]')
+    if (mobileOpen) {
+      if (scrim) scrim.style.opacity = '1'
+      drawer.style.opacity = '1'
+      drawer.style.transform = 'translateY(0) scale(1)'
+      links.forEach((l) => { (l as HTMLElement).style.opacity = '1'; (l as HTMLElement).style.transform = 'translateY(0)' })
+    } else {
+      if (scrim) scrim.style.opacity = '0'
+      drawer.style.opacity = '0'
+      drawer.style.transform = 'translateY(-8px) scale(0.985)'
+      links.forEach((l) => { (l as HTMLElement).style.opacity = '0'; (l as HTMLElement).style.transform = 'translateY(-4px)' })
+      setTimeout(() => setMobileRendered(false), 200)
+    }
+  }, [mobileOpen, mobileRendered])
+
   const pillLinks = session
     ? [
         { label: COPY.organizers, href: '/organizers' },
