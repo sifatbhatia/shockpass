@@ -138,9 +138,9 @@ export function HomePageView() {
   return (
     <AppShell showLivePulse={liveEvents.length > 0} heroUnderNav>
       <div ref={rootRef}>
-      {/* Attendee-first hero — full bleed under transparent nav */}
+      {/* Hero — centered, two paths, no decoration */}
       <section
-        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(80vh,640px)] overflow-hidden grain-overlay"
+        className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(70vh,600px)] overflow-hidden grain-overlay"
       >
         <Image
           src={heroImage}
@@ -152,155 +152,49 @@ export function HomePageView() {
           sizes="100vw"
           className="object-cover opacity-82 saturate-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-bg/70 via-bg/30 to-bg/90" />
-        <div className="absolute bottom-8 left-[8vw] hidden font-mono text-xs uppercase tracking-[0.24em] text-muted md:block">
-          <p>Global rooms</p>
-          <p>Art, culture</p>
-          <p>& sound</p>
-          <span className="mt-8 block h-px w-10 bg-nav-accent" />
-        </div>
-        <div className="absolute bottom-12 right-[12vw] hidden font-mono text-xs leading-relaxed tracking-[0.16em] text-muted lg:block">
-          <p>40.7128° N</p>
-          <p>74.0060° W</p>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-bg/75 via-bg/45 to-bg/95" />
 
-        <div className="relative mx-auto flex min-h-[min(80vh,640px)] max-w-[1650px] flex-col justify-end px-4 pb-12 pt-[calc(var(--nav-bar-height,4.5rem)+1.5rem)] sm:px-6 sm:pb-16 md:pb-20">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-end lg:gap-12">
-            <div className="max-w-2xl">
-              <p data-hero-animate className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-bg/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted backdrop-blur font-sans">
-                <span className="h-1.5 w-1.5 rounded-full bg-nav-accent animate-live-pulse" />
-                {liveEvents.length > 0
-                  ? `${liveEvents.length} ${liveEvents.length === 1 ? 'drop' : 'drops'} on sale now`
-                  : COPY.liveNow}
-              </p>
+        <div className="relative mx-auto flex min-h-[min(70vh,600px)] max-w-[1650px] flex-col items-center justify-center px-4 pt-[calc(var(--nav-bar-height,4.5rem)+1rem)] sm:px-6">
+          <div className="flex flex-col items-center text-center max-w-2xl">
+            <p data-hero-animate className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-bg/50 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted backdrop-blur font-sans">
+              <span className="h-1.5 w-1.5 rounded-full bg-nav-accent animate-live-pulse" />
+              {liveEvents.length > 0
+                ? `${liveEvents.length} ${liveEvents.length === 1 ? 'drop' : 'drops'} on sale now`
+                : COPY.liveNow}
+            </p>
 
-              <h1 data-hero-animate className="font-display text-balance text-5xl leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[4.5rem]">
-                Ticket drops that make the room feel alive.
-              </h1>
-              <p data-hero-animate className="mt-4 max-w-lg text-pretty text-sm leading-relaxed text-muted font-sans md:text-base">
-                Find the room, see the price, hold the ticket, walk through the door. Willcall keeps the whole night in one fast, human-made flow.
-              </p>
+            <h1 data-hero-animate className="font-display text-balance text-5xl leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem]">
+              Ticket drops that make the room feel alive.
+            </h1>
+            <p data-hero-animate className="mt-4 max-w-lg text-pretty text-sm leading-relaxed text-muted font-sans md:text-base">
+              Find the room, see the price, hold the ticket, walk through the door. Willcall keeps the whole night in one fast, human-made flow.
+            </p>
 
-              <div data-hero-animate className="mt-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-                <Button
-                  href={featured ? `/events/${featured.slug}` : '/events'}
-                  className="w-full sm:w-auto"
-                >
-                  {featured ? COPY.getTickets : COPY.seeWhatsLive}
-                </Button>
-                <Button href="/events" variant="ghost" className="w-full sm:w-auto">
-                  {COPY.homeBrowseAll}
-                </Button>
-                <Button
-                  href={session && isOrganizer ? '/dashboard' : '/organizers'}
-                  variant="ghost"
-                  className="w-full sm:w-auto text-muted hover:text-text"
-                >
-                  Launch a drop →
-                </Button>
-              </div>
+            <div data-hero-animate className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Button
+                href={featured ? `/events/${featured.slug}` : '/events'}
+                className="w-full sm:w-auto"
+              >
+                {featured ? COPY.getTickets : COPY.seeWhatsLive}
+              </Button>
+              <Button
+                href={session && isOrganizer ? '/dashboard' : '/organizers'}
+                variant="ghost"
+                className="w-full sm:w-auto text-muted hover:text-text"
+              >
+                Launch a drop →
+              </Button>
             </div>
-
-            <aside data-hero-animate className="min-h-[224px] overflow-hidden rounded-pass border border-white/12 bg-bg/75 backdrop-blur-md">
-              {featured && featuredCap > 0 ? (
-                <>
-                <div className="flex gap-4 p-5">
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-drop bg-panel-2">
-                    <EventPoster
-                      src={featured.posterUrl}
-                      title={featured.title}
-                      className="h-20 w-20"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted font-sans">
-                        {COPY.homeSellingNow}
-                      </p>
-                      {featuredState && (
-                        <DropStatePill state={featuredState} className="!px-2 !py-0.5 !text-[10px]" />
-                      )}
-                    </div>
-                    <p className="font-display text-xl leading-tight tracking-tight line-clamp-2">
-                      {featured.title}
-                    </p>
-                    <p className="mt-1 text-xs text-muted font-sans">
-                      {featured.venueName ? `${featured.venueName} · ` : ''}
-                      {featured.city} · {format(new Date(featured.startsAt), 'EEE, MMM d')}
-                    </p>
-                  </div>
-                </div>
-                <div className="border-t border-white/10 px-5 pb-5 pt-4">
-                  <SellThroughBar sold={featuredSold} capacity={featuredCap} className="mb-4" />
-                  <div className="flex items-center justify-between gap-3">
-                    <Button href={`/events/${featured.slug}`} className="flex-1">
-                      {COPY.getTickets}
-                    </Button>
-                    {featuredMin != null && (
-                      <span className="font-mono text-sm text-text">
-                        {COPY.fromPrice(`$${(featuredMin / 100).toFixed(0)}`)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                </>
-              ) : (
-                <div className="flex h-full min-h-[224px] flex-col justify-between p-5">
-                  <div className="flex gap-4">
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-drop bg-gradient-to-br from-acid/30 to-acid/10 flex items-center justify-center">
-                      <span className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-acid">live</span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-2">
-                        <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted font-sans">
-                          {COPY.homeSellingNow}
-                        </p>
-                      </div>
-                      <p className="font-display text-xl leading-tight tracking-tight">
-                        {MOCK_HOME_EVENTS[0].title}
-                      </p>
-                      <p className="mt-1 text-xs text-muted font-sans">
-                        {MOCK_HOME_EVENTS[0].venueName} · {MOCK_HOME_EVENTS[0].city} · {format(new Date(MOCK_HOME_EVENTS[0].startsAt), 'EEE, MMM d')}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="border-t border-white/10 px-0 pb-0 pt-4">
-                    <div className="mb-4">
-                      <div className="flex items-center justify-between gap-2 text-xs text-muted font-sans mb-1">
-                        <span>Fill</span>
-                        <span>225 / 250</span>
-                      </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-panel-2">
-                        <div className="h-full w-[90%] rounded-full bg-acid transition-all" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <Button href="/events" className="flex-1">
-                        {COPY.getTickets}
-                      </Button>
-                      <span className="font-mono text-sm text-text">from $35</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </aside>
           </div>
         </div>
       </section>
 
-      <LiveTicker
-        items={liveEvents.map((e) => ({
-          label: `${e.title} · ${e.city} · ${COPY.onSaleNow.toLowerCase()}`,
-          href: `/events/${e.slug}`,
-        }))}
-      />
-
-      {/* Live board — buyer discovery */}
-      <section data-home-animate className="mx-auto max-w-[1650px] px-4 py-14 sm:px-6 sm:py-16 md:py-20">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      {/* Live board — immediately below hero, peeking to entice scroll */}
+      <section data-home-animate className="mx-auto max-w-[1650px] px-4 pt-6 pb-12 sm:px-6 sm:pt-8 sm:pb-16 md:py-10">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="font-display text-3xl tracking-tight md:text-4xl">{COPY.liveNow}</h2>
+              <h2 className="font-display text-2xl tracking-tight md:text-3xl">{COPY.liveNow}</h2>
               {liveEvents.length > 0 && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-nav-accent/25 bg-nav-accent/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-nav-accent font-sans">
                   <span className="h-1.5 w-1.5 rounded-full bg-nav-accent animate-live-pulse" />
