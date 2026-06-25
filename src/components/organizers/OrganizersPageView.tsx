@@ -166,9 +166,6 @@ export function OrganizersPageView() {
         <section className="border-y border-white/10 bg-panel/24">
           <div className="mx-auto grid max-w-[1650px] gap-8 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
             <div data-org-animate>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">
-                Operating system
-              </p>
               <h2 className="mt-5 max-w-xl font-display text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-6xl">
                 Launch, sell, read, scan.
               </h2>
@@ -191,9 +188,6 @@ export function OrganizersPageView() {
         {/* ─── Final CTA ─── */}
         <section className="mx-auto max-w-[1650px] px-4 py-16 sm:px-6 md:py-24">
           <div data-org-animate className="flex flex-col items-center text-center gap-6 rounded-[24px] border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 sm:p-12 md:p-16">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
-              Ready to show it
-            </p>
             <h2 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-6xl">
               Open a polished sales room in minutes.
             </h2>
