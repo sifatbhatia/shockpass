@@ -8,6 +8,7 @@ import { AppShell } from '@/components/AppShell'
 import { Panel } from '@/components/ui/Panel'
 import { Input, Label } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
+import { Select } from '@/components/ui/Select'
 import { SellThroughBar } from '@/components/SellThroughBar'
 import { trpc } from '@/trpc/client'
 import { format } from 'date-fns'
@@ -414,17 +415,16 @@ export default function EventManagePage() {
                 />
               </div>
               <div>
-                <Label>Type</Label>
-                <select
-                  id="promo-type"
-                  value={promoForm.discountType}
-                  onChange={(e) => setPromoForm({ ...promoForm, discountType: e.target.value as 'PERCENT' | 'FIXED' })}
-                  className="w-full h-10 rounded-drop border border-border bg-bg px-3 text-sm text-text font-sans focus:outline-none focus:ring-2 focus:ring-acid/40"
-                >
-                  <option value="PERCENT">Percent</option>
-                  <option value="FIXED">Fixed ($)</option>
-                </select>
-              </div>
+                  <Label>Type</Label>
+                  <Select
+                    options={[
+                      { value: 'PERCENT', label: 'Percent' },
+                      { value: 'FIXED', label: 'Fixed amount' },
+                    ]}
+                    value={promoForm.discountType}
+                    onChange={(v) => setPromoForm({ ...promoForm, discountType: v as 'PERCENT' | 'FIXED' })}
+                  />
+                </div>
               <Button
                 onClick={() => createPromo.mutate({ eventId: id, code: promoForm.code, discountType: promoForm.discountType, discountValue: promoForm.discountValue })}
                 disabled={!promoForm.code}
