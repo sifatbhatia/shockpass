@@ -368,7 +368,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
           />
           <div
             ref={megaPanelRef}
-            className="fixed left-1/2 z-[var(--z-dropdown)] hidden max-h-[calc(100dvh-var(--nav-bar-height)-1rem)] w-[min(calc(100vw-2rem),900px)] -translate-x-1/2 overflow-hidden rounded-b-pass border-x border-b border-white/10 bg-bg/94 shadow-sheet backdrop-blur-md lg:block"
+            className="fixed left-1/2 z-[var(--z-dropdown)] hidden max-h-[calc(100dvh-var(--nav-bar-height)-1rem)] w-[min(calc(100vw-2rem),1650px)] -translate-x-1/2 overflow-hidden rounded-b-pass border-x border-b border-white/10 bg-bg/94 shadow-sheet backdrop-blur-md lg:block"
             style={{ top: navBarHeight, opacity: 0 }}
           >
             <div className="relative grid gap-8 px-6 py-6 md:grid-cols-3 md:px-8 md:py-8">

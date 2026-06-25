@@ -22,15 +22,15 @@ const LEGAL_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden bg-nav-accent text-bg" style={{ minHeight: 'clamp(540px, 72vh, 800px)' }}>
+    <footer className="relative isolate min-h-screen overflow-hidden bg-nav-accent text-bg">
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(5,5,5,0.06)_0,rgba(5,5,5,0.06)_1px,transparent_1px,transparent_calc(100%/12))]" aria-hidden />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),transparent_30%,rgba(5,5,5,0.04))]" aria-hidden />
 
-      {/* Wordmark — bottom, behind everything. Very subtle so links stay readable. */}
+      {/* Wordmark — subtle watermark at bottom */}
       <p
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 select-none font-display font-medium leading-none tracking-[-0.06em] text-bg/12"
-        style={{ bottom: 'clamp(8px, 2vw, 40px)', fontSize: 'clamp(140px, 24vw, 420px)', lineHeight: '0.72' }}
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 select-none font-display font-medium leading-none tracking-[-0.06em] text-bg/10"
+        style={{ bottom: 'clamp(8px, 1.5vw, 32px)', fontSize: 'clamp(140px, 24vw, 420px)', lineHeight: '0.72' }}
         aria-hidden
       >
         {BRAND.name}
