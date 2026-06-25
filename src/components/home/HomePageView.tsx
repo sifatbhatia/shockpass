@@ -408,7 +408,7 @@ export function HomePageView() {
                 <li key={step.title} className="border-b border-white/10 last:border-b-0">
                   <Link
                     href={step.href}
-                    className="group relative gap-5 py-8 transition-colors hover:bg-white/[0.025] focus-ring sm:px-5"
+                    className="group relative block py-8 transition-colors hover:bg-white/[0.025] focus-ring sm:px-5"
                   >
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
