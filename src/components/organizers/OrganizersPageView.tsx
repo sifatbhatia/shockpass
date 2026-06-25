@@ -65,11 +65,7 @@ export function OrganizersPageView() {
   useGSAP(
     () => {
       gsap.from('[data-org-hero]', {
-        autoAlpha: 0,
-        y: 18,
-        duration: 0.72,
-        stagger: 0.08,
-        ease: 'power3.out',
+        autoAlpha: 0, y: 18, duration: 0.72, stagger: 0.08, ease: 'power3.out',
       })
 
       gsap.utils.toArray<HTMLElement>('[data-org-animate]').forEach((el) => {
@@ -77,10 +73,7 @@ export function OrganizersPageView() {
           el,
           { autoAlpha: 0, y: 32 },
           {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
+            autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out',
             scrollTrigger: { trigger: el, start: 'top 84%', once: true },
           }
         )
@@ -92,7 +85,8 @@ export function OrganizersPageView() {
   return (
     <AppShell heroUnderNav>
       <div ref={rootRef} className="bg-bg">
-        <section className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(92vh,820px)] overflow-hidden grain-overlay stage-vignette">
+        {/* ─── Hero ─── */}
+        <section className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[min(70vh,600px)] overflow-hidden grain-overlay">
           <Image
             src="/assets/willcall-organizers-grid.png"
             alt=""
@@ -102,56 +96,57 @@ export function OrganizersPageView() {
             sizes="100vw"
             className="object-cover opacity-84 saturate-110"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,0.84)_42%,rgba(5,5,5,0.36)_76%,#050505_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.7)_0%,rgba(5,5,5,0.22)_36%,#050505_100%)]" />
-          <div className="absolute bottom-14 left-[9vw] hidden font-mono text-xs uppercase leading-relaxed tracking-[0.18em] text-muted md:block">
-            <p>Built for those</p>
-            <p>who build culture.</p>
-            <span className="mt-7 block h-px w-10 bg-nav-accent" />
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-bg/75 via-bg/40 to-bg/95" />
 
-          <div className="relative mx-auto flex min-h-[min(92vh,820px)] max-w-[1650px] flex-col justify-end px-4 pb-10 pt-[calc(var(--nav-bar-height,4.5rem)+2rem)] sm:px-6 sm:pb-16">
-            <div className="max-w-5xl">
-              <p data-org-hero className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
+          <div className="relative mx-auto flex min-h-[min(70vh,600px)] max-w-[1650px] flex-col items-center justify-center px-4 pt-[calc(var(--nav-bar-height,4.5rem)+1rem)] sm:px-6">
+            <div className="flex flex-col items-center text-center max-w-3xl">
+              <p data-org-hero className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent mb-4">
                 For organizers
               </p>
-              <h1 data-org-hero className="mt-5 max-w-4xl font-display text-balance text-6xl leading-[0.9] tracking-tight sm:text-7xl md:text-8xl">
+              <h1 data-org-hero className="font-display text-balance text-5xl leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-[4.5rem]">
                 Launch the drop.
                 <span className="block text-acid">Run the room.</span>
               </h1>
-              <p data-org-hero className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
+              <p data-org-hero className="mt-5 max-w-xl text-pretty text-sm leading-relaxed text-muted sm:text-base">
                 Built for promoters, venues, and cultural rooms that need ticketing to feel as deliberate as the night itself.
               </p>
-              <div data-org-hero className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Button href={launchHref}>{COPY.launchADrop}</Button>
-                <Button href="/events" variant="ghost">
-                  See buyer side
+              <div data-org-hero className="mt-6 flex items-center justify-center gap-3">
+                <Button href={launchHref} className="flex-1 sm:flex-none">
+                  Launch a drop
+                </Button>
+                <Button href="/events" variant="ghost" className="flex-1 sm:flex-none text-muted hover:text-text">
+                  See buyer side →
                 </Button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1650px] px-4 py-12 sm:px-6 sm:py-16 md:py-20">
+        {/* ─── Why organizers — three cards ─── */}
+        <section className="mx-auto max-w-[1650px] px-4 py-16 sm:px-6 md:py-24">
           <div data-org-animate className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">Why organizers use it</p>
-              <h2 className="mt-5 max-w-lg font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl">
+              <h2 className="mt-5 max-w-lg font-display text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-6xl">
                 More than a checkout link.
               </h2>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+                Willcall gives organizers one command view for tiers, promos, live sell-through, guest lookup, and door scan.
+              </p>
             </div>
             <div className="grid gap-3 md:grid-cols-3">
               {ORGANIZER_VALUES.map((item) => (
-                <article key={item.title} className="rounded-pass border border-white/10 bg-white/[0.035] p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.055] hover:-translate-y-0.5 focus-within:border-acid/40 focus-within:ring-1 focus-within:ring-acid/20">
+                <article key={item.title} className="rounded-[20px] border border-white/10 bg-white/[0.035] p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.055] hover:-translate-y-0.5">
                   <Check className="mb-8 h-5 w-5 text-nav-accent" strokeWidth={1.7} />
-                  <h3 className="font-sans text-xl font-semibold tracking-tight">{item.title}</h3>
+                  <h3 className="font-sans text-xl font-semibold tracking-tight text-text">{item.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
                 </article>
               ))}
             </div>
           </div>
 
-          <div data-org-animate className="mt-14 overflow-hidden rounded-pass border border-white/10 bg-panel/36">
+          {/* ─── Workflow table ─── */}
+          <div data-org-animate className="mt-16 overflow-hidden rounded-[20px] border border-white/10 bg-panel/36">
             <div className="grid border-b border-white/10 px-5 py-4 font-mono text-[10px] uppercase tracking-[0.16em] text-muted md:grid-cols-[0.7fr_1.15fr_1fr]">
               <span>Workflow</span>
               <span className="hidden md:block">What you control</span>
@@ -167,13 +162,14 @@ export function OrganizersPageView() {
           </div>
         </section>
 
+        {/* ─── Operating system ─── */}
         <section className="border-y border-white/10 bg-panel/24">
-          <div className="mx-auto grid max-w-[1650px] gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+          <div className="mx-auto grid max-w-[1650px] gap-8 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
             <div data-org-animate>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-electric">
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">
                 Operating system
               </p>
-              <h2 className="mt-5 max-w-xl font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl">
+              <h2 className="mt-5 max-w-xl font-display text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-6xl">
                 Launch, sell, read, scan.
               </h2>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-muted sm:text-base">
@@ -182,9 +178,9 @@ export function OrganizersPageView() {
             </div>
             <div data-org-animate className="grid gap-3 sm:grid-cols-2">
               {OPERATING_STACK.map(({ icon: Icon, title, body }) => (
-                <article key={title} className="rounded-pass border border-white/10 bg-bg/72 p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.06] hover:-translate-y-0.5 focus-within:border-acid/40 focus-within:ring-1 focus-within:ring-acid/20">
+                <article key={title} className="rounded-[20px] border border-white/10 bg-bg/72 p-5 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.06] hover:-translate-y-0.5">
                   <Icon className="mb-8 h-5 w-5 text-acid" strokeWidth={1.6} />
-                  <h3 className="font-sans text-2xl font-semibold tracking-tight">{title}</h3>
+                  <h3 className="font-sans text-2xl font-semibold tracking-tight text-text">{title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
                 </article>
               ))}
@@ -192,26 +188,22 @@ export function OrganizersPageView() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1650px] px-4 py-12 sm:px-6 sm:py-16 md:py-20">
-          <div data-org-animate className="grid gap-8 rounded-pass border border-white/10 bg-[radial-gradient(ellipse_at_16%_0%,rgba(248,214,247,0.13),transparent_38%),rgba(255,255,255,0.035)] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end transition-all duration-300 hover:border-white/20 hover:shadow-[0_8px_40px_rgba(248,214,247,0.06)]">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
-                Ready to show it
-              </p>
-              <h2 className="mt-5 max-w-4xl font-display text-5xl leading-[0.95] tracking-tight sm:text-6xl md:text-7xl">
-                Open a polished sales room in minutes.
-              </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted">
-                Start with a poster and the first tier. Willcall handles the buyer flow, pass delivery, and the door.
-              </p>
-            </div>
-            <Link
-              href={launchHref}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-nav-accent px-6 py-3 text-sm font-medium text-bg transition-[background,transform] hover:bg-acid active:scale-[0.98] focus-ring"
-            >
+        {/* ─── Final CTA ─── */}
+        <section className="mx-auto max-w-[1650px] px-4 py-16 sm:px-6 md:py-24">
+          <div data-org-animate className="flex flex-col items-center text-center gap-6 rounded-[24px] border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 sm:p-12 md:p-16">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-nav-accent">
+              Ready to show it
+            </p>
+            <h2 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-tight sm:text-5xl md:text-6xl">
+              Open a polished sales room in minutes.
+            </h2>
+            <p className="max-w-xl text-sm leading-relaxed text-muted">
+              Start with a poster and the first tier. Willcall handles the buyer flow, pass delivery, and the door.
+            </p>
+            <Button href={launchHref} className="mt-2">
               Launch a drop
-              <ArrowRight className="h-4 w-4" strokeWidth={1.6} />
-            </Link>
+              <ArrowRight className="h-4 w-4 ml-1.5" strokeWidth={2} />
+            </Button>
           </div>
         </section>
       </div>
