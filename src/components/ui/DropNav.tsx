@@ -276,7 +276,6 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
         >
           <BrandMark
             variant="nav"
-            showPulse={showLivePulse}
             size="md"
             className={cn(darkNav && '[&_img]:brightness-0')}
           />
