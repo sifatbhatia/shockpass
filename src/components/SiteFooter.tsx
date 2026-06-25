@@ -37,7 +37,7 @@ export function SiteFooter() {
       </p>
 
       {/* Content layer */}
-      <div className="relative z-10 mx-auto max-w-[1480px] px-4 pt-20 pb-20 sm:px-6 md:px-8 md:pt-28 md:pb-28">
+      <div className="relative z-10 mx-auto max-w-[1650px] px-4 pt-20 pb-28 sm:px-6 md:px-8 md:pt-28">
         {/* Top row: CTA + contact */}
         <div className="grid gap-12 md:grid-cols-[1fr_auto] md:gap-16">
           <section>
@@ -96,8 +96,8 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="relative z-10 mx-3 mb-3 flex min-h-7 items-center justify-between gap-2 rounded-[4px] bg-bg px-3 font-mono text-[11px] font-semibold uppercase leading-tight tracking-normal text-nav-accent sm:mx-4">
+      {/* Bottom bar — pinned to footer bottom */}
+      <div className="absolute bottom-3 left-3 right-3 z-10 flex min-h-7 items-center justify-between gap-2 rounded-[4px] bg-bg px-3 font-mono text-[11px] font-semibold uppercase leading-tight tracking-normal text-nav-accent sm:left-4 sm:right-4">
         <p>© 2026 · All rights reserved.</p>
         <a href="https://sifat.tech" target="_blank" rel="noreferrer" className="transition-colors hover:text-acid focus-ring">
           Site by Sift Design
