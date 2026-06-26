@@ -6,6 +6,7 @@ import { Providers } from '@/components/Providers'
 import { TRPCProvider } from '@/components/TRPCProvider'
 import { BRAND, brandTitle } from '@/lib/brand'
 import { siteConfig } from '@/lib/seo'
+import { GlimmProvider, InterceptLinks } from 'glimm/next'
 
 const sans = DM_Sans({
   variable: '--font-inter',
@@ -79,7 +80,12 @@ export default function RootLayout({
     >
       <body className="h-full bg-bg text-text font-sans">
         <TRPCProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            <GlimmProvider palette="prism">
+              <InterceptLinks />
+              {children}
+            </GlimmProvider>
+          </Providers>
         </TRPCProvider>
       </body>
     </html>
