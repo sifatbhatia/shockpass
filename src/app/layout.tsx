@@ -81,7 +81,7 @@ export default function RootLayout({
       <body className="h-full bg-bg text-text font-sans">
         <TRPCProvider>
           <Providers>
-            <GlimmProvider palette="prism">
+            <GlimmProvider palette="ember" sweepMs={1400} bandTight={0.3} peakAlpha={0.95}>
               <InterceptLinks />
               {children}
             </GlimmProvider>
