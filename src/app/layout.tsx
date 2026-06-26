@@ -6,6 +6,7 @@ import { Providers } from '@/components/Providers'
 import { TRPCProvider } from '@/components/TRPCProvider'
 import { BRAND, brandTitle } from '@/lib/brand'
 import { siteConfig } from '@/lib/seo'
+import { GlimmProvider, InterceptLinks } from 'glimm/next'
 
 const sans = DM_Sans({
   variable: '--font-inter',

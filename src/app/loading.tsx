@@ -4,7 +4,8 @@ import { BRAND } from '@/lib/brand'
 export default function Loading() {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-bg">
-      <div className="relative h-12 w-40 animate-pulse">
+      <div className="relative h-12 w-40">
+        <div className="absolute inset-0 animate-pulse" />
         <Image
           src="/brand/willcall-nav.png"
           alt={BRAND.name}
