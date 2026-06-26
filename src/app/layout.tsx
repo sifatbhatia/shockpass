@@ -1,20 +1,14 @@
 import type { Metadata } from 'next'
-import { DM_Sans, JetBrains_Mono, DM_Serif_Display, Afacad } from 'next/font/google'
+import { DM_Sans, JetBrains_Mono, DM_Serif_Display } from 'next/font/google'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 import { TRPCProvider } from '@/components/TRPCProvider'
 import { BRAND, brandTitle } from '@/lib/brand'
 import { siteConfig } from '@/lib/seo'
-import { GlimmProvider, InterceptLinks } from 'glimm/next'
 
 const sans = DM_Sans({
   variable: '--font-inter',
-  subsets: ['latin'],
-})
-
-const afacad = Afacad({
-  variable: '--font-afacad',
   subsets: ['latin'],
 })
 
@@ -81,16 +75,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${afacad.variable} ${mono.variable} ${display.variable} h-full antialiased`}
+      className={`${sans.variable} ${mono.variable} ${display.variable} h-full antialiased`}
     >
       <body className="h-full bg-bg text-text font-sans">
         <TRPCProvider>
-          <Providers>
-            <GlimmProvider palette="prism">
-              <InterceptLinks />
-              {children}
-            </GlimmProvider>
-          </Providers>
+          <Providers>{children}</Providers>
         </TRPCProvider>
       </body>
     </html>
