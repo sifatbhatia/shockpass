@@ -72,11 +72,11 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
   }, [navBarHeight])
 
   useEffect(() => {
-    if (megaOpen) queueMicrotask(() => setMegaRendered(true))
+    if (megaOpen) setMegaRendered(true)
   }, [megaOpen])
 
   useEffect(() => {
-    if (mobileOpen) queueMicrotask(() => setMobileRendered(true))
+    if (mobileOpen) setMobileRendered(true)
   }, [mobileOpen])
 
   useEffect(() => {
