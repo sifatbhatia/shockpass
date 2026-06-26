@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { TransitionLink as GlimmLink } from 'glimm/next'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react'
 import { BrandMark } from '@/components/BrandMark'
 import { COPY, NAV_QUICK_LINKS } from '@/lib/copy'
@@ -254,7 +255,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
               </button>
 
               {pillLinks.map((link) => (
-                <Link
+                <GlimmLink
                   key={link.href + link.label}
                   href={link.href}
                   onClick={() => setMegaOpen(false)}
@@ -270,7 +271,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                   )}
                 >
                   {link.label}
-                </Link>
+                </GlimmLink>
               ))}
             </div>
           </div>
