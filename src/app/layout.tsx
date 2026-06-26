@@ -79,7 +79,7 @@ export default function RootLayout({
       className={`${sans.variable} ${mono.variable} ${display.variable} h-full antialiased`}
     >
       <body className="h-full bg-bg text-text font-sans">
-          <GlimmProvider palette="lagoon" sweepMs={1200} easing="easeOutCubic">
+          <GlimmProvider palette="lagoon" sweepMs={800} easing="easeOutCubic" bandTight={0.35}>
             <InterceptLinks />
         <TRPCProvider>
           <Providers>
