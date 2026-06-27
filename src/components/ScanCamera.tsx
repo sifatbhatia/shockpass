@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, useCallback } from 'react'
-import { cn } from '@/lib/cn'
+import type { Html5Qrcode as Html5QrcodeType } from 'html5-qrcode'
 
 export type CameraState = 'loading' | 'ready' | 'denied' | 'unavailable'
 
@@ -24,7 +24,7 @@ export const ScanCamera = forwardRef<ScanCameraHandle, ScanCameraProps>(function
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const scannerRef = useRef<any>(null)
+  const scannerRef = useRef<Html5QrcodeType | null>(null)
   const [state, setState] = useState<CameraState>('loading')
   const [cameras, setCameras] = useState<Array<{ id: string; label: string }>>([])
   const currentCameraIdx = useRef(0)
@@ -77,19 +77,20 @@ export const ScanCamera = forwardRef<ScanCameraHandle, ScanCameraProps>(function
           }
         }
       } catch { /* torch check failed */ }
-    } catch (err: any) {
-      const msg = String(err?.message ?? '')
-      if (err?.name === 'NotAllowedError' || msg.toLowerCase().includes('permission')) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      const errName = err instanceof Error ? err.name : ''
+      if (errName === 'NotAllowedError' || msg.toLowerCase().includes('permission')) {
         updateState('denied')
       } else {
         updateState('unavailable')
       }
     }
-  }, [onScan, onStateChange, onTorchSupported])
+  }, [onScan, onTorchSupported, updateState])
 
   useEffect(() => {
     if (!active) return
-    updateState('loading')
+    const timer = setTimeout(() => updateState('loading'), 0)
     let cancelled = false
 
     ;(async () => {
@@ -101,6 +102,7 @@ export const ScanCamera = forwardRef<ScanCameraHandle, ScanCameraProps>(function
     })()
 
     return () => {
+      clearTimeout(timer)
       cancelled = true
       if (scannerRef.current) {
         scannerRef.current.stop().catch(() => { /* ignore */ })

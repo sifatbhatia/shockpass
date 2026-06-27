@@ -27,7 +27,6 @@ export function EventPoster({ src, title, className, priority = false }: EventPo
           fill
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : 'auto'}
-          unoptimized
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           onError={() => setFailedSrc(posterSrc)}

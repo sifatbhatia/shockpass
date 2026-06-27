@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/Input'
 import { PassSkeleton } from '@/components/ui/Skeleton'
 import { EventPoster } from '@/components/EventPoster'
 import { BRAND } from '@/lib/brand'
-import { COPY } from '@/lib/copy'
 import { trpc } from '@/trpc/client'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
@@ -225,8 +224,8 @@ function TicketDetailContent() {
 
               {/* Entry details */}
               <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-deep font-sans space-y-1">
-                {(ticket as any).id && (
-                  <p>Ticket ID: {(ticket as any).id.slice(0, 12).toUpperCase()}</p>
+                {ticket?.id && (
+                  <p>Ticket ID: {String(ticket.id).slice(0, 12).toUpperCase()}</p>
                 )}
                 <p className="mt-3 text-muted">Have this ready at the door.</p>
               </div>

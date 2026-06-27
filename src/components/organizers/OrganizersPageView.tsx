@@ -1,12 +1,10 @@
 'use client'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { ArrowRight, Check, Shield, Sparkles, Ticket, Users } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button } from '@/components/ui/Button'
-import { COPY } from '@/lib/copy'
 const ORGANIZER_VALUES = [
   {
     title: 'Drop pages that sell',
@@ -58,11 +56,10 @@ export function OrganizersPageView() {
         {/* ─── Hero ─── */}
         <section className="relative -mt-[var(--nav-bar-height,4.5rem)] min-h-[100dvh] overflow-hidden grain-overlay">
           <Image
-            src="/assets/willcall-organizers-grid.png"
+            src="/assets/willcall-organizers-grid.webp"
             alt=""
             fill
-            loading="eager"
-            fetchPriority="high"
+            priority
             sizes="100vw"
             className="object-cover opacity-84 saturate-110"
           />

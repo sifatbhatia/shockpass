@@ -52,7 +52,6 @@ export function TicketPassCard({
               alt=""
               fill
               className="object-cover"
-              unoptimized
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-bg/85 via-bg/70 to-bg/85" />

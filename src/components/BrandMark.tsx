@@ -48,7 +48,6 @@ export function BrandMark({
         alt=""
         width={variant === 'nav' ? navSpec.width : spec.px}
         height={variant === 'nav' ? navSpec.height : spec.px}
-        unoptimized
         loading={variant === 'nav' ? 'eager' : 'lazy'}
         fetchPriority={variant === 'nav' ? 'high' : 'auto'}
         className={cn(
@@ -80,7 +79,6 @@ export function BrandMark({
         alt={BRAND.name}
         width={186}
         height={58}
-        unoptimized
         className="h-9 w-auto object-contain transition-opacity group-hover:opacity-85 sm:h-10"
       />
     </Link>

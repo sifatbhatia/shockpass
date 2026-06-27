@@ -1,8 +1,8 @@
 export const POSTER_PRESETS = [
-  '/assets/willcall-hero-drop-v2.png',
-  '/assets/scan-success-moment.png',
-  '/assets/empty-drops-gallery.png',
-  '/assets/empty-wallet-rope.png',
+  '/assets/willcall-hero-drop-v2.webp',
+  '/assets/scan-success-moment.webp',
+  '/assets/empty-drops-gallery.webp',
+  '/assets/empty-wallet-rope.webp',
 ] as const
 
 const LEGACY_POSTER_MAP = [

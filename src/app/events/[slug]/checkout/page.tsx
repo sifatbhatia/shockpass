@@ -81,7 +81,7 @@ function OrderStub({
       {(eventTitle || posterUrl) && (
         <div className="relative h-28 w-full">
           {posterUrl ? (
-            <Image src={posterUrl} alt="" fill unoptimized className="object-cover" />
+            <Image src={posterUrl} alt="" fill className="object-cover" />
           ) : (
             <div className="absolute inset-0 skeleton-shimmer" />
           )}

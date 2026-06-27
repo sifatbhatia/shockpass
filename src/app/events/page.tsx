@@ -23,7 +23,7 @@ export default function EventsPage() {
   const allEvents = data?.pages.flatMap((p) => p.events) ?? []
 
   return (
-    <AppShell showLivePulse={allEvents.some((e) => e.status === 'LIVE')}>
+    <AppShell>
       <section className="mx-auto min-h-[calc(100vh-var(--nav-bar-height,4.5rem))] max-w-[1280px] px-4 py-8 sm:px-6 md:py-14 pb-20">
         <PageHeader
           title={COPY.findTheDrop}

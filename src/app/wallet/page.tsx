@@ -1,11 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppShell } from '@/components/AppShell'
-import { PageHeader } from '@/components/ui/PageHeader'
-import { EmptyState } from '@/components/ui/EmptyState'
 import { PassSkeleton } from '@/components/ui/Skeleton'
 import { TicketPassCard } from '@/components/TicketPassCard'
 import { trpc } from '@/trpc/client'
@@ -83,13 +82,13 @@ function WalletContent() {
             <Ticket className="h-12 w-12 text-muted-deep mb-4" strokeWidth={1.5} />
             <h2 className="font-display text-2xl tracking-tight mb-2">No passes yet</h2>
             <p className="text-sm text-muted font-sans mb-6 max-w-md">Your purchased passes will appear here when they are ready.</p>
-            <a
+            <Link
               href="/events"
               className="inline-flex items-center justify-center min-h-11 rounded-full bg-acid text-bg px-6 py-2.5 text-sm font-medium font-sans tracking-tight transition-[background,transform] hover:bg-acid-dim active:scale-[0.98] focus-ring"
             >
               Browse drops
               <ArrowRight className="h-4 w-4 ml-1.5" strokeWidth={1.6} />
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">

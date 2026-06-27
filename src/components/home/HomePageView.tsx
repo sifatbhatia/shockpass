@@ -2,22 +2,19 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRef } from 'react'
-import { format } from 'date-fns'
 import { ArrowRight, CheckCircle2, ShieldCheck, Ticket, Zap } from 'lucide-react'
-import { trpc } from '@/trpc/client'
+import type { inferRouterOutputs } from '@trpc/server'
+import type { AppRouter } from '@/trpc/routers/_app'
 import { AppShell } from '@/components/AppShell'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { LiveTicker } from '@/components/ui/LiveTicker'
-import { SellThroughBar } from '@/components/SellThroughBar'
-import { DropStatePill } from '@/components/drop/DropStatePill'
-import { EventPoster } from '@/components/EventPoster'
-import { HomeLiveRow, HomeLiveRowSkeleton } from '@/components/home/HomeLiveRow'
+import { HomeLiveRow } from '@/components/home/HomeLiveRow'
 import { COPY, HOME_BUYER_FEATURES } from '@/lib/copy'
-import { useSession } from 'next-auth/react'
-import { MOCK_HOME_EVENTS } from '@/lib/mock-data'
+
+type EventListOutput = inferRouterOutputs<AppRouter>['event']['list']
+type EventItem = EventListOutput['events'][number]
 const FALLBACK_HERO =
-  '/assets/willcall-grid-hero.png'
+  '/assets/willcall-grid-hero.webp'
 const PLATFORM_LANES = [
   {
     kicker: 'Discovery',
@@ -44,39 +41,15 @@ const SUPPORT_ITEMS = [
   { icon: Ticket, label: 'Drops', body: 'Public drop pages with tiers, limits, status, and urgency.' },
   { icon: CheckCircle2, label: 'Door', body: 'Rotating QR, scanner mode, check-in status, and guest lookup.' },
 ] as const
-function getFeaturedDropState(sold: number, capacity: number, status: string) {
-  if (capacity > 0 && sold >= capacity) return 'sold_out' as const
-  if (status === 'LIVE') {
-    if (capacity > 0 && sold / capacity >= 0.9) return 'almost_sold_out' as const
-    return 'on_sale' as const
-  }
-  return 'before_sale' as const
-}
-export function HomePageView() {
+export function HomePageView({ initialEvents }: { initialEvents: EventItem[] }) {
   const rootRef = useRef<HTMLDivElement>(null)
-  const { data: session } = useSession()
-  const { data, isLoading, error, refetch } = trpc.event.list.useQuery({ limit: 12 })
-  const events = data?.events ?? []
-  const featured = events[0]
-  const isOrganizer = session?.user?.role === 'ORGANIZER' || session?.user?.role === 'ADMIN'
-  const liveEvents = events.filter((e) => e.status === 'LIVE')
-  const featuredSold = featured
-    ? featured.ticketTiers.reduce((s, t) => s + t.quantitySold, 0)
-    : 0
-  const featuredCap = featured
-    ? featured.ticketTiers.reduce((s, t) => s + t.quantityTotal, 0)
-    : 0
-  const featuredMin =
-    featured && featured.ticketTiers.length > 0
-      ? Math.min(...featured.ticketTiers.map((t) => t.priceCents))
-      : null
-  const featuredState = featured
-    ? getFeaturedDropState(featuredSold, featuredCap, featured.status)
-    : null
+  const featured = initialEvents[0]
+  const liveEvents = initialEvents.filter((e) => e.status === 'LIVE')
+  const events = initialEvents
   const heroImage = FALLBACK_HERO
 
   return (
-    <AppShell showLivePulse={liveEvents.length > 0} heroUnderNav>
+    <AppShell heroUnderNav>
       <div ref={rootRef}>
       {/* Hero — centered, two paths, no decoration */}
       <section
@@ -86,9 +59,7 @@ export function HomePageView() {
           src={heroImage}
           alt=""
           fill
-          loading="eager"
-          fetchPriority="high"
-          unoptimized
+          priority
           sizes="100vw"
           className="object-cover opacity-82 saturate-110"
         />
@@ -115,7 +86,7 @@ export function HomePageView() {
                 {featured ? COPY.getTickets : COPY.seeWhatsLive}
               </Button>
               <Button
-                href={session && isOrganizer ? '/dashboard' : '/organizers'}
+                href="/organizers"
                 variant="ghost"
                 className="flex-1 sm:flex-none whitespace-nowrap text-sm sm:text-base text-muted hover:text-text"
               >
@@ -165,29 +136,7 @@ export function HomePageView() {
               </span>
             ))}
           </div>
-          {isLoading ? (
-            <div className="pb-3 sm:pb-0">
-              {MOCK_HOME_EVENTS.map((event, index) => (
-                <HomeLiveRow
-                  key={event.id}
-                  event={event as any}
-                  rank={index + 1}
-                  featured={index === 0}
-                />
-              ))}
-            </div>
-          ) : error ? (
-            <div className="p-6">
-              <EmptyState
-                title={COPY.loadDropsFailed}
-                description={COPY.loadDropsFailedHint}
-                actionLabel={COPY.tryAgain}
-                onAction={() => refetch()}
-                illustration="drops"
-                framed={false}
-              />
-            </div>
-          ) : events.length === 0 ? (
+          {events.length === 0 ? (
             <div className="p-6">
               <EmptyState
                 title={COPY.noDropsLive}
@@ -226,7 +175,7 @@ export function HomePageView() {
               </p>
             </div>
             <ol className="border-y border-white/10">
-              {PLATFORM_LANES.map((step, index) => (
+              {PLATFORM_LANES.map((step) => (
                 <li key={step.title} className="border-b border-white/10 last:border-b-0">
                   <Link
                     href={step.href}
@@ -265,7 +214,7 @@ export function HomePageView() {
               </p>
             </div>
             <div className="grid border-b border-white/10 lg:grid-cols-4">
-              {SUPPORT_ITEMS.map(({ icon: Icon, label, body }, index) => (
+              {SUPPORT_ITEMS.map(({ icon: Icon, label, body }) => (
                 <article
                   key={label}
                   className="group min-h-[16rem] border-b border-white/10 py-7 transition-colors hover:bg-white/[0.025] lg:border-b-0 lg:border-r lg:px-6 lg:last:border-r-0"
@@ -294,7 +243,7 @@ export function HomePageView() {
                 </h2>
               </div>
               <div className="divide-y divide-white/10 border-y border-white/10">
-                {HOME_BUYER_FEATURES.map((item, index) => (
+                {HOME_BUYER_FEATURES.map((item) => (
                   <article
                     key={item.title}
                     className="group gap-6 py-8 transition-colors hover:bg-white/[0.025] md:py-10"
@@ -340,11 +289,11 @@ export function HomePageView() {
                   ))}
                 </div>
                 <Button
-                  href={session && isOrganizer ? '/dashboard' : '/organizers'}
+                  href="/organizers"
                   variant="outline"
                   className="w-full shrink-0 sm:w-max"
                 >
-                  {session && isOrganizer ? COPY.commandCenter : COPY.organizers}
+                  {COPY.organizers}
                 </Button>
               </div>
             </div>

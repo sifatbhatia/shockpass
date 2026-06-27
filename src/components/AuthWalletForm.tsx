@@ -69,12 +69,10 @@ function AuthFields() {
       {/* Left: venue imagery */}
       <div className="relative hidden min-h-screen overflow-hidden border-r border-white/10 bg-bg md:block grain-overlay">
         <Image
-          src="/assets/willcall-hero-drop-v2.png"
+          src="/assets/willcall-hero-drop-v2.webp"
           alt=""
           fill
-          loading="eager"
-          fetchPriority="high"
-          unoptimized
+          priority
           className="object-cover opacity-86 saturate-110"
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.22)_0%,rgba(5,5,5,0.42)_38%,#050505_100%)]" />

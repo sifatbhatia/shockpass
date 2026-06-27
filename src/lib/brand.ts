@@ -5,14 +5,14 @@ export const BRAND = {
   domain: 'willcall.app',
   demoEmail: 'demo@willcall.app',
   logo: {
-    nav: '/brand/willcall-nav.png',
-    mark: '/brand/willcall-emblem.png',
-    wordmark: '/brand/willcall-wordmark.png',
-    horizontal: '/brand/willcall-horizontal-full.png',
-    vertical: '/brand/willcall-vertical-full.png',
-    favicon: '/brand/icon-32x32.png',
-    apple: '/brand/icon-180x180.png',
-    og: '/brand/willcall-vertical-full.png',
+    nav: '/brand/willcall-nav.webp',
+    mark: '/brand/willcall-emblem.webp',
+    wordmark: '/brand/willcall-wordmark.webp',
+    horizontal: '/brand/willcall-horizontal-full.webp',
+    vertical: '/brand/willcall-vertical-full.webp',
+    favicon: '/brand/icon-32x32.webp',
+    apple: '/brand/icon-180x180.webp',
+    og: '/brand/willcall-vertical-full.webp',
   },
 } as const
 

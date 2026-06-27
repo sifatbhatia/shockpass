@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { AppShell } from '@/components/AppShell'
 import { Panel } from '@/components/ui/Panel'
@@ -16,7 +15,7 @@ import toast from 'react-hot-toast'
 import { COPY } from '@/lib/copy'
 import { cn } from '@/lib/cn'
 import {
-  ArrowRight, Copy, DollarSign, Download, Plus, Ticket, TrendingUp, Users, Percent
+  Copy, Download, Plus, Ticket, TrendingUp, Users, Percent
 } from 'lucide-react'
 
 function formatCurrency(cents: number): string {

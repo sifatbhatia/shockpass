@@ -113,13 +113,13 @@ html {
   background-color: var(--color-bg);
   background-image:
     linear-gradient(90deg, rgba(5, 5, 5, 0.18), rgba(5, 5, 5, 0.46)),
-    url('/assets/pass-texture.png');
+    url('/assets/pass-texture.webp');
   background-size: cover;
   background-position: left center;
 }
 
 .trust-icon-sheet {
-  background-image: url('/assets/trust-icons-sheet.png');
+  background-image: url('/assets/trust-icons-sheet.webp');
   background-size: 200% 200%;
   background-repeat: no-repeat;
 }

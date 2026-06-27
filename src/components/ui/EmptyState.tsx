@@ -15,12 +15,12 @@ type EmptyStateProps = {
 
 const illustrations = {
   drops: {
-    src: '/assets/empty-drops-gallery.png',
+    src: '/assets/empty-drops-gallery.webp',
     alt: '',
     className: 'aspect-[4/3]',
   },
   wallet: {
-    src: '/assets/empty-wallet-rope.png',
+    src: '/assets/empty-wallet-rope.webp',
     alt: '',
     className: 'aspect-square',
   },

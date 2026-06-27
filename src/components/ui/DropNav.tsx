@@ -11,7 +11,6 @@ import { cn } from '@/lib/cn'
 
 type DropNavProps = {
   className?: string
-  showLivePulse?: boolean
   sticky?: boolean
   heroUnderNav?: boolean
 }
@@ -20,7 +19,7 @@ function ExternalIcon({ className }: { className?: string }) {
   return <ArrowUpRight className={cn('h-4 w-4 shrink-0 opacity-70', className)} strokeWidth={1.5} />
 }
 
-export function DropNav({ className, showLivePulse, sticky = true }: DropNavProps) {
+export function DropNav({ className, sticky = true }: DropNavProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const isOrganizer = session?.user?.role === 'ORGANIZER' || session?.user?.role === 'ADMIN'
@@ -70,13 +69,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
     }
   }, [navBarHeight])
 
-  useEffect(() => {
-    if (megaOpen) setMegaRendered(true)
-  }, [megaOpen])
 
-  useEffect(() => {
-    if (mobileOpen) setMobileRendered(true)
-  }, [mobileOpen])
 
   useEffect(() => {
     document.body.style.overflow = megaOpen || mobileOpen ? 'hidden' : ''
@@ -236,7 +229,10 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                 type="button"
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
-                onClick={() => setMegaOpen((open) => !open)}
+                onClick={() => {
+                  setMegaOpen((open) => !open)
+                  setMegaRendered(true)
+                }}
                 className={cn(
                   'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium font-sans transition-colors duration-500 ease-out focus-ring',
                   megaOpen
@@ -280,7 +276,10 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
               type="button"
               aria-expanded={mobileOpen}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              onClick={() => setMobileOpen((open) => !open)}
+              onClick={() => {
+                setMobileOpen((open) => !open)
+                setMobileRendered(true)
+              }}
               className={cn(
                 'inline-flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-xl transition-[background,border-color,color] duration-700 ease-out focus-ring',
                 darkNav ? 'border-bg/20 bg-nav-accent/10 text-bg' : 'border-white/10 bg-bg/18 text-text'

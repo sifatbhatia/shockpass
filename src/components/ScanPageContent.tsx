@@ -360,7 +360,7 @@ export function ScanPageContent({ eventId }: ScanPageContentProps) {
             <p className="text-xs font-medium uppercase tracking-wider text-muted font-sans">
               Guest results ({searchResults.length})
             </p>
-            {searchResults.map((ticket: any) => (
+            {searchResults.map((ticket) => (
               <div
                 key={ticket.id}
                 className="flex items-center justify-between rounded-drop border border-border bg-panel-2 p-3"
@@ -408,7 +408,7 @@ export function ScanPageContent({ eventId }: ScanPageContentProps) {
 
         {recentScans.length > 0 && (
           <div className="mt-3 space-y-1.5">
-            {recentScans.slice(0, 10).map((log: any) => {
+            {recentScans.slice(0, 10).map((log) => {
               const scanColor =
                 log.result === 'VALID' || log.result === 'VIP' || log.result === 'GUESTLIST'
                   ? 'text-[#22c55e]'

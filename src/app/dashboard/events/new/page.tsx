@@ -222,11 +222,8 @@ function TimePicker({
     }
   }, [value])
 
-  const [inputValue, setInputValue] = useState(displayLabel)
-
-  useEffect(() => {
-    setInputValue(displayLabel)
-  }, [displayLabel])
+  const [inputOverride, setInputOverride] = useState<string | null>(null)
+  const inputValue = inputOverride ?? displayLabel
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -273,12 +270,16 @@ function TimePicker({
           value={inputValue}
           onChange={(e) => {
             const raw = e.target.value
-            setInputValue(raw)
             const parsed = tryParseInput(raw)
-            if (parsed) onChange(format(parsed, 'HH:mm'))
+            if (parsed) {
+              onChange(format(parsed, 'HH:mm'))
+              setInputOverride(null)
+            } else {
+              setInputOverride(raw)
+            }
           }}
           onFocus={() => setOpen(true)}
-          onBlur={() => setInputValue(displayLabel)}
+          onBlur={() => setInputOverride(null)}
           placeholder="Select time"
           className={cn(
             'h-11 w-full rounded-drop border bg-panel-2 pl-10 pr-9 text-sm text-text placeholder:text-muted/60 transition-colors focus-ring',
@@ -487,8 +488,6 @@ export default function CreateEventPage() {
     venueAddress: '',
     city: '',
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    startsAt: '',
-    endsAt: '',
     capacity: 500,
     lat: undefined as number | undefined,
     lng: undefined as number | undefined,
@@ -510,20 +509,7 @@ export default function CreateEventPage() {
     if (status === 'unauthenticated') router.push('/auth?tab=signup')
   }, [status, router])
 
-  // Keep form dates in sync with schedule
-  useEffect(() => {
-    setForm((f) => ({
-      ...f,
-      startsAt:
-        schedule.startDate && schedule.startTime
-          ? `${schedule.startDate}T${schedule.startTime}`
-          : '',
-      endsAt:
-        schedule.endDate && schedule.endTime
-          ? `${schedule.endDate}T${schedule.endTime}`
-          : '',
-    }))
-  }, [schedule.startDate, schedule.startTime, schedule.endDate, schedule.endTime])
+
 
   // ── Tier manipulation ──────────────────────────────────────────────
 
@@ -586,8 +572,16 @@ export default function CreateEventPage() {
         subtitle: form.subtitle.trim() || undefined,
         city: location.displayCity || form.city,
         capacity: Number(form.capacity),
-        startsAt: new Date(form.startsAt),
-        endsAt: new Date(form.endsAt),
+        startsAt: new Date(
+          schedule.startDate && schedule.startTime
+            ? `${schedule.startDate}T${schedule.startTime}`
+            : ''
+        ),
+        endsAt: new Date(
+          schedule.endDate && schedule.endTime
+            ? `${schedule.endDate}T${schedule.endTime}`
+            : ''
+        ),
         lat: form.lat,
         lng: form.lng,
       })

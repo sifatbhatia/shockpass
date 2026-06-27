@@ -58,7 +58,7 @@ export default function EventPage() {
           : 'before_sale'
 
   return (
-    <AppShell showLivePulse={isOnSale && !isCancelled}>
+    <AppShell>
       {/* Hero banner — cinematic but not overly huge */}
       <section className="relative min-h-[40dvh] overflow-hidden grain-overlay stage-vignette md:min-h-[55dvh]">
         <div className="absolute inset-0">

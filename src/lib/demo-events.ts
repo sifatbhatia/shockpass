@@ -84,7 +84,7 @@ export const DEMO_EVENTS: DemoEvent[] = [
     subtitle: "Brooklyn's biggest underground dance night",
     description:
       'A night of house, techno, and bass music under the Brooklyn Bridge. Three stages, immersive art installations, and a silent disco until sunrise. This is the proof-of-flow demo drop for Willcall.',
-    posterUrl: '/assets/willcall-hero-drop-v2.png',
+    posterUrl: '/assets/willcall-hero-drop-v2.webp',
     heroVideoUrl: null,
     venueName: 'The Warehouse',
     venueAddress: '45 Kent Ave, Brooklyn, NY 11249',
@@ -142,7 +142,7 @@ export const DEMO_EVENTS: DemoEvent[] = [
     subtitle: 'Retro-futuristic sounds in a historic theater',
     description:
       'Live synthwave, retrowave, and darksynth performances with a full light show, VJ projections, and an arcade lounge built for the midnight crowd.',
-    posterUrl: '/assets/scan-success-moment.png',
+    posterUrl: '/assets/scan-success-moment.webp',
     heroVideoUrl: null,
     venueName: 'The Regent Theater',
     venueAddress: '448 S Main St, Los Angeles, CA 90012',
@@ -190,7 +190,7 @@ export const DEMO_EVENTS: DemoEvent[] = [
     subtitle: 'A limited-capacity bass showcase',
     description:
       'The third installment of a bass-heavy warehouse night with international headliners, local talent, and a sound system tuned for people who arrive early.',
-    posterUrl: '/assets/empty-drops-gallery.png',
+    posterUrl: '/assets/empty-drops-gallery.webp',
     heroVideoUrl: null,
     venueName: 'Arena Berlin',
     venueAddress: 'Eichenstrasse 4, 12435 Berlin',

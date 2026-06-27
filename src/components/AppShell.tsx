@@ -5,7 +5,6 @@ import { cn } from '@/lib/cn'
 type AppShellProps = {
   children: React.ReactNode
   className?: string
-  showLivePulse?: boolean
   mainClassName?: string
   stickyNav?: boolean
   heroUnderNav?: boolean
@@ -15,7 +14,6 @@ type AppShellProps = {
 export function AppShell({
   children,
   className,
-  showLivePulse,
   mainClassName,
   stickyNav = true,
   heroUnderNav = false,
@@ -23,7 +21,7 @@ export function AppShell({
 }: AppShellProps) {
   return (
     <div className={cn('min-h-screen bg-bg', className)}>
-      <DropNav showLivePulse={showLivePulse} sticky={stickyNav} heroUnderNav={heroUnderNav} />
+      <DropNav sticky={stickyNav} heroUnderNav={heroUnderNav} />
       <main
         className={cn(
           'mx-auto max-w-[1650px]',
