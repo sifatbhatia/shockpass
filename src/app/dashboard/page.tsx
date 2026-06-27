@@ -168,7 +168,7 @@ export default function DashboardPage() {
                               {event.status === 'LIVE' ? 'Live' :
                                event.status === 'SCHEDULED' ? 'Scheduled' :
                                event.status === 'DRAFT' ? 'Draft' :
-                               event.status}
+                               event.status === 'CANCELLED' ? 'Cancelled' : 'Unknown'}
                             </span>
                           </div>
                           <div className="flex items-center gap-3 mt-2 text-xs text-muted font-mono">
