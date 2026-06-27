@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { TransitionLink } from 'glimm/next'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -255,7 +254,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
               </button>
 
               {pillLinks.map((link) => (
-                <TransitionLink
+                <Link
                   key={link.href + link.label}
                   href={link.href}
                   onClick={() => setMegaOpen(false)}
@@ -271,7 +270,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                   )}
                 >
                   {link.label}
-                </TransitionLink>
+                </Link>
               ))}
             </div>
           </div>
@@ -318,17 +317,17 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                 <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Discover</p>
                 <ul className="space-y-3">
                   <li data-nav-animate>
-                    <TransitionLink href="/events" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
+                    <Link href="/events" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
                       {COPY.seeWhatsLive}
                       <ExternalIcon className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </TransitionLink>
+                    </Link>
                   </li>
                   {session && (
                     <li data-nav-animate>
-                      <TransitionLink href="/wallet" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
+                      <Link href="/wallet" onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-lg font-medium text-text transition-colors hover:text-nav-accent focus-ring rounded-sm">
                         {COPY.myWallet}
                         <ExternalIcon className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </TransitionLink>
+                      </Link>
                     </li>
                   )}
                 </ul>
@@ -340,10 +339,10 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                 <ul className="divide-y divide-white/10">
                   {organizerLinks.map((link) => (
                     <li key={link.href + link.label} data-nav-animate>
-                      <TransitionLink href={link.href} onClick={closeAll} className="group flex items-center justify-between py-3 font-sans text-sm font-medium text-text transition-colors hover:text-nav-accent focus-ring">
+                      <Link href={link.href} onClick={closeAll} className="group flex items-center justify-between py-3 font-sans text-sm font-medium text-text transition-colors hover:text-nav-accent focus-ring">
                         {link.label}
                         <ExternalIcon />
-                      </TransitionLink>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -351,18 +350,18 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
 
               {/* Right — Quick links */}
               <div>
-                <TransitionLink href="/organizers" onClick={closeAll} data-nav-animate className="mb-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-muted transition-colors hover:text-text focus-ring rounded-sm">
+                <Link href="/organizers" onClick={closeAll} data-nav-animate className="mb-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-muted transition-colors hover:text-text focus-ring rounded-sm">
                   {COPY.organizers}
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-                </TransitionLink>
+                </Link>
 
                 <ul className="space-y-2">
                   {NAV_QUICK_LINKS.map((link) => (
                     <li key={link.href} data-nav-animate>
-                      <TransitionLink href={link.href} onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-text focus-ring">
+                      <Link href={link.href} onClick={closeAll} className="group inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-text focus-ring">
                         {link.label}
                         <ExternalIcon className="h-3.5 w-3.5" />
-                      </TransitionLink>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -392,7 +391,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
               <ul className="space-y-1">
                 {mobileLinks.map((link, index) => (
                   <li key={`${link.href}-${link.label}-${index}`} data-nav-animate>
-                    <TransitionLink
+                    <Link
                       href={link.href}
                       onClick={closeAll}
                       className={cn(
@@ -404,7 +403,7 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
                     >
                       {link.label}
                       <ArrowRight className="h-5 w-5 shrink-0 opacity-70 sm:h-6 sm:w-6" strokeWidth={1.5} />
-                    </TransitionLink>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -414,14 +413,14 @@ export function DropNav({ className, showLivePulse, sticky = true }: DropNavProp
               <ul className="divide-y divide-white/10">
                 {NAV_QUICK_LINKS.map((link) => (
                   <li key={link.href} data-nav-animate>
-                    <TransitionLink
+                    <Link
                       href={link.href}
                       onClick={closeAll}
                       className="flex min-h-11 items-center justify-between py-3 font-sans text-sm text-muted transition-colors hover:text-text focus-ring sm:text-base"
                     >
                       {link.label}
                       <ExternalIcon />
-                    </TransitionLink>
+                    </Link>
                   </li>
                 ))}
               </ul>
